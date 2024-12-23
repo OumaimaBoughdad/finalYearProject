@@ -1,9 +1,6 @@
 package com.example.employee_service.security;
 
 
-
-
-
 import com.example.employee_service.entity.Employee;
 import com.example.employee_service.reposetory.EmployeeRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -34,7 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // Utilisation de la nouvelle API pour désactiver CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/employees/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/employees/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )

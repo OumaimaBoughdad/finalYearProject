@@ -62,9 +62,12 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<EmployeeDTO> getEmployeeByEmail(@PathVariable String email) {
+    @GetMapping("/by-email")
+    public ResponseEntity<Employee> getEmployeeByEmail(@RequestParam String email) {
         Employee employee = employeeService.findByEmail(email);
-        return ResponseEntity.ok(EmployeeMapper.toDTO(employee));
+        if (employee == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(employee);
     }
 }

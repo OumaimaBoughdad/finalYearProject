@@ -33,5 +33,8 @@ public class Client {
     @Column(name = "job", nullable = true)
     private String job;
 
+    @Column(name = "adress", nullable = true)
+    private String adress;
+
 
 }
