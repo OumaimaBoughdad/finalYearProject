@@ -6,6 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="clients_service" />
+        <module name="eureka_main" />
       </profile>
       <profile name="Annotation profile for employee_service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -14,18 +16,17 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="client_service" />
+        <module name="api-gateway" />
         <module name="employee_service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="client_service" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="client_service" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="clients_service" options="-parameters" />
       <module name="employee_service" options="-parameters" />
+      <module name="eureka_main" options="-parameters" />
     </option>
   </component>
 </project>
