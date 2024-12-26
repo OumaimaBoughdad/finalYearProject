@@ -20,12 +20,12 @@ public class EmployeeController {
     }
 
     // Create a new employee
-    @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        EmployeeDTO createdEmployee = employeeService.createEmployee(employeeDTO);
-
-        return ResponseEntity.ok(createdEmployee);
-    }
+//    @PostMapping
+//    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+//        EmployeeDTO createdEmployee = employeeService.createEmployee(employeeDTO);
+//
+//        return ResponseEntity.ok(createdEmployee);
+//    }
 
     // Get all employees
     @GetMapping
@@ -70,4 +70,14 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(employee);
     }
+
+    // publish the employee object
+
+    @PostMapping
+    public ResponseEntity<Employee> sendJsonMessage(@RequestBody Employee employee){
+        employeeService.createnewEmployee(employee);
+        employeeService.sendEmployee(employee);
+        return ResponseEntity.ok(employee);
+    }
+
 }

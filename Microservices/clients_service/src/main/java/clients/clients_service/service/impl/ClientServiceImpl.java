@@ -1,8 +1,6 @@
 package clients.clients_service.service.impl;
 
 import clients.clients_service.entity.Client;
-import clients.clients_service.entity.Employee;
-import clients.clients_service.events.ClientPlacedEvent;
 import clients.clients_service.repository.ClientRepository;
 import clients.clients_service.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +14,21 @@ import java.util.Optional;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    //inject kafka service
-    private final KafkaTemplate<String,ClientPlacedEvent> kafkaTemplate;
 
     @Autowired
     private RestTemplate restTemplate;
 
     private final ClientRepository clientRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository, KafkaTemplate kafkaTemplate) {
+    public ClientServiceImpl(ClientRepository clientRepository) {
 
         this.clientRepository = clientRepository;
-        this.kafkaTemplate = kafkaTemplate;
+
     }
 
     @Override
     public Client createClient(Client client) {
-        //Employee emp =restTemplate.getForObject("http://localhost:8080/api/employees/1", Employee.class);
-        clientRepository.save(client);
-        kafkaTemplate.send("employeeService", new ClientPlacedEvent(client.getIdClient()));
-        return  client;
+        return clientRepository.save(client);
     }
 
     @Override
@@ -58,6 +51,7 @@ public class ClientServiceImpl implements ClientService {
         client.setEmail(clientDetails.getEmail());
         client.setPhoneNumber(clientDetails.getPhoneNumber());
         client.setAddress(clientDetails.getAddress());
+
 
         return clientRepository.save(client);
     }

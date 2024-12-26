@@ -4,6 +4,10 @@ import com.example.employee_service.dto.EmployeeDTO;
 import com.example.employee_service.dto.EmployeeMapper;
 import com.example.employee_service.entity.Employee;
 import com.example.employee_service.reposetory.EmployeeRepository;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
@@ -16,10 +20,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaTemplate<String , Employee> kafkaTemplate;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, KafkaTemplate<String , Employee> kafkaTemplate) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder; // Initialisation correcte
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
@@ -72,6 +78,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findByEmail(String email) {
         Optional<Employee> employee = employeeRepository.findByEmail(email);
         return employee.orElseThrow(() -> new RuntimeException("Employee not found with email: " + email));
+    }
+
+
+    // function to send the employee object to the kafka broker
+
+    public void sendEmployee(Employee employee) {
+        Message<Employee> message = MessageBuilder
+                .withPayload(employee)
+                .setHeader(KafkaHeaders.TOPIC, "employeeTopic")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
+    @Override
+    public Employee createnewEmployee(Employee employee) {
+       return employeeRepository.save(employee);
     }
 }
 
