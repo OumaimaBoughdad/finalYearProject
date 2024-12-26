@@ -30,12 +30,11 @@ public class ClientServiceImpl implements ClientService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-
     @Override
     public Client createClient(Client client) {
         //Employee emp =restTemplate.getForObject("http://localhost:8080/api/employees/1", Employee.class);
         clientRepository.save(client);
-        kafkaTemplate.send("notificationTopic", new ClientPlacedEvent(client.getIdClient()));
+        kafkaTemplate.send("employeeService", new ClientPlacedEvent(client.getIdClient()));
         return  client;
     }
 
