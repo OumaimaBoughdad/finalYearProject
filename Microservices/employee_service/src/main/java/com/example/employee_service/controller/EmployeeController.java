@@ -4,14 +4,19 @@ import com.example.employee_service.dto.EmployeeDTO;
 import com.example.employee_service.dto.EmployeeMapper;
 import com.example.employee_service.entity.Employee;
 import com.example.employee_service.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
+
+    Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
     private final EmployeeService employeeService;
 
@@ -39,7 +44,8 @@ public class EmployeeController {
 
     // Get employee by ID
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id,@RequestHeader("loggedInUser")  String loggedInUser ) {
+        logger.info("we have gett the {}"+loggedInUser);
         return employeeService.getEmployeeById(id)
                 .map(EmployeeMapper::toDTO)
                 .map(ResponseEntity::ok)
