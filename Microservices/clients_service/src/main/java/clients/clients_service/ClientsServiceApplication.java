@@ -10,16 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 public class ClientsServiceApplication {
-
-	@Bean
-	public WebClient webclient(){
-		return WebClient.builder().baseUrl("http://localhost:8080").build();
-	}
 
 	Logger log = LoggerFactory.getLogger(ClientsServiceApplication.class);
 	private final JdbcTemplate jdbcTemplate;

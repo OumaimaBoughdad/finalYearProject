@@ -26,6 +26,11 @@ public class Client {
     private String address;
 
 
+    @Column(nullable = false)
+    private String cne;
+
+
+
     public Employee getEmployee() {
         return employee;
     }
@@ -43,12 +48,13 @@ public class Client {
     public Client() {}
 
     // Parameterized constructor
-    public Client(String firstName, String lastName, String email, String phoneNumber, String address) {
+    public Client(String firstName, String lastName, String email, String phoneNumber, String address, String cne) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.cne = cne;
     }
 
     // Getters and Setters
@@ -99,4 +105,8 @@ public class Client {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getCne() { return cne;}
+
+    public void setCne(String cne) {this.cne = cne;}
 }
