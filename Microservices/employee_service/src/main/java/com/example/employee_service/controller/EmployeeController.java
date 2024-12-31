@@ -45,7 +45,12 @@ public class EmployeeController {
     // Get employee by ID
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id,@RequestHeader("loggedInUser")  String loggedInUser ) {
-        logger.info("we have gett the {}"+loggedInUser);
+        logger.info("we have got the looged in employee email "+loggedInUser);
+
+        Employee employee = employeeService.findByEmail(loggedInUser);
+
+        logger.info("we have gett the employee of id : "+employee.getIdEmployee());
+
         return employeeService.getEmployeeById(id)
                 .map(EmployeeMapper::toDTO)
                 .map(ResponseEntity::ok)
