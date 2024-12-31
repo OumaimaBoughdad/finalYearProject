@@ -1,5 +1,8 @@
-package clients.clients_service.entity;
+package com.example.compte_service.entity;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -41,7 +44,8 @@ public class Client {
 
     // Many-to-one relationship with Employee
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false) // Foreign key column
+    @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnore// Foreign key column
     private Employee employee;
 
     // Default constructor

@@ -11,4 +11,5 @@ public interface ClientService {
     Optional<Client> getClientById(Long id);
     Client updateClient(Long id, Client clientDetails);
     void deleteClient(Long id);
+    Optional<Client> getClientByCne(String cne);
 }

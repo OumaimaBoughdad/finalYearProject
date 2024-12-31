@@ -60,4 +60,9 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(Long id) {
         clientRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Client> getClientByCne(String cne) {
+        return clientRepository.findByCne(cne);
+    }
 }
