@@ -82,7 +82,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     // function to send the employee object to the kafka broker
-
     public void sendEmployee(Employee employee) {
         Message<Employee> message = MessageBuilder
                 .withPayload(employee)

@@ -2,6 +2,7 @@ package com.example.compte_service.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +27,7 @@ public class CarteBancaire {
     private double limiteCarte;
 
     // Many-to-one relationship with Compte
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "compte_id", nullable = false)
     private Compte compte;

@@ -2,10 +2,11 @@ package com.example.transaction_service.entity;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import reactor.core.CorePublisher;
+
 import java.time.LocalDate;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "comptes")
@@ -18,6 +19,8 @@ public class Compte {
 
     @Column(name = "numero_compte", nullable = false, unique = true)
     private String numeroCompte;
+
+
 
     public enum TypeCompte {
         COURANT,
@@ -39,12 +42,6 @@ public class Compte {
 
     @Column(nullable = true)
     private double decouvert; // Seulement applicable pour le compte courant
-
-
-
-
-
-
 
     // Default constructor
     public Compte() {}

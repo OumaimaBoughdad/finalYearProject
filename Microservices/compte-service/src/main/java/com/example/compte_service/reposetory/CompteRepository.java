@@ -12,6 +12,5 @@ import java.util.Optional;
 public interface CompteRepository extends JpaRepository<Compte, Long> {
     Optional<Compte> findByNumeroCompte(String numeroCompte);
     List<Compte> findByClient(Client client);
-    Compte getCompteByNumeroCompte(String numeroCompte);
 
 }
