@@ -1,6 +1,7 @@
 package com.example.compte_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -45,6 +46,8 @@ public class Compte {
     private Client client;
 
     // One-to-many relationship with CarteBancaire
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "compte")
     private Set<CarteBancaire> cartes;
 

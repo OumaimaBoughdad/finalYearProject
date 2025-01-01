@@ -9,6 +9,7 @@ import com.example.compte_service.service.CompteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,9 @@ public class CompteController {
     @Autowired
     private CompteRepository compteRepository;
 
+
+
+
     @PostMapping("/{clientId}")
     public Compte createCompte(@PathVariable long clientId,
                                @RequestBody CompteRequest compteRequest,
@@ -40,14 +44,17 @@ public class CompteController {
             throw new IllegalArgumentException("Employee not found for the provided email.");
         }
 
-        // Appeler la méthode de service avec l'ID de l'employé authentifié
-        return compteService.createCompte(
+
+
+
+        Compte compte = compteService.createCompte(
                 compteRequest.getNumeroCompte(),
                 compteRequest.getTypeCompte(),
                 compteRequest.getSolde(),
                 clientId,
                 employee.getIdEmployee() // Utilisation de l'ID de l'employé authentifié
         );
+        return compte;
     }
 
 
@@ -69,6 +76,13 @@ public class CompteController {
         List<Compte> comptes = compteService.getComptesByClientCne(cne);
         return ResponseEntity.ok(comptes);
     }
+
+
+
+
+
+
+
 
 
 }

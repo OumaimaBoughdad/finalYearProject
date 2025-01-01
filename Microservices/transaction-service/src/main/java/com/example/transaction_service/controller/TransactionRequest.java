@@ -2,24 +2,24 @@ package com.example.transaction_service.controller;
 
 
 import  com.example.transaction_service.entity.Transaction;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 
 public class TransactionRequest {
 
-    @JsonProperty("compteId")
+
     private String compteId;
 
-    @JsonProperty("typeTransaction")
+
     private Transaction.TypeTransaction typeTransaction;
 
-    @JsonProperty("amount")
+
     private double amount;
 
-    @JsonProperty("targetCompteId")
+
     private String targetCompteId;
 
-    @JsonProperty("employeeId")
+
     private Long employeeId;
 
 

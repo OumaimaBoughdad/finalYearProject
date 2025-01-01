@@ -8,6 +8,10 @@ import com.example.compte_service.reposetory.ClientRepository;
 import com.example.compte_service.reposetory.CompteRepository;
 import com.example.compte_service.reposetory.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +36,9 @@ public class CompteServiceImpl implements CompteService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // Instancier le BCryptPasswordEncoder
 
+
+
+
     @Override
     public Compte createCompte(String numeroCompte, Compte.TypeCompte typeCompte, double solde, long clientId, long employeeId) {
         Compte compte = new Compte();
@@ -54,6 +61,7 @@ public class CompteServiceImpl implements CompteService {
 
         // Générer une carte bancaire
         generateCarteBancaire(savedCompte);
+
 
         return savedCompte;
     }
@@ -99,6 +107,8 @@ public class CompteServiceImpl implements CompteService {
         // Récupérer les comptes associés au client
         return compteRepository.findByClient(client);
     }
+
+
 
 
 }

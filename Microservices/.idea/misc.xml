@@ -9,6 +9,11 @@
         <option value="$PROJECT_DIR$/employee_service/pom.xml" />
         <option value="$PROJECT_DIR$/eureka_main/eureka_main/pom.xml" />
         <option value="$PROJECT_DIR$/notification-service/pom.xml" />
+        <option value="$PROJECT_DIR$/security_service/pom.xml" />
+        <option value="$PROJECT_DIR$/transaction-service/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka_main/pom.xml" />
+        <option value="$PROJECT_DIR$/security-services/pom.xml" />
+        <option value="$PROJECT_DIR$/compte-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -17,7 +22,7 @@
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="23" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="23" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
