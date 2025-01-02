@@ -3,8 +3,11 @@ package com.example.employee_service.controller;
 import com.example.employee_service.dto.EmployeeDTO;
 import com.example.employee_service.dto.EmployeeMapper;
 import com.example.employee_service.entity.Employee;
+import com.example.employee_service.reposetory.EmployeeRepository;
 import com.example.employee_service.service.EmployeeService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,9 @@ public class EmployeeController {
     Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
     private final EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -44,13 +50,12 @@ public class EmployeeController {
 
     // Get employee by ID
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id,@RequestHeader("loggedInUser")  String loggedInUser ) {
-        logger.info("we have gett the {}"+loggedInUser);
-        return employeeService.getEmployeeById(id)
-                .map(EmployeeMapper::toDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found with ID: " + id));
+        return ResponseEntity.ok(employee);
     }
+
 
     // Update an existing employee
     @PutMapping("/{id}")

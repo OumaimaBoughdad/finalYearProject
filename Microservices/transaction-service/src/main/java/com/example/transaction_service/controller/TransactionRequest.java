@@ -8,7 +8,7 @@ import  com.example.transaction_service.entity.Transaction;
 public class TransactionRequest {
 
 
-    private String compteId;
+    private long compteId;
 
 
     private Transaction.TypeTransaction typeTransaction;
@@ -24,7 +24,7 @@ public class TransactionRequest {
 
 
 
-    public TransactionRequest(Transaction.TypeTransaction typeTransaction, String compteId, double amount, String  targetCompteId,Long employeeId) {
+    public TransactionRequest(Transaction.TypeTransaction typeTransaction, long compteId, double amount, String  targetCompteId,Long employeeId) {
         this.typeTransaction = typeTransaction;
         this.compteId=compteId;
         this.amount = amount;
@@ -32,7 +32,7 @@ public class TransactionRequest {
         this.employeeId= employeeId;
     }
 
-   public String getCompteId(){
+   public long getCompteId(){
         return compteId;
    }
 
@@ -52,7 +52,7 @@ public class TransactionRequest {
         this.typeTransaction = typeTransaction;
     }
 
-    public void setCompteId(String compteId) {
+    public void setCompteId(long compteId) {
         this.compteId=compteId;
     }
 

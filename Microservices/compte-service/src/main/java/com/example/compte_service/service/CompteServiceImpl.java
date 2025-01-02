@@ -7,6 +7,8 @@ import com.example.compte_service.reposetory.CarteBancaireRepository;
 import com.example.compte_service.reposetory.ClientRepository;
 import com.example.compte_service.reposetory.CompteRepository;
 import com.example.compte_service.reposetory.EmployeeRepository;
+import jakarta.transaction.Transactional;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;

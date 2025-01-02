@@ -1,8 +1,12 @@
 package com.example.compte_service.controller;
 
+import com.example.compte_service.entity.CarteBancaire;
+import com.example.compte_service.entity.Client;
 import com.example.compte_service.entity.Compte;
 import com.example.compte_service.entity.Compte.TypeCompte;
 import com.example.compte_service.entity.Employee;
+import com.example.compte_service.reposetory.CarteBancaireRepository;
+import com.example.compte_service.reposetory.ClientRepository;
 import com.example.compte_service.reposetory.CompteRepository;
 import com.example.compte_service.reposetory.EmployeeRepository;
 import com.example.compte_service.service.CompteService;
@@ -14,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/compte")
@@ -31,6 +37,12 @@ public class CompteController {
     @Autowired
     private CompteRepository compteRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private CarteBancaireRepository carteBancaireRepository;
+
 
 
 
@@ -43,9 +55,6 @@ public class CompteController {
         if (employee == null) {
             throw new IllegalArgumentException("Employee not found for the provided email.");
         }
-
-
-
 
         Compte compte = compteService.createCompte(
                 compteRequest.getNumeroCompte(),
@@ -79,10 +88,51 @@ public class CompteController {
 
 
 
+    @PutMapping("/put/{id}")
+    public ResponseEntity<Compte> updateCompte(@PathVariable Long id, @RequestBody Compte updatedCompte) {
+        Optional<Compte> compteOptional = compteRepository.findById(id);
+        if (compteOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Compte compte = compteOptional.get();
+        compte.setSolde(updatedCompte.getSolde());
+        // Mettez à jour d'autres champs si nécessaire
+        Compte savedCompte = compteRepository.save(compte);
+        return ResponseEntity.ok(savedCompte);
+    }
 
 
+    @DeleteMapping("/{idCompte}")
+    public ResponseEntity<String> deleteCompte(@PathVariable long idCompte) {
+        // Rechercher le compte
+        Optional<Compte> optionalCompte = compteRepository.findById(idCompte);
+        if (optionalCompte.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Compte avec l'ID " + idCompte + " introuvable");
+        }
 
+        Compte compte = optionalCompte.get();
+        Client client = compte.getClient();
 
+        // Supprimer les cartes bancaires associées au compte
+        Set<CarteBancaire> cartesBancaires = compte.getCartes();
+        if (cartesBancaires != null) {
+            for (CarteBancaire carte : cartesBancaires) {
+                carteBancaireRepository.delete(carte);
+            }
+        }
+
+        // Supprimer le compte
+        compteRepository.delete(compte);
+
+        // Vérifier si le client n'a plus de comptes
+        if (client != null && client.getComptes().isEmpty()) {
+            clientRepository.delete(client);
+            return ResponseEntity.ok("Compte et cartes bancaires supprimés, client associé supprimé car il n'avait plus de comptes");
+        }
+
+        return ResponseEntity.ok("Compte et cartes bancaires supprimés avec succès");
+    }
 
 
 }
