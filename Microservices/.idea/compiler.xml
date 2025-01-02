@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="transaction-service" />
         <module name="clients_service" />
-        <module name="security_service" />
         <module name="eureka_main" />
         <module name="compte-service" />
         <module name="security-services" />
@@ -27,6 +26,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="notification-service" target="23" />
+      <module name="security_service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
