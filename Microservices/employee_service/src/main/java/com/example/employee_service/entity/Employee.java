@@ -93,7 +93,9 @@ public class Employee {
         this.password = password;
     }
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, String role, String password) {
+    public Employee(Long idEmployee,String firstName, String lastName, String email, String phoneNumber, String role, String password) {
+        this.idEmployee = idEmployee;
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
