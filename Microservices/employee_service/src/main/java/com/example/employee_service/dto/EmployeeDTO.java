@@ -4,6 +4,17 @@ package com.example.employee_service.dto;
 
 
 public class EmployeeDTO {
+
+    public Long getIdEmployee() {
+        return idEmployee;
+    }
+
+    public void setIdEmployee(Long idEmployee) {
+        this.idEmployee = idEmployee;
+    }
+
+    private Long idEmployee;
+
     private String firstName;
     private String lastName;
     private String email;
