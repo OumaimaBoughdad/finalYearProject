@@ -1,0 +1,31 @@
+<div class="employee-form">
+  <h3>Ajouter un nouvel employé</h3>
+  <form (ngSubmit)="onSubmit()">
+    <label for="firstName">Prénom</label>
+    <input id="firstName" [(ngModel)]="employee.firstName" name="firstName" required />
+
+    <label for="lastName">Nom</label>
+    <input id="lastName" [(ngModel)]="employee.lastName" name="lastName" required />
+    <label for="password">password</label>
+    <input id="password" [(ngModel)]="employee.password" name="password" required />
+
+    <label for="email">Email</label>
+    <input id="email" [(ngModel)]="employee.email" name="email" required type="email" />
+
+    <label for="phoneNumber">Numéro de téléphone</label>
+    <input id="phoneNumber" [(ngModel)]="employee.phoneNumber" name="phoneNumber" />
+
+    <label for="role">Rôle</label>
+    <input id="role" [(ngModel)]="employee.role" name="role" required />
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+</div>
