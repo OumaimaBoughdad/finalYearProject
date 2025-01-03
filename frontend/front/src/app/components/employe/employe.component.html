@@ -1,0 +1,59 @@
+<h2>Liste des Employés</h2>
+<p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Email</th>
+    <th>Rôle</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let employee of employees; let i = index">
+    <td>{{ employee.idEmployee }}</td>
+    <td>
+      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.firstName" />
+      <span *ngIf="!employee.isEditing">{{ employee.firstName }}</span>
+    </td>
+    <td>
+      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.lastName" />
+      <span *ngIf="!employee.isEditing">{{ employee.lastName }}</span>
+    </td>
+    <td>
+      <input *ngIf="employee.isEditing" type="email" [(ngModel)]="employee.email" />
+      <span *ngIf="!employee.isEditing">{{ employee.email }}</span>
+    </td>
+    <td>
+      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.role" />
+      <span *ngIf="!employee.isEditing">{{ employee.role }}</span>
+    </td>
+    <td>
+      <button *ngIf="!employee.isEditing" (click)="editEmployee(employee)">Modifier</button>
+      <button *ngIf="employee.isEditing" (click)="saveEmployee(employee)">Sauvegarder</button>
+      <button (click)="deleteEmployee(employee.idEmployee)">Supprimer</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3>Recherche</h3>
+<input #idInput type="number" placeholder="Recherche par ID" />
+<button (click)="searchById(+idInput.value)">Rechercher</button>
+<br />
+<input #emailInput type="text" placeholder="Recherche par Email" />
+<button (click)="searchByEmail(emailInput.value)">Rechercher</button>
+
+<div *ngIf="searchResult">
+  <h4>Résultat de la recherche :</h4>
+  <p>ID : {{ searchResult.idEmployee }}</p>
+  <p>Prénom : {{ searchResult.firstName }}</p>
+  <p>Nom : {{ searchResult.lastName }}</p>
+  <p>Email : {{ searchResult.email }}</p>
+  <p>Rôle : {{ searchResult.role }}</p>
+</div>
