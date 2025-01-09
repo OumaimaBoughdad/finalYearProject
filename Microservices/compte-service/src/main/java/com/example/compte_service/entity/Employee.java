@@ -118,4 +118,18 @@ public class Employee {
         this.comptes = comptes;
     }
 
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "idEmployee=" + idEmployee +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", role='" + role + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
 }

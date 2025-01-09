@@ -15,4 +15,15 @@ public class KafkaProducerConfig {
         return new NewTopic("employeeTopic", 5, (short) 1);
     }
 
+    public NewTopic createTopic3(){
+        return new NewTopic("clPost", 5, (short) 1);
+    }//cldelete
+
+
+
+    public NewTopic createTopic4(){
+        return new NewTopic("TOPICj", 5, (short) 1);
+    }
+    public NewTopic createTopic6(){return new NewTopic("topicupdate", 5, (short) 1);}
+
 }

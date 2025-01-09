@@ -11,7 +11,7 @@ public class EmployeeMapper {
                 dto.getEmail(),
                 dto.getPhoneNumber(),
                 dto.getRole(),
-                "defaultPassword" // Si vous voulez gérer un mot de passe par défaut
+                "defaultPassword"
         );
     }
 

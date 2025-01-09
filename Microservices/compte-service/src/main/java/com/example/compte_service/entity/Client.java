@@ -12,7 +12,6 @@ import java.util.Set;
 @Table(name = "clients")
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_client", nullable = false, updatable = false)
     private long idClient;
 
@@ -47,7 +46,7 @@ public class Client {
 
     // Many-to-one relationship with Employee
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
+    @JoinColumn(name = "employee_id")
     @JsonIgnore// Foreign key column
     private Employee employee;
 

@@ -2,8 +2,12 @@ package clients.clients_service.controller;
 
 import clients.clients_service.entity.Client;
 import clients.clients_service.entity.Employee;
+import clients.clients_service.repository.ClientRepository;
 import clients.clients_service.repository.EmployeeRepository;
 import clients.clients_service.service.ClientService;
+import clients.clients_service.service.impl.ClientServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +20,17 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
+    Logger log = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientService clientService;
 
     @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    private ClientServiceImpl clientServiceImpl;
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
@@ -34,7 +44,11 @@ public class ClientController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found for email: " + loggedInUser);
         }
         client.setEmployee(employee);
-        return ResponseEntity.ok(clientService.createClient(client));
+        clientService.createClient(client);
+        clientService.sendClient(client);
+        return ResponseEntity.ok(client);
+
+
     }
 
     @GetMapping
@@ -51,12 +65,27 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client clientDetails) {
-        return ResponseEntity.ok(clientService.updateClient(id, clientDetails));
+
+        clientService.updateClient(id, clientDetails);
+        Client client = clientServiceImpl.getClientByIdd(id);
+        if (client != null) {
+            clientServiceImpl.sendClientforupdate(client);
+            log.info("client was sent to be update "+client.getIdClient());
+        }
+        clientService.updateClient(id, clientDetails);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+
+        Client client = clientServiceImpl.getClientByIdd(id);
         clientService.deleteClient(id);
+
+        if (client != null) {
+            clientServiceImpl.sendClientfordeletion(client);
+            log.info("client was sent to be deleted "+client.getIdClient());
+        }
         return ResponseEntity.noContent().build();
     }
 

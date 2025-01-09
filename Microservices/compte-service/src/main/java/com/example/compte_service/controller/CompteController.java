@@ -10,6 +10,7 @@ import com.example.compte_service.reposetory.ClientRepository;
 import com.example.compte_service.reposetory.CompteRepository;
 import com.example.compte_service.reposetory.EmployeeRepository;
 import com.example.compte_service.service.CompteService;
+import com.example.compte_service.service.CompteServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class CompteController {
 
     @Autowired
     private CarteBancaireRepository carteBancaireRepository;
+
+    @Autowired
+    private CompteServiceImpl compteserviceimpl;
 
 
 
@@ -128,6 +132,12 @@ public class CompteController {
         // Vérifier si le client n'a plus de comptes
         if (client != null && client.getComptes().isEmpty()) {
             clientRepository.delete(client);
+            if(client!=null){
+                compteserviceimpl.sendClientfordeletion(client);
+                log.info("cchhchc");
+
+            }
+
             return ResponseEntity.ok("Compte et cartes bancaires supprimés, client associé supprimé car il n'avait plus de comptes");
         }
 
