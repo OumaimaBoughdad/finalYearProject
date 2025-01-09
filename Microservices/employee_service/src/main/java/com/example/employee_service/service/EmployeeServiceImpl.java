@@ -54,6 +54,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findById(id);
     }
 
+    public Employee getEmployeeByIdOrThrow(Long id) {
+        return getEmployeeById(id)
+                .orElseThrow(() -> new RuntimeException());
+    }
+
+
+
+
     @Override
     public Employee updateEmployee(Long id, Employee employeeDetails) {
         Employee employee = employeeRepository.findById(id)
@@ -90,9 +98,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         kafkaTemplate.send(message);
     }
 
+    public void sendEmployeedelet(Employee employee) {
+        Message<Employee> message = MessageBuilder
+                .withPayload(employee)
+                .setHeader(KafkaHeaders.TOPIC, "employeedelet")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
+    public void sendEmployeeforupdate(Employee employee) {
+        Message<Employee> message = MessageBuilder
+                .withPayload(employee)
+                .setHeader(KafkaHeaders.TOPIC, "employeeupdat")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
     @Override
     public Employee createnewEmployee(Employee employee) {
        return employeeRepository.save(employee);
     }
+
 }
 

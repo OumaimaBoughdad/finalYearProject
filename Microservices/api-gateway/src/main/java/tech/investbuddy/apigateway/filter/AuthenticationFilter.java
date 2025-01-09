@@ -23,44 +23,49 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public AuthenticationFilter() {
         super(Config.class);
     }
-
     @Override
     public GatewayFilter apply(Config config) {
-        return ((exchange, chain) -> {
-            ServerHttpRequest request=null;
-            if (validator.isSecured.test(exchange.getRequest())) {
-                //header contains token or not
-                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new RuntimeException("missing authorization header");
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+
+            // Check if the route is secured
+            if (validator.isSecured.test(request)) {
+                String authHeader = null;
+
+                // Check for Authorization header
+                if (request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                    authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+                    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                        authHeader = authHeader.substring(7);
+                    }
+                } else if (request.getQueryParams().containsKey("Bearer")) {
+                    // Check for token in query parameters as fallback
+                    authHeader = request.getQueryParams().getFirst("Bearer");
                 }
 
-                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-                if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    authHeader = authHeader.substring(7);
+                if (authHeader == null) {
+                    throw new RuntimeException("Missing authorization token");
                 }
+
                 try {
-//                    //REST call to AUTH service
-                 // template.getForObject("http://security-services//validate?token" + authHeader, String.class);
+                    jwtUtil.validateToken(authHeader);
 
-                 jwtUtil.validateToken(authHeader);
-
-                 // pass the actual information into the header
-                     request = exchange.getRequest()
+                    // Pass user details to downstream services
+                    String username = jwtUtil.extractUsername(authHeader);
+                    request = exchange.getRequest()
                             .mutate()
-                            .header("loggedInUser",jwtUtil.extractUsername(authHeader))
+                            .header("loggedInUser", username)
                             .build();
 
-
                 } catch (Exception e) {
-                    System.out.println("invalid access...!");
-                    throw new RuntimeException("un authorized access to application");
+                    throw new RuntimeException("Unauthorized access: " + e.getMessage());
                 }
             }
-            //
-            return chain.filter(exchange.mutate().request(request).build());
 
-        });
+            return chain.filter(exchange.mutate().request(request).build());
+        };
     }
+
 
     public static class Config {
 

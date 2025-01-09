@@ -35,11 +35,15 @@ public class CompteServiceImpl implements CompteService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+@Autowired
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // Instancier le BCryptPasswordEncoder
 
 
-
+    public CompteServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Override
     public Compte createCompte(String numeroCompte, Compte.TypeCompte typeCompte, double solde, long clientId, long employeeId) {
@@ -111,6 +115,12 @@ public class CompteServiceImpl implements CompteService {
     }
 
 
-
+    public void sendClientfordeletion(Client client) {
+        Message<Client> message = MessageBuilder
+                .withPayload(client)
+                .setHeader(KafkaHeaders.TOPIC, "tpc")
+                .build();
+        kafkaTemplate.send(message);
+    }
 
 }

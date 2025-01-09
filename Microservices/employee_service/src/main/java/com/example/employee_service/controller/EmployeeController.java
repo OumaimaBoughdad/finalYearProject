@@ -5,8 +5,10 @@ import com.example.employee_service.dto.EmployeeMapper;
 import com.example.employee_service.entity.Employee;
 import com.example.employee_service.reposetory.EmployeeRepository;
 import com.example.employee_service.service.EmployeeService;
+import com.example.employee_service.service.EmployeeServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,14 @@ public class EmployeeController {
 
     Logger logger = Logger.getLogger(EmployeeController.class.getName());
 
+
     private final EmployeeService employeeService;
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeServiceImpl employeeServiceImpl;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -63,12 +69,21 @@ public class EmployeeController {
             @PathVariable Long id,
             @RequestBody EmployeeDTO employeeDetails) {
         Employee updatedEmployee = employeeService.updateEmployee(id, EmployeeMapper.toEntity(employeeDetails));
+        if (updatedEmployee != null) {
+            employeeService.sendEmployeeforupdate(updatedEmployee);
+            logger.info("employee was sent to be update "+updatedEmployee.getIdEmployee());
+        }
         return ResponseEntity.ok(EmployeeMapper.toDTO(updatedEmployee));
     }
 
     // Delete an employee
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        Employee employee = employeeService.getEmployeeByIdOrThrow(id);
+        if (employee != null) {
+            employeeService.sendEmployeedelet(employee);
+            logger.info("employee was sent to be deleted "+ employee.getIdEmployee());
+        }
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }

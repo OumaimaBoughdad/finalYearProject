@@ -17,4 +17,7 @@ public interface EmployeeService {
     Employee findByEmail(String email);
     void sendEmployee(Employee employee);
     Employee createnewEmployee(Employee employee);
+    void sendEmployeedelet(Employee employee);
+    public Employee getEmployeeByIdOrThrow(Long id);
+    public void sendEmployeeforupdate(Employee employee);
 }

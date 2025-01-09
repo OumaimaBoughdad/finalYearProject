@@ -12,5 +12,8 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     // Additional custom query methods can go here
     Optional<Client> findByCne(String cne);
+    // You can use built-in JPA methods like findById
+    Client findByIdClient(long idClient);
+
 }
 
