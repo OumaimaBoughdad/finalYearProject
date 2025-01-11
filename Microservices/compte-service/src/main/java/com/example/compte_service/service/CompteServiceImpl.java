@@ -123,4 +123,28 @@ public class CompteServiceImpl implements CompteService {
         kafkaTemplate.send(message);
     }
 
+    public void sendcompteforadd(Compte compte) {
+        Message<Compte> message = MessageBuilder
+                .withPayload(compte)
+                .setHeader(KafkaHeaders.TOPIC, "comptadd")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
+    public void sendComptefodelet(Compte compte) {
+        Message<Compte> message = MessageBuilder
+                .withPayload(compte)
+                .setHeader(KafkaHeaders.TOPIC, "comptdelet")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
+    public void sendCompteforupdate(Compte compte) {
+        Message<Compte> message = MessageBuilder
+                .withPayload(compte)
+                .setHeader(KafkaHeaders.TOPIC, "compteup")
+                .build();
+        kafkaTemplate.send(message);
+    }
+
 }

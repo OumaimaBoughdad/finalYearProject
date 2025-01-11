@@ -17,14 +17,14 @@ public class TransactionRequest {
     private double amount;
 
 
-    private String targetCompteId;
+    private Long targetCompteId;
 
 
     private Long employeeId;
 
 
 
-    public TransactionRequest(Transaction.TypeTransaction typeTransaction, long compteId, double amount, String  targetCompteId,Long employeeId) {
+    public TransactionRequest(Transaction.TypeTransaction typeTransaction, long compteId, double amount, Long  targetCompteId,Long employeeId) {
         this.typeTransaction = typeTransaction;
         this.compteId=compteId;
         this.amount = amount;
@@ -44,7 +44,7 @@ public class TransactionRequest {
         return amount;
     }
 
-    public String  getTargetCompteId() {
+    public Long getTargetCompteId() {
         return targetCompteId;
     }
 
@@ -60,7 +60,7 @@ public class TransactionRequest {
         this.amount = amount;
     }
 
-    public void setTargetCompteId(String  targetCompteId) {
+    public void setTargetCompteId(Long  targetCompteId) {
         this.targetCompteId = targetCompteId;
     }
 

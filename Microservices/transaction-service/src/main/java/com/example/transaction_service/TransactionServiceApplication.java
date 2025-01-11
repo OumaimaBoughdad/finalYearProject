@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 
 @SpringBootApplication
 public class TransactionServiceApplication {
@@ -124,9 +127,72 @@ public class TransactionServiceApplication {
 		}
 	}
 
+//events of compts:
+
+	@KafkaListener(topics = "comptadd", groupId = "grpemployee")
+	public void consumcomptetoadd(Compte compte) {
+		try {
+			log.info("we have received compte to insert with ID: {}", compte.getIdCompte());
+			log.info("we have received compte to insert with Type: {}", compte.getTypeCompte());
+
+			long id = compte.getIdCompte();
+			String num = compte.getNumeroCompte();
+			double solde = compte.getSolde();
+			Compte.TypeCompte type = compte.getTypeCompte();
+			LocalDate date = compte.getDateOuverture();
+			double taux = compte.getTaux();
+			double decouvert = compte.getDecouvert();
+
+			String sql = "INSERT INTO comptes(id_compte, date_ouverture, decouvert, numero_compte, solde, taux, type_compte) VALUES (?,?,?,?,?,?,?)";
+			jdbcTemplate.update(sql, id, date, decouvert, num, solde, taux, type.toString());
+
+			log.info("Compte inserted successfully.");
+		} catch (Exception e) {
+			log.error("Error processing message: {}", e.getMessage(), e);
+			// Optionnel : notifier ou stocker le message pour traitement manuel ultérieur.
+		}
+	}
+
+	@KafkaListener(topics = "compteup", groupId = "grpemployee")
+	public void consumcomptetoup(Compte compte){
+
+		log.info("we have received compte to update with ID: {}", compte.getIdCompte());
 
 
 
+		long id = compte.getIdCompte();
+		String num= compte.getNumeroCompte();
+		double solde = compte.getSolde();
+
+		LocalDate date = compte.getDateOuverture();
+		double taux = compte.getTaux();
+		double decouvert = compte.getDecouvert();
+
+		String sql = "UPDATE comptes SET   date_ouverture = ? ,decouvert=?, numero_compte=?,solde=?, taux=? WHERE id_compte = ? ";
+		jdbcTemplate.update(sql,date, decouvert,num, solde, taux, id);
+		log.info("compte update with success");
+
+	}
+	@KafkaListener(topics = "comptdelet", groupId = "grpemployee")
+	public void consumcomptedelet(Compte compte) {
+		log.info("We have received compte to delet with ID: {}", compte.getIdCompte());
+
+
+		long idCompte = compte.getIdCompte();
+		String sql = "DELETE FROM comptes WHERE id_compte = ?"; // Correct column name
+
+		try {
+			int rowsAffected = jdbcTemplate.update(sql, idCompte);
+
+			if (rowsAffected > 0) {
+				log.info("Successfully deleted compte with ID: {}", idCompte);
+			} else {
+				log.warn("No compte found with ID: {}", idCompte);
+			}
+		} catch (Exception e) {
+			log.error("Error deleting compte with ID: {}", idCompte, e);
+		}
+	}
 
 
 

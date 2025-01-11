@@ -18,6 +18,9 @@ import org.springframework.http.*;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 
@@ -49,9 +52,13 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
     private final WebClient webClient;
 
-    public TransactionService(WebClient.Builder webClientBuilder,CompteRepository compteRepository) {
+    public TransactionService(KafkaTemplate<String, String> kafkaTemplate, WebClient.Builder webClientBuilder, CompteRepository compteRepository) {
+        this.kafkaTemplate = kafkaTemplate;
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
         this.compteRepository = compteRepository;
     }
@@ -60,25 +67,10 @@ public class TransactionService {
     @Autowired
     private CompteRepository compteRepository;
 
-//
-//    public String authenticateAndGetToken() {
-//        String authUrl = "http://localhost:8080/auth/login";
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//        Map<String, String> credentials = new HashMap<>();
-//        credentials.put("username", "admin");
-//        credentials.put("password", "password");
-//
-//        HttpEntity<Map<String, String>> request = new HttpEntity<>(credentials, headers);
-//
-//        ResponseEntity<Map<String, String>> response = restTemplate.postForEntity(authUrl, request, Map.class);
-//        return response.getBody().get("token"); // Assuming the token
-//    }
 
 
     public ResponseEntity<Transaction> makeTransaction(long compteId, Transaction.TypeTransaction typeTransaction,
-                                                       double amount, String targetCompteId, Long employeeId,
+                                                       double amount, Long targetCompteId, Long employeeId,
                                                        @RequestHeader("loggedInUser") String loggedInUser,
                                                        @RequestHeader("Authorization") String authorizationHeader) {
 
@@ -145,7 +137,7 @@ public class TransactionService {
             }
 
             // Retrieve the target account
-            Optional<Compte> optionalTargetCompte = compteRepository.findById(Long.parseLong(targetCompteId));
+            Optional<Compte> optionalTargetCompte = compteRepository.findById(targetCompteId);
             if (optionalTargetCompte.isEmpty()) {
                 log.info("Target account not found in the local database");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -192,119 +184,6 @@ public class TransactionService {
 
 
 
-
-
-
-
-//    public ResponseEntity<Transaction> makeTransaction(String compteId, Transaction.TypeTransaction typeTransaction, double amount, String targetCompteId,Long employeeId) {
-//        // Retrieve the account (Compte) from the Compte microservice
-//        Compte compte = webClient.get()
-//                .uri("/api/compte/" + compteId)
-//                .retrieve()
-//                .bodyToMono(Compte.class)
-//                .block(); // Synchronous call
-//
-//        if (compte == null)
-//        {
-//            log.info("Account not found  2");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//
-//        log.info("Account found  1");
-//
-//        // Create a new transaction
-//        Transaction transaction = new Transaction();
-//        transaction.setComptes(Set.of(compte)); // Add the source account
-//        transaction.setMontant(amount);
-//        transaction.setDateTransaction(LocalDateTime.now());
-//        transaction.setTypeTransaction(typeTransaction);
-//
-//        Employee employee = webClient.get()
-//                .uri("/api/employee/" + employeeId)
-//                .retrieve()
-//                .bodyToMono(Employee.class)
-//                .block(); // Synchronous call
-//
-//
-//        if(employee == null ){
-//            log.info("Emplyee not foud  1");
-//
-//        }
-//
-//       transaction.setEmployee(employee);
-//
-//        // Handle the transaction type
-//        if (typeTransaction == Transaction.TypeTransaction.DEBIT) {
-//            // Validate sufficient balance for debit
-//            if (compte.getSolde() < amount) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(null); // Insufficient balance
-//            }
-//            // Deduct amount from account
-//            compte.setSolde(compte.getSolde() - amount);
-//        } else if (typeTransaction == Transaction.TypeTransaction.CREDIT) {
-//            // Add amount to account
-//            compte.setSolde(compte.getSolde() + amount);
-//        } else if (typeTransaction == Transaction.TypeTransaction.TRANSFERT) {
-//            // Ensure target account is specified
-//            if (targetCompteId == null) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(null); // Missing target account
-//            }
-//
-//            // Retrieve target account
-//            Compte targetCompte = webClient.get()
-//                    .uri("/api/compte/" + targetCompteId)
-//                    .retrieve()
-//                    .bodyToMono(Compte.class)
-//                    .block();
-//
-//            if (targetCompte == null) {
-//                log.info("Account not found 3");
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//            }
-//
-//            // Validate sufficient balance for transfer
-//            if (compte.getSolde() < amount) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(null); // Insufficient balance
-//            }
-//
-//            // Deduct amount from source account and add to target account
-//            compte.setSolde(compte.getSolde() - amount);
-//            targetCompte.setSolde(targetCompte.getSolde() + amount);
-//
-//            // Save updated target account
-//            webClient.put()
-//                    .uri("/api/compte/" + targetCompte.getIdCompte())
-//                    .bodyValue(targetCompte)
-//                    .retrieve()
-//                    .bodyToMono(Compte.class)
-//                    .block();
-//        } else {
-//             log.info("Account not found kkkk  ");
-//            // Invalid transaction type
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(null);
-//        }
-//
-//        // Save updated source account
-//        webClient.put()
-//                .uri("/api/compte/" + compte.getIdCompte())
-//                .bodyValue(compte)
-//                .retrieve()
-//                .bodyToMono(Compte.class)
-//                .block();
-//
-//        // Save transaction record in the database
-//        Transaction savedTransaction = transactionRepository.save(transaction);
-//
-//        // Return the saved transaction
-//        return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
-//    }
-
-
-
     // checks id the token is valid or not
     public boolean validateToken(String token) {
         if(token == null || token.isEmpty()) {
@@ -320,84 +199,6 @@ public class TransactionService {
 
     }
 
-    public List<Compte> getXihaja(@RequestHeader("loggedInUser") String loggedInUser,
-                                  @RequestHeader("Authorization") String authorizationHeader) {
-        // Extract the token from the Authorization header
-        String token;
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7); // Remove "Bearer " prefix
-        } else {
-            token = null;
-        }
-
-        // Validate the token
-        boolean isTokenValid = validateToken(token); // Implement this in transactionService
-        if (!isTokenValid) {
-            System.out.println("Invalid token for user: " + loggedInUser);
-            //return Flux.error(new RuntimeException("Unauthorized access: Token validation failed."));
-        }
-
-        System.out.println("Token validated successfully for user: " + loggedInUser);
-
-        // If token is valid, proceed to fetch Compte objects using WebClient
-
-
-        List<Compte> comptes = webClient.get()
-                .uri("/api/compte") // Update the endpoint if required
-                .headers(headers -> headers.setBearerAuth(token)) // Add the token as Bearer Auth
-                .retrieve()
-                .bodyToFlux(Compte.class) // Deserialize the response into a Flux<Compte>
-                .onErrorResume(error -> {
-                    // Handle potential errors from the API call
-                    System.out.println("Error while fetching Compte objects: " + error.getMessage());
-                    return Flux.error(new RuntimeException("Failed to fetch Compte objects from external API."));
-                })
-                .collectList() // Collect the Flux into a List<Compte>
-                .block(); // Block the call to get the List<Compte> (This is a blocking operation)
-
-
-
-        for ( Compte compte : comptes ) {
-            saveCompte(compte);
-        }
-
-        return comptes;
-
-    }
-
-
-    public void saveCompte(Compte compte) {
-        Long id = compte.getIdCompte();
-
-        // Vérifier si le compte existe
-        String sql1 = "SELECT COUNT(*) FROM comptes WHERE id_compte = ?";
-        Integer count = jdbcTemplate.queryForObject(sql1, Integer.class, id);
-
-        if (count == null || count == 0) {
-            // Insérer un nouveau compte
-            String sqlInsert = "INSERT INTO comptes (id_compte, numero_compte, type_compte, solde, date_ouverture, taux, decouvert) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            jdbcTemplate.update(sqlInsert, id, compte.getNumeroCompte(), compte.getTypeCompte().name(),
-                    compte.getSolde(), compte.getDateOuverture(), compte.getTaux(), compte.getDecouvert());
-            log.info("Compte inséré avec succès.");
-        } else {
-            // Vérifier si une mise à jour est nécessaire
-            String sqlCheck = "SELECT numero_compte, type_compte, solde, date_ouverture, taux, decouvert FROM comptes WHERE id_compte = ?";
-            Compte existingCompte = jdbcTemplate.queryForObject(sqlCheck, new BeanPropertyRowMapper<>(Compte.class), id);
-
-            if (!compte.equals(existingCompte)) { // Implémentez une méthode equals() dans Compte
-                // Mettre à jour le compte existant
-                String sqlUpdate = "UPDATE comptes SET numero_compte = ?, type_compte = ?, solde = ?, date_ouverture = ?, taux = ?, decouvert = ? " +
-                        "WHERE id_compte = ?";
-                int rowsAffected = jdbcTemplate.update(sqlUpdate, compte.getNumeroCompte(), compte.getTypeCompte().name(),
-                        compte.getSolde(), compte.getDateOuverture(), compte.getTaux(),
-                        compte.getDecouvert(), id);
-                log.info("Nombre de lignes mises à jour : {}", rowsAffected);
-            } else {
-                log.info("Aucune mise à jour nécessaire.");
-            }
-        }
-    }
 
 
     public List<Transaction> getAllTransactions() {
@@ -407,7 +208,21 @@ public class TransactionService {
     public List<Transaction> getTransactionsByCompteId(Long idCompte) {
         return transactionRepository.findByComptes_IdCompte(idCompte);
     }
+    public void sendCompteforupdate1(Compte compte) {
+        Message<Compte> message = MessageBuilder
+                .withPayload(compte)
+                .setHeader(KafkaHeaders.TOPIC, "tranup")
+                .build();
+        kafkaTemplate.send(message);
+    }
 
+    public void sendCompteforupdate2(Compte targetcompte) {
+        Message<Compte> message = MessageBuilder
+                .withPayload(targetcompte)
+                .setHeader(KafkaHeaders.TOPIC, "tranup2")
+                .build();
+        kafkaTemplate.send(message);
+    }
 }
 
 

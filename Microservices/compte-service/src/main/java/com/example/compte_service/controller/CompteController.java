@@ -67,6 +67,8 @@ public class CompteController {
                 clientId,
                 employee.getIdEmployee() // Utilisation de l'ID de l'employé authentifié
         );
+        compteService.sendcompteforadd(compte);
+        log.info("comte envoye for add");
         return compte;
     }
 
@@ -92,7 +94,7 @@ public class CompteController {
 
 
 
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Compte> updateCompte(@PathVariable Long id, @RequestBody Compte updatedCompte) {
         Optional<Compte> compteOptional = compteRepository.findById(id);
         if (compteOptional.isEmpty()) {
@@ -100,8 +102,9 @@ public class CompteController {
         }
         Compte compte = compteOptional.get();
         compte.setSolde(updatedCompte.getSolde());
-        // Mettez à jour d'autres champs si nécessaire
         Compte savedCompte = compteRepository.save(compte);
+        compteService.sendCompteforupdate(compte);
+        log.info("compte update send");
         return ResponseEntity.ok(savedCompte);
     }
 
@@ -125,7 +128,8 @@ public class CompteController {
                 carteBancaireRepository.delete(carte);
             }
         }
-
+         compteService.sendComptefodelet(compte);
+        log.info("compte send for delet");
         // Supprimer le compte
         compteRepository.delete(compte);
 
