@@ -2,6 +2,7 @@ package com.example.compte_service;
 
 import com.example.compte_service.entity.Client;
 import com.example.compte_service.entity.ClientEvent;
+import com.example.compte_service.entity.Compte;
 import com.example.compte_service.entity.Employee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @SpringBootApplication
@@ -42,7 +44,7 @@ public class CompteServiceApplication {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 //	consume the employee object
-	@KafkaListener(topics = "employeeTopic", groupId = "groupDtest")
+	@KafkaListener(topics = "employeeTopic", groupId = "grrouptr")
 	public void consumeEmployee(Employee employee){
 
 		log.info("we have received employee with ID: {}", employee.getIdEmployee());
@@ -63,7 +65,7 @@ public class CompteServiceApplication {
 
 	}
 
-	@KafkaListener(topics = "employeeupdat", groupId = "groupDtest")
+	@KafkaListener(topics = "employeeupdat", groupId = "grrouptr")
 	public void consumeEmployeeupdate(Employee employee){
 
 		log.info("we have received employee with ID: {}", employee.getIdEmployee());
@@ -100,7 +102,7 @@ public class CompteServiceApplication {
 
 
 
-	@KafkaListener(topics = "clPost", groupId = "groupDtest")
+	@KafkaListener(topics = "clPost", groupId = "grrouptr")
 	public void consumeClient(Client client) {
 		log.info("We have received client with ID: {}", client.getIdClient());
 		log.info("We have received client with name: {}", client.getFirstName());
@@ -132,7 +134,7 @@ public class CompteServiceApplication {
 		}
 	}
 
-	@KafkaListener(topics = "TOPICj", groupId = "groupDtest")
+	@KafkaListener(topics = "TOPICj", groupId = "grrouptr")
 	public void consumeClientdelet(Client client) {
 		log.info("We have received client with ID: {}", client.getIdClient());
 		log.info("We have received client with name: {}", client.getFirstName());
@@ -153,7 +155,7 @@ public class CompteServiceApplication {
 		}
 	}
 
-	@KafkaListener(topics = "topicupdate", groupId = "grpem")
+	@KafkaListener(topics = "topicupdate", groupId = "grrouptr")
 	public void consumeClientupdate(Client client) {
 		log.info("We have received client with ID: {}", client.getIdClient());
 		log.info("We have received client with name: {}", client.getFirstName());
@@ -183,7 +185,7 @@ public class CompteServiceApplication {
 		}
 	}
 
-	@KafkaListener(topics = "employeedelet", groupId = "grpem")
+	@KafkaListener(topics = "employeedelet", groupId = "grrouptr")
 	public void consumemployeedelet(Employee employee) {
 		log.info("We have received employee with ID: {}", employee.getIdEmployee());
 		log.info("We have received employee with name: {}", employee.getFirstName());
@@ -202,5 +204,52 @@ public class CompteServiceApplication {
 		} catch (Exception e) {
 			log.error("Error deleting employee with ID: {}", idEmployee, e);
 		}
+	}
+
+
+	@KafkaListener(topics = "tranup", groupId = "grrouptr")
+	public void consumcomptetoup(Compte compte){
+
+		log.info("we have received compte to update with ID: {}", compte.getIdCompte());
+
+
+
+
+		long id = compte.getIdCompte();
+		String num= compte.getNumeroCompte();
+		double solde = compte.getSolde();
+
+		LocalDate date = compte.getDateOuverture();
+		double taux = compte.getTaux();
+		double decouvert = compte.getDecouvert();
+
+		String sql = "UPDATE comptes SET   date_ouverture = ? ,decouvert=?, numero_compte=?,solde=?, taux=? WHERE id_compte = ? ";
+		jdbcTemplate.update(sql,date, decouvert,num, solde, taux, id);
+		log.info("compte update with success");
+
+
+
+	}
+
+	@KafkaListener(topics = "tranup2", groupId = "grrouptr")
+	public void consumcomptetoup2(Compte targetcompt){
+
+
+		log.info("we have received  Target compte to update with ID: {}", targetcompt.getIdCompte());
+
+
+
+		long idt = targetcompt.getIdCompte();
+		String numt= targetcompt.getNumeroCompte();
+		double soldet = targetcompt.getSolde();
+
+		LocalDate datet = targetcompt.getDateOuverture();
+		double tauxt = targetcompt.getTaux();
+		double decouvertt = targetcompt.getDecouvert();
+
+		String sqlt = "UPDATE comptes SET   date_ouverture = ? ,decouvert=?, numero_compte=?,solde=?, taux=? WHERE id_compte = ? ";
+		jdbcTemplate.update(sqlt,datet, decouvertt,numt, soldet, tauxt, idt);
+		log.info("Target compte update with success");
+
 	}
 }

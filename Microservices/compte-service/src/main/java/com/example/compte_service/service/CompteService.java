@@ -13,6 +13,9 @@ public interface CompteService {
     List<Compte> getAllComptes();
     Compte getCompteByNumero(String numeroCompte);
     List<Compte> getComptesByClientCne(String cne);
+    public void sendcompteforadd(Compte compte);
+    public void sendComptefodelet(Compte compte);
+    public void sendCompteforupdate(Compte compte);
 
 
 
