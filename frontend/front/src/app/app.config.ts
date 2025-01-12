@@ -1,13 +1,12 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideRouter, withHashLocation } from '@angular/router';
-
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { jwtInterceptor } from './jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withHashLocation()),
-    provideHttpClient(withFetch()), // Intact
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([jwtInterceptor])), // Utilisez la fonction d'intercepteur
   ],
 };
