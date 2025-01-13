@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the microservice...'
+                sh './mvnw clean package'  // Use Maven to build the project
+            }
+        }
+    }
+}
