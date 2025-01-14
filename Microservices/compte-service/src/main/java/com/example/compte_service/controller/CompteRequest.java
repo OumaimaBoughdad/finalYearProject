@@ -8,6 +8,10 @@ public class CompteRequest {
     private TypeCompte typeCompte;
     private double solde;
 
+    private  double taux;
+    private double decouvert;
+
+
     // Getters and setters
 
     public String getNumeroCompte() {
@@ -34,5 +38,19 @@ public class CompteRequest {
         this.solde = solde;
     }
 
+    public double getTaux() {
+        return taux;
+    }
 
+    public double getDecouvert() {
+        return decouvert;
+    }
+
+    public void setTaux(double taux) {
+        this.taux = taux;
+    }
+
+    public void setDecouvert(double decouvert) {
+        this.decouvert = decouvert;
+    }
 }

@@ -35,7 +35,7 @@ public class CompteServiceImpl implements CompteService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-@Autowired
+    @Autowired
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // Instancier le BCryptPasswordEncoder
@@ -46,11 +46,13 @@ public class CompteServiceImpl implements CompteService {
     }
 
     @Override
-    public Compte createCompte(String numeroCompte, Compte.TypeCompte typeCompte, double solde, long clientId, long employeeId) {
+    public Compte createCompte(String numeroCompte, Compte.TypeCompte typeCompte, double solde, double taux,double decouvert,long clientId, long employeeId) {
         Compte compte = new Compte();
         compte.setNumeroCompte(numeroCompte);
         compte.setTypeCompte(typeCompte);
         compte.setSolde(solde);
+        compte.setDecouvert(decouvert);
+        compte.setTaux(taux);
         compte.setDateOuverture(LocalDate.now());
 
         // Associer le client
