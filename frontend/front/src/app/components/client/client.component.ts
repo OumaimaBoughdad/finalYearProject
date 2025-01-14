@@ -1,4 +1,3 @@
-// src/app/components/client/client.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../models/client.model';
@@ -73,14 +72,9 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  // Récupérer un client par son ID
-  getClientById(id: number): void {
-    this.clientService.getClientById(id).subscribe({
-      next: (client) => {
-        this.selectedClient = client; // Stocker le client sélectionné
-      },
-      error: (err) => console.error('Failed to load client', err),
-    });
+  // Sélectionner un client pour la mise à jour
+  selectClientForUpdate(client: Client): void {
+    this.selectedClient = { ...client }; // Crée une copie du client
   }
 
   // Mettre à jour un client
@@ -97,6 +91,8 @@ export class ClientComponent implements OnInit {
         },
         error: (err) => console.error('Failed to update client', err),
       });
+    } else {
+      console.error('No client selected or client ID is missing');
     }
   }
 
@@ -111,4 +107,17 @@ export class ClientComponent implements OnInit {
       });
     }
   }
+  searchId: number | null = null;
+  getClientById(): void {
+    if (this.searchId) {
+      this.clientService.getClientById(this.searchId).subscribe({
+        next: (client) => {
+          this.selectedClient = client; // Afficher les détails du client trouvé
+        },
+        error: (err) => console.error('Échec du chargement du client par ID', err),
+      });
+    }
+  }
+
+
 }

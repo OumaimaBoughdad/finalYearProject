@@ -15,6 +15,20 @@
 
   <hr />
 
+  <!-- Section de recherche par ID -->
+  <div class="search-section">
+    <label for="searchId">Rechercher par ID :</label>
+    <input
+      type="number"
+      id="searchId"
+      [(ngModel)]="searchId"
+      placeholder="Entrer l'ID"
+    />
+    <button (click)="getClientById()">Rechercher</button>
+  </div>
+
+  <hr />
+
   <!-- Formulaire pour ajouter un nouveau client -->
   <div class="form-section">
     <h3>Ajouter un Nouveau Client</h3>
@@ -73,18 +87,16 @@
         <td>{{ client.address }}</td>
         <td>{{ client.cne }}</td>
         <td>
-          <!-- Vérifiez si idClient n'est pas undefined avant d'appeler les méthodes -->
-          <button (click)="updateClient()">Modifier</button>
-          <button
-            *ngIf="client.idClient !== undefined"
-            (click)="deleteClient(client.idClient!)">
+          <!-- Bouton pour sélectionner le client à modifier -->
+          <button (click)="selectClientForUpdate(client)">Modifier</button>
+          <!-- Bouton pour supprimer le client -->
+          <button *ngIf="client.idClient !== undefined" (click)="deleteClient(client.idClient!)">
             Supprimer
           </button>
         </td>
       </tr>
       </tbody>
     </table>
-
   </div>
 
   <hr />

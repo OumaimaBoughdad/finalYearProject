@@ -1,0 +1,89 @@
+<div class="transaction-container">
+  <h2>Effectuer une transaction</h2>
+  <form (ngSubmit)="makeTransaction()">
+    <!-- Champ pour l'ID du compte source -->
+    <div>
+      <label for="compteId">ID du compte source :</label>
+      <input
+        type="number"
+        id="compteId"
+        [(ngModel)]="compteId"
+        name="compteId"
+        required
+      />
+    </div>
+
+    <!-- Champ pour le type de transaction -->
+    <div>
+      <label for="typeTransaction">Type de transaction :</label>
+      <select
+        id="typeTransaction"
+        [(ngModel)]="typeTransaction"
+        name="typeTransaction"
+        required
+      >
+        <option value="CREDIT">Crédit</option>
+        <option value="DEBIT">Débit</option>
+        <option value="TRANSFERT">Transfert</option>
+      </select>
+    </div>
+
+    <!-- Champ pour le montant -->
+    <div>
+      <label for="amount">Montant :</label>
+      <input
+        type="number"
+        id="amount"
+        [(ngModel)]="amount"
+        name="amount"
+        required
+      />
+    </div>
+
+    <!-- Champ pour l'ID du compte cible (uniquement pour les transferts) -->
+    <div *ngIf="typeTransaction === 'TRANSFERT'">
+      <label for="targetCompteId">ID du compte cible :</label>
+      <input
+        type="number"
+        id="targetCompteId"
+        [(ngModel)]="targetCompteId"
+        name="targetCompteId"
+        required
+      />
+    </div>
+
+    <!-- Bouton pour soumettre le formulaire -->
+    <button type="submit">Effectuer la transaction</button>
+  </form>
+
+  <!-- Section pour afficher toutes les transactions -->
+  <div class="transactions-section">
+    <h3>Toutes les transactions</h3>
+    <ul>
+      <li *ngFor="let transaction of transactions">
+        ID: {{ transaction.idTransaction }} - Type: {{ transaction.typeTransaction }} - Montant: {{ transaction.montant }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Section pour afficher les transactions d'un compte spécifique -->
+  <div class="compte-transactions-section">
+    <h3>Transactions du compte</h3>
+    <div>
+      <label for="selectedCompteId">ID du compte :</label>
+      <input
+        type="number"
+        id="selectedCompteId"
+        [(ngModel)]="selectedCompteId"
+        name="selectedCompteId"
+        placeholder="Entrez l'ID du compte"
+      />
+      <button (click)="loadTransactionsByCompteId()">Charger les transactions</button>
+    </div>
+    <ul>
+      <li *ngFor="let transaction of compteTransactions">
+        ID: {{ transaction.idTransaction }} - Type: {{ transaction.typeTransaction }} - Montant: {{ transaction.montant }}
+      </li>
+    </ul>
+  </div>
+</div>
