@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction-service
+  template:
+    metadata:
+      labels:
+        app: transaction-service
+    spec:
+      containers:
+        - name: transaction-service
+          image: your-docker-repo/transaction-service:latest
+          ports:
+            - containerPort: 8087
+          env:
+            - name: EUREKA_SERVER
+              value: "http://eureka-main:8761/eureka"

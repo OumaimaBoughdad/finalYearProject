@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eureka_main
+  name: eureka-main
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: eureka_main
+      app: eureka-main
   template:
     metadata:
       labels:
-        app: eureka_main
+        app: eureka-main
     spec:
       containers:
-        - name: eureka_main
-          image: oumaimaboughdad/eureka_main:v1.0.0
+        - name: eureka-main
+          image: your-docker-repo/eureka-main:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8761

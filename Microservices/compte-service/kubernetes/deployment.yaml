@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compte-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: compte-service
+  template:
+    metadata:
+      labels:
+        app: compte-service
+    spec:
+      containers:
+        - name: compte-service
+          image: your-docker-repo/compte-service:latest
+          ports:
+            - containerPort: 8086
+          env:
+            - name: EUREKA_SERVER
+              value: "http://eureka-main:8761/eureka"

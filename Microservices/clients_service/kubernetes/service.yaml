@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clients-service
+spec:
+  selector:
+    app: clients-service
+  ports:
+    - port: 8383
+      targetPort: 8383

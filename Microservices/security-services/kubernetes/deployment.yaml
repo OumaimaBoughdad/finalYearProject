@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: security-service
+  template:
+    metadata:
+      labels:
+        app: security-service
+    spec:
+      containers:
+        - name: security-service
+          image: your-docker-repo/security-service:latest
+          ports:
+            - containerPort: 8089
+          env:
+            - name: EUREKA_SERVER
+              value: "http://eureka-main:8761/eureka"
