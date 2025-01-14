@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthGuard } from './auth.guard';
 import { LoginComponent } from './components/login/login.component';
 import {ClientComponent} from './components/client/client.component';
+import {CompteComponent} from './components/compte/compte.component';
+import {TransactionComponent} from './components/transaction/transaction.component';
+
 
 export const routes: Routes = [
   { path: '', component: EmployeComponent , canActivate: [AuthGuard]},
@@ -13,7 +16,8 @@ export const routes: Routes = [
   { path: 'add-employee', component: AddEmployeeComponent,canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
    { path: 'login', component: LoginComponent },
    { path: 'clients', component: ClientComponent,canActivate: [AuthGuard] },
-
+  { path: 'comptes', component: CompteComponent,canActivate: [AuthGuard] },
+  { path: 'transaction', component: TransactionComponent,canActivate: [AuthGuard] },
 
  ];
 

@@ -1,0 +1,169 @@
+<div class="compte-container">
+  <h2>Gestion des Comptes</h2>
+
+  <!-- Section de recherche par numéro de compte -->
+  <div class="search-section">
+    <label for="searchNumeroCompte">Rechercher par numéro de compte :</label>
+    <input
+      type="text"
+      id="searchNumeroCompte"
+      [(ngModel)]="searchNumeroCompte"
+      placeholder="Entrer le numéro de compte"
+    />
+    <button (click)="searchByNumero()">Rechercher</button>
+  </div>
+
+  <!-- Section de recherche par CNE du client -->
+  <div class="search-section">
+    <label for="searchClientCne">Rechercher par CNE du client :</label>
+    <input
+      type="text"
+      id="searchClientCne"
+      [(ngModel)]="searchClientCne"
+      placeholder="Entrer le CNE du client"
+    />
+    <button (click)="searchByClientCne()">Rechercher</button>
+  </div>
+
+  <hr />
+
+  <!-- Formulaire pour ajouter un nouveau compte -->
+  <div class="form-section">
+    <h3>Ajouter un Nouveau Compte</h3>
+    <form (ngSubmit)="createCompte()">
+      <div>
+        <label for="clientId">Client :</label>
+        <select id="clientId" [(ngModel)]="selectedClientId" name="clientId" required>
+          <option value="" disabled selected>Sélectionnez un client</option>
+          <option *ngFor="let client of clients" [value]="client.idClient">
+            {{ client.firstName }} {{ client.lastName }} ({{ client.cne }})
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="numeroCompte">Numéro de compte :</label>
+        <input type="text" id="numeroCompte" [(ngModel)]="newCompte.numeroCompte" name="numeroCompte" required />
+      </div>
+      <div>
+        <label for="typeCompte">Type de compte :</label>
+        <select id="typeCompte" [(ngModel)]="newCompte.typeCompte" name="typeCompte" required>
+          <option value="COURANT">Courant</option>
+          <option value="EPARGNE">Épargne</option>
+        </select>
+      </div>
+      <div>
+        <label for="solde">Solde :</label>
+        <input type="number" id="solde" [(ngModel)]="newCompte.solde" name="solde" required />
+      </div>
+      <div>
+        <label for="dateOuverture">Date d'ouverture :</label>
+        <input type="date" id="dateOuverture" [(ngModel)]="newCompte.dateOuverture" name="dateOuverture" required />
+      </div>
+      <div *ngIf="newCompte.typeCompte === 'EPARGNE'">
+        <label for="taux">Taux :</label>
+        <input type="number" id="taux" [(ngModel)]="newCompte.taux" name="taux" />
+      </div>
+      <div *ngIf="newCompte.typeCompte === 'COURANT'">
+        <label for="decouvert">Découvert :</label>
+        <input type="number" id="decouvert" [(ngModel)]="newCompte.decouvert" name="decouvert" />
+      </div>
+      <button type="submit">Ajouter</button>
+    </form>
+  </div>
+
+  <hr />
+
+  <!-- Liste des comptes -->
+  <div class="comptes-section">
+    <h3>Liste des Comptes</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Type</th>
+        <th>Solde</th>
+        <th>Date d'ouverture</th>
+        <th>Taux/Découvert</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let compte of comptes">
+        <td>{{ compte.numeroCompte }}</td>
+        <td>{{ compte.typeCompte }}</td>
+        <td>{{ compte.solde }}</td>
+        <td>{{ compte.dateOuverture }}</td>
+        <td>
+          <span *ngIf="compte.typeCompte === 'EPARGNE'">Taux : {{ compte.taux }}</span>
+          <span *ngIf="compte.typeCompte === 'COURANT'">Découvert : {{ compte.decouvert }}</span>
+        </td>
+        <td>
+          <button (click)="selectCompteForUpdate(compte)">Modifier</button>
+          <button (click)="deleteCompte(compte.idCompte)">Supprimer</button>
+          <button (click)="showCartes(compte)">Voir cartes</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section pour afficher les cartes bancaires -->
+  <div class="cartes-section" *ngIf="selectedCompteCartes">
+    <h3>Cartes Bancaires</h3>
+    <button (click)="closeCartes()">Fermer</button>
+    <table>
+      <thead>
+      <tr>
+        <th>Numéro de carte</th>
+        <th>Date d'expiration</th>
+        <th>Code PIN</th>
+        <th>Limite</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let carte of selectedCompteCartes">
+        <td>{{ carte.numeroCarte }}</td>
+        <td>{{ carte.dateExpiration }}</td>
+        <td>{{ carte.codePin }}</td>
+        <td>{{ carte.limiteCarte }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulaire de mise à jour des comptes -->
+  <div class="update-section" *ngIf="selectedCompte">
+    <h3>Modifier le Compte</h3>
+    <form (ngSubmit)="updateCompte()">
+      <div>
+        <label for="updateNumeroCompte">Numéro de compte :</label>
+        <input type="text" id="updateNumeroCompte" [(ngModel)]="selectedCompte.numeroCompte" name="updateNumeroCompte" required />
+      </div>
+      <div>
+        <label for="updateTypeCompte">Type de compte :</label>
+        <select id="updateTypeCompte" [(ngModel)]="selectedCompte.typeCompte" name="updateTypeCompte" required>
+          <option value="COURANT">Courant</option>
+          <option value="EPARGNE">Épargne</option>
+        </select>
+      </div>
+      <div>
+        <label for="updateSolde">Solde :</label>
+        <input type="number" id="updateSolde" [(ngModel)]="selectedCompte.solde" name="updateSolde" required />
+      </div>
+      <div>
+        <label for="updateDateOuverture">Date d'ouverture :</label>
+        <input type="date" id="updateDateOuverture" [(ngModel)]="selectedCompte.dateOuverture" name="updateDateOuverture" required />
+      </div>
+      <div *ngIf="selectedCompte.typeCompte === 'EPARGNE'">
+        <label for="updateTaux">Taux :</label>
+        <input type="number" id="updateTaux" [(ngModel)]="selectedCompte.taux" name="updateTaux" />
+      </div>
+      <div *ngIf="selectedCompte.typeCompte === 'COURANT'">
+        <label for="updateDecouvert">Découvert :</label>
+        <input type="number" id="updateDecouvert" [(ngModel)]="selectedCompte.decouvert" name="updateDecouvert" />
+      </div>
+      <button type="submit">Mettre à jour</button>
+      <button type="button" (click)="selectedCompte = null">Annuler</button>
+    </form>
+  </div>
+</div>
