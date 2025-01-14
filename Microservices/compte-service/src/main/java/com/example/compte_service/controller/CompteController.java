@@ -64,6 +64,8 @@ public class CompteController {
                 compteRequest.getNumeroCompte(),
                 compteRequest.getTypeCompte(),
                 compteRequest.getSolde(),
+                compteRequest.getTaux(),
+                compteRequest.getDecouvert(),
                 clientId,
                 employee.getIdEmployee() // Utilisation de l'ID de l'employé authentifié
         );
