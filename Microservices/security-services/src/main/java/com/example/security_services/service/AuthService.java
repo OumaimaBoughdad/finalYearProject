@@ -1,6 +1,6 @@
 package com.example.security_services.service;
 
-import com.example.compte_service.CompteServiceApplication;
+//import com.example.compte_service.CompteServiceApplication;
 import com.example.security_services.entity.Employee;
 import com.example.security_services.repository.EmployeeRepository;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class AuthService {
     private JdbcTemplate jdbcTemplate;
 
 
-    Logger log = LoggerFactory.getLogger(CompteServiceApplication.class);
+    Logger log = LoggerFactory.getLogger(AuthService.class);
     @Autowired
     private EmployeeRepository repository;
     @Autowired
@@ -56,8 +56,8 @@ public class AuthService {
     @KafkaListener(topics = "employeeupdat", groupId = "grprmp")
     public void consumeEmployeeupdate(Employee employee){
 
-        log.info("we have received employee to update with ID: {}", employee.getIdEmployee());
-        log.info("we have received employee with name: {}", employee.getFirstName());
+       log.info("we have received employee to update with ID: {}", employee.getIdEmployee());
+       log.info("we have received employee with name: {}", employee.getFirstName());
 
 
         long id = employee.getIdEmployee();

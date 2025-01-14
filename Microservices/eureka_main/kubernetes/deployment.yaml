@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka_main
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eureka_main
+  template:
+    metadata:
+      labels:
+        app: eureka_main
+    spec:
+      containers:
+        - name: eureka_main
+          image: oumaimaboughdad/eureka_main:v1.0.0
+          ports:
+            - containerPort: 8080
