@@ -1,0 +1,190 @@
+body {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.container {
+  background-color: #eef0f3;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  width: 900px;
+  max-width: 100%;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  margin: 50px auto;  /* Ajoute des marges verticales et centre horizontalement */
+  margin-top:80px ;
+}
+
+.container.active .welcome-container {
+  width: 40%;
+}
+
+.container.active .form-container {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.welcome-container,
+.form-container {
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: all 0.6s ease-in-out;
+}
+
+.welcome-container {
+  background: linear-gradient(to top right, #eef0f3, #ffffff);
+  color: rgba(6, 57, 131, 0.99);
+  z-index: 2;
+}
+
+.welcome-container .logo img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  background-color: rgb(44, 57, 108);
+  transform: translateX(100%);
+  opacity: 0;
+  width: 50%;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* max-width: 400px; /* Limite la largeur du formulaire */
+}
+
+form h1 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+form p {
+  margin-bottom: 20px;
+  color: #ddd;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+  margin: 10px 0;
+}
+.input-group .icon-eye {
+  position: absolute;
+  left: 10px;
+  top: 50%; /* Centrer verticalement */
+  transform: translateY(-50%); /* Ajuste pour un centrage parfait */
+  color: #6a11cb;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6a11cb;
+  font-size: 16px;
+}
+
+.input-group .icon-eye {
+  cursor: pointer;
+}
+
+.input-group .icon-eye:hover {
+  color: #2575fc;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 12px 12px 40px; /* Ajuster le padding pour laisser de l'espace pour l'icône à gauche */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #2575fc;
+}
+
+button {
+  margin-top: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to right, #c1890f, #475997);
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, #c1890f, #2c396c);
+  transform: scale(1.05);
+}
+
+form .back-btn {
+  background: transparent;
+  color: #2575fc;
+  border: 2px solid #2575fc;
+  margin-top: 15px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+form .back-btn:hover {
+  background: #2575fc;
+  color: #fff;
+}
+
+a {
+  margin-top: 10px;
+  color: #2575fc;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #6a11cb;
+  text-decoration: underline;
+}

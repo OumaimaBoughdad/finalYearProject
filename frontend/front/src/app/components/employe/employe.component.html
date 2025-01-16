@@ -1,59 +1,102 @@
-<h2>Liste des Employés</h2>
-<p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+<div class="container">
+  <h2>Liste des Employés</h2>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Prénom</th>
-    <th>Nom</th>
-    <th>Email</th>
-    <th>Rôle</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let employee of employees; let i = index">
-    <td>{{ employee.idEmployee }}</td>
-    <td>
-      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.firstName" />
-      <span *ngIf="!employee.isEditing">{{ employee.firstName }}</span>
-    </td>
-    <td>
-      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.lastName" />
-      <span *ngIf="!employee.isEditing">{{ employee.lastName }}</span>
-    </td>
-    <td>
-      <input *ngIf="employee.isEditing" type="email" [(ngModel)]="employee.email" />
-      <span *ngIf="!employee.isEditing">{{ employee.email }}</span>
-    </td>
-    <td>
-      <input *ngIf="employee.isEditing" type="text" [(ngModel)]="employee.role" />
-      <span *ngIf="!employee.isEditing">{{ employee.role }}</span>
-    </td>
-    <td>
-      <button *ngIf="!employee.isEditing" (click)="editEmployee(employee)">Modifier</button>
-      <button *ngIf="employee.isEditing" (click)="saveEmployee(employee)">Sauvegarder</button>
-      <button (click)="deleteEmployee(employee.idEmployee)">Supprimer</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <!-- Conteneur pour la recherche et le tri -->
+  <div class="search-and-sort-container">
+    <!-- Barre de recherche à gauche -->
+    <div class="search-section">
+      <mat-form-field>
+        <input
+          matInput
+          #searchInput
+          type="text"
+          placeholder="Recherche par ID ou Email"
+          (keyup.enter)="universalSearch(searchInput.value)"
+        />
 
-<hr />
+      <button matSuffix mat-button (click)="universalSearch(searchInput.value)">
+        <mat-icon>search</mat-icon> <!-- Icône de recherche -->
+      </button>
+      </mat-form-field>
+    </div>
 
-<h3>Recherche</h3>
-<input #idInput type="number" placeholder="Recherche par ID" />
-<button (click)="searchById(+idInput.value)">Rechercher</button>
-<br />
-<input #emailInput type="text" placeholder="Recherche par Email" />
-<button (click)="searchByEmail(emailInput.value)">Rechercher</button>
+    <!-- Menu de tri à droite -->
+    <div class="sort-options">
+      <mat-form-field appearance="fill">
+        <mat-label>Trier par</mat-label>
+        <mat-select [(ngModel)]="selectedSortOption" (selectionChange)="applySort()">
+          <mat-option value="id">ID</mat-option>
+          <mat-option value="firstName">Prénom</mat-option>
+          <mat-option value="lastName">Nom</mat-option>
+          <mat-option value="email">Email</mat-option>
+          <mat-option value="role">Rôle</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
 
-<div *ngIf="searchResult">
-  <h4>Résultat de la recherche :</h4>
-  <p>ID : {{ searchResult.idEmployee }}</p>
-  <p>Prénom : {{ searchResult.firstName }}</p>
-  <p>Nom : {{ searchResult.lastName }}</p>
-  <p>Email : {{ searchResult.email }}</p>
-  <p>Rôle : {{ searchResult.role }}</p>
+  <!-- Message d'erreur -->
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+  <!-- Tableau avec tri et pagination -->
+  <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Colonne ID -->
+    <ng-container matColumnDef="idEmployee">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{ employee.idEmployee }}</mat-cell>
+    </ng-container>
+
+    <!-- Colonne Prénom -->
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Prénom</mat-header-cell>
+      <mat-cell *matCellDef="let employee">
+        <input *ngIf="employee.isEditing" matInput type="text" [(ngModel)]="employee.firstName" />
+        <span *ngIf="!employee.isEditing">{{ employee.firstName }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Colonne Nom -->
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
+      <mat-cell *matCellDef="let employee">
+        <input *ngIf="employee.isEditing" matInput type="text" [(ngModel)]="employee.lastName" />
+        <span *ngIf="!employee.isEditing">{{ employee.lastName }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Colonne Email -->
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+      <mat-cell *matCellDef="let employee">
+        <input *ngIf="employee.isEditing" matInput type="email" [(ngModel)]="employee.email" />
+        <span *ngIf="!employee.isEditing">{{ employee.email }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Colonne Rôle -->
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rôle</mat-header-cell>
+      <mat-cell *matCellDef="let employee">
+        <input *ngIf="employee.isEditing" matInput type="text" [(ngModel)]="employee.role" />
+        <span *ngIf="!employee.isEditing">{{ employee.role }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Colonne Actions -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let employee">
+        <button *ngIf="!employee.isEditing" mat-raised-button color="primary" (click)="editEmployee(employee)">Modifier</button>
+        <button *ngIf="employee.isEditing" mat-raised-button color="accent" (click)="saveEmployee(employee)">Sauvegarder</button>
+        <button mat-raised-button color="warn" (click)="deleteEmployee(employee.idEmployee)">Supprimer</button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- En-têtes et lignes du tableau -->
+    <mat-header-row *matHeaderRowDef="['idEmployee', 'firstName', 'lastName', 'email', 'role', 'actions']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['idEmployee', 'firstName', 'lastName', 'email', 'role', 'actions']"></mat-row>
+  </mat-table>
+
+  <!-- Pagination -->
+  <mat-paginator [pageSizeOptions]="[10, 20, 50]" [pageSize]="10" showFirstLastButtons></mat-paginator>
 </div>
