@@ -1,5 +1,21 @@
-<nav>
-  <a routerLink="/employees">Liste des employés</a>
-  <a routerLink="/add-employee">Ajouter un employé</a>
-  <button (click)="onLogout()">Déconnexion</button>
-</nav>
+<mat-toolbar color="primary">
+  <img src="/ab.png" alt="Bank Logo" height="40" class="logo" />
+
+  <span>AMWAL</span>
+
+  <!-- Espace flexible pour pousser les éléments suivants à droite -->
+  <span class="spacer"></span>
+
+  <!-- Liens de navigation -->
+  <a mat-button routerLink="/employees">Liste des employés</a>
+  <a mat-button routerLink="/add-employee">Ajouter un employé</a>
+  <a mat-button routerLink="/clients">gestion des clients</a>
+  <a mat-button routerLink="/comptes">Gestion des comptes</a>
+  <a mat-button routerLink="/transaction">Gestion des transactions</a>
+
+  <!-- Menu de déconnexion -->
+  <button mat-button (click)="onLogout()">
+    <mat-icon>logout</mat-icon>
+    Déconnexion
+  </button>
+</mat-toolbar>

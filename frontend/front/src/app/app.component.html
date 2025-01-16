@@ -1,9 +1,2 @@
-<!-- app.component.html -->
-<nav>
-  <a routerLink="/employees">Employés</a> <!-- Lien vers la page des employés -->
-</nav>
-<nav>
-  <a routerLink="/add-employee">Employés</a> <!-- Lien vers la page des employés -->
-</nav>
-<app-navbar></app-navbar>
+<app-navbar *ngIf="showNavbar"></app-navbar> <!-- Affiche la navbar uniquement si showNavbar est true -->
 <router-outlet></router-outlet> <!-- Affichage des composants en fonction des routes -->
