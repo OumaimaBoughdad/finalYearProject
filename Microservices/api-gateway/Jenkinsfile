@@ -14,8 +14,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the eureka microservice ......  '
-                dir('Microservices/eureka_main ') { // Change to the directory containing pom.xml
+                echo 'Building the api gateway microservice ......  '
+                dir('Microservices/api-gateway') { // Change to the directory containing pom.xml
                     sh 'mvn clean package -DskipTests'
                 }
             }

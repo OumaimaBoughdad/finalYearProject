@@ -16,8 +16,15 @@ pipeline {
             steps {
                 echo 'Building the microservice...'
                 dir('Microservices/clients_service') { // Change to the directory containing pom.xml
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests' // Skip tests during the build
+                }
+            }
+        }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') { // Use the name configured in Jenkins
+                    sh 'mvn sonar:sonar -Dsonar.host.url=http://13.53.84.227:9000/ -Dsonar.login=Sqa_1edd27e4ad72c8e103459f7a0eab4c058d3345ac'
                 }
             }
         }
