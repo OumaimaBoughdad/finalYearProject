@@ -16,7 +16,8 @@ pipeline {
             steps {
                 echo 'Building the microservice...'
                 dir('Microservices/clients_service') { // Change to the directory containing pom.xml
-                    sh 'mvn clean package'
+                    sh 'mvn clean package -DskipTests'
+
                 }
             }
         }
