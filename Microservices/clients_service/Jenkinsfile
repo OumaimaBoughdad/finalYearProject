@@ -5,6 +5,11 @@ pipeline {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
 
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Jenkins credentials ID for Docker Hub
+        DOCKER_IMAGE_NAME = 'oumaimaboughdad/clients-service' // Replace with your Docker Hub username and image name
+    }
+
     stages {
         stage('Checkout SCM') {
             steps {
@@ -21,25 +26,50 @@ pipeline {
             }
         }
 
-       stage('SonarQube Analysis') {
-           steps {
-               withSonarQubeEnv('Sonar-6') { // Use the name configured in Jenkins
-                   dir('Microservices/clients_service') { // Specify the directory where the pom.xml is located
-                       sh '''
-                       mvn sonar:sonar \
-                           -Dsonar.host.url=http://13.53.84.227:9000/ \
-                           -Dsonar.login=squ_1ae4f5b6d10ad27965eb511624faa9f2da2dc9fc \
-                           -Dsonar.projectKey=Prj-Fin-T
-                       '''
-                   }
-               }
-           }
-       }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Sonar-6') { // Use the name configured in Jenkins
+                    dir('Microservices/clients_service') { // Specify the directory where the pom.xml is located
+                        sh '''
+                        mvn sonar:sonar \
+                            -Dsonar.host.url=http://13.53.84.227:9000/ \
+                            -Dsonar.login=squ_1ae4f5b6d10ad27965eb511624faa9f2da2dc9fc \
+                            -Dsonar.projectKey=Prj-Fin-T
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Check Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                dir('Microservices/clients_service') { // Change to the directory containing Dockerfile
+                    script {
+                        // Build the Docker image
+                        docker.build("${env.DOCKER_IMAGE_NAME}:latest")
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                echo 'Pushing Docker image to Docker Hub...'
+                script {
+                    // Log in to Docker Hub
+                    docker.withRegistry('https://registry.hub.docker.com', "${env.DOCKER_HUB_CREDENTIALS}") {
+                        // Push the Docker image
+                        docker.image("${env.DOCKER_IMAGE_NAME}:latest").push()
+                    }
                 }
             }
         }
