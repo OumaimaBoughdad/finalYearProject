@@ -32,7 +32,7 @@ pipeline {
                     dir('Microservices/clients_service') { // Specify the directory where the pom.xml is located
                         sh '''
                         mvn sonar:sonar \
-                            -Dsonar.host.url=http://13.49.72.73:9000/ \
+                            -Dsonar.host.url=http://51.20.127.133:9000/ \
                             -Dsonar.login=squ_1ae4f5b6d10ad27965eb511624faa9f2da2dc9fc \
                             -Dsonar.projectKey=Prj-Fin-T
                         '''
