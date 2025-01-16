@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
-    }
-
     stages {
         stage('Checkout SCM') {
             steps {
@@ -15,28 +11,25 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the microservice...'
-                dir('Microservices/clients_service') { // Change to the directory containing pom.xml
-                    sh 'mvn clean package -DskipTests' // Skip tests during the build
+                dir('Microservices/clients_service') {
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonar-6') { // Use the name configured in Jenkins
-                    sh '''
-                    mvn sonar:sonar \
-                        -Dsonar.host.url=http://13.53.84.227:9000/ \
-                        -Dsonar.login=sonar-token \
-                        -Dsonar.projectKey=Prj-Fin-T
-                    '''
+                withSonarQubeEnv('Sonar-6') { // Replace 'Sonar-6' with your SonarQube server configuration name
+                    dir('Microservices/clients_service') {
+                        sh 'mvn sonar:sonar -Dsonar.host.url=http://13.53.84.227:9000/ -Dsonar.login=sonar-token -Dsonar.projectKey=Prj-Fin-T'
+                    }
                 }
             }
         }
 
         stage('Check Quality Gate') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
+                timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
             }
