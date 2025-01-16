@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
+    }
+
+    stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the security microservice ......  '
+                dir('Microservices/security-services') { // Change to the directory containing pom.xml
+                    sh 'mvn clean package'
+                }
+            }
+        }
+    }
+}
