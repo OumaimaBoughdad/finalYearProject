@@ -28,11 +28,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonar-6') { // Use the name configured in Jenkins
+                withSonarQubeEnv('Sonar-7') { // Use the name configured in Jenkins
                     dir('Microservices/clients_service') { // Specify the directory where the pom.xml is located
                         sh '''
                         mvn sonar:sonar \
-                            -Dsonar.host.url=http://13.53.84.227:9000/ \
+                            -Dsonar.host.url=http://13.49.72.73:9000/ \
                             -Dsonar.login=squ_1ae4f5b6d10ad27965eb511624faa9f2da2dc9fc \
                             -Dsonar.projectKey=Prj-Fin-T
                         '''
