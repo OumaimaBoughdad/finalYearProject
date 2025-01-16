@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the microservice...'
-                sh './mvnw clean package'  // Use Maven to build the project
+                sh 'mvn clean package'  // Use Maven Wrapper for Windows
             }
         }
     }
