@@ -23,7 +23,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarScanner') { // Use the name configured in Jenkins
+                withSonarQubeEnv('Sonar-6') { // Use the name configured in Jenkins
                     sh '''
                     mvn sonar:sonar \
                         -Dsonar.host.url=http://13.53.84.227:9000/ \
