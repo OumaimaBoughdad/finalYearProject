@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Jenkins credentials ID for Docker Hub
+        DOCKER_HUB_TOKEN = credentials('docker-hub-token') // Use the token-based credentials
         DOCKER_IMAGE_NAME = 'oumaimaboughdad/clients-service' // Replace with your Docker Hub username and image name
     }
 
@@ -56,8 +56,8 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to Docker Hub...'
                 script {
-                    // Log in to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', "${env.DOCKER_HUB_CREDENTIALS}") {
+                    // Log in to Docker Hub using the token
+                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_HUB_TOKEN) {
                         // Push the Docker image
                         docker.image("${env.DOCKER_IMAGE_NAME}:latest").push()
                     }
