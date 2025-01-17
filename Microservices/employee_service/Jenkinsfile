@@ -20,5 +20,17 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
+                        dir('Microservices/employee_service') { // Ensure analysis is run in the correct directory
+                            sh 'mvn sonar:sonar'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
