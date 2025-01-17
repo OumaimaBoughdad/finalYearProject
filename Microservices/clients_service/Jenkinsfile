@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
-        docker 'Docker v' // Use the Docker tool configured in Jenkins
+        dockerTool 'Docker' // Use the Docker tool configured in Jenkins
     }
 
     environment {
