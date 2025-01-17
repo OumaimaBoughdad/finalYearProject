@@ -4,12 +4,11 @@ pipeline {
     tools {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
-    
-    environment {
+     environment {
         APP_NAME = "employee-service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = credentials('dockerhub-token') // Use Jenkins credentials for security
+        DOCKER_PASS = 'token-for-the-jenkins'
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
