@@ -9,7 +9,7 @@ pipeline {
         APP_NAME = "employee-service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = 'token-for-the-jenkins'
+        DOCKER_PASS = credentials('dockerhub-token') // Use Jenkins credentials for security
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
@@ -42,24 +42,27 @@ pipeline {
             }
         }
 
-        //stage('Quality Gate') {
-            //steps {
-               // script {
-                   // waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token-for-jenkins'
-               // }
-            //}
-       // }
+        // Uncomment this stage if you want to enforce the quality gate
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token-for-jenkins'
+        //         }
+        //     }
+        // }
 
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKER_PASS) {
-                        // Build Docker image
-                        docker_image = docker.build("${IMAGE_NAME}")
-                        
-                        // Push Docker image with the specified tag and 'latest'
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
+                    dir('Microservices/employee_service') { // Change to the directory containing the Dockerfile
+                        docker.withRegistry('', DOCKER_PASS) {
+                            // Build Docker image
+                            docker_image = docker.build("${IMAGE_NAME}")
+                            
+                            // Push Docker image with the specified tag and 'latest'
+                            docker_image.push("${IMAGE_TAG}")
+                            docker_image.push('latest')
+                        }
                     }
                 }
             }
