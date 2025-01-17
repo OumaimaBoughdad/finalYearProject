@@ -46,7 +46,7 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 script {
-                    // Build the Docker image
+                    // Build the Docker image using the Docker tool
                     docker.build("${env.DOCKER_IMAGE_NAME}:latest", 'Microservices/clients_service')
                 }
             }
@@ -56,8 +56,8 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to Docker Hub...'
                 script {
-                    // Log in to Docker Hub using the token
-                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_HUB_TOKEN) {
+                    // Use the pre-configured Docker registry in Jenkins
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
                         // Push the Docker image
                         docker.image("${env.DOCKER_IMAGE_NAME}:latest").push()
                     }
