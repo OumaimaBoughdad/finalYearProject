@@ -4,6 +4,15 @@ pipeline {
     tools {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
+    
+    environment {
+        APP_NAME = "employee-service"
+        RELEASE = "latest"
+        DOCKER_USER = "oumaimaboughdad"
+        DOCKER_PASS = 'token-for-the-jenkins'
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "latest"
+    }
 
     stages {
         stage('Checkout SCM') {
@@ -37,6 +46,21 @@ pipeline {
             steps {
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token-for-jenkins'
+                }
+            }
+        }
+
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_PASS) {
+                        // Build Docker image
+                        docker_image = docker.build("${IMAGE_NAME}")
+                        
+                        // Push Docker image with the specified tag and 'latest'
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
                 }
             }
         }
