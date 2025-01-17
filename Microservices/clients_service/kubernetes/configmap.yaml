@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microservice-config
+  namespace: microservices-namespace
+data:
+  EUREKA_SERVER_URL: "http://eureka_main:8761/eureka/"
+  SPRING_PROFILES_ACTIVE: "prod"
