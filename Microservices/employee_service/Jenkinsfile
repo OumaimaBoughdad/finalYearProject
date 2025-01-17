@@ -4,11 +4,12 @@ pipeline {
     tools {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
-     environment {
+
+    environment {
         APP_NAME = "employee-service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = 'token-for-the-jenkins'
+        DOCKER_PASS = credentials('dockerhub-token') // Use Jenkins credentials for security
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
@@ -66,12 +67,27 @@ pipeline {
                 }
             }
         }
-        stage("Trivy Scan") {
-           steps {
-               script {
-	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image oumaimaboughdad/employee-service:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
-               }
-           }
-       
+
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    sh '''
+                        docker run -v /var/run/docker.sock:/var/run/docker.sock \
+                        aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} \
+                        --no-progress --scanners vuln --exit-code 0 \
+                        --severity HIGH,CRITICAL --format table
+                    '''
+                }
+            }
+        }
+
+        stage('Cleanup Artifacts') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
+                }
+            }
+        }
     }
 }
