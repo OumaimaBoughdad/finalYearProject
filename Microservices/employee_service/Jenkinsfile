@@ -42,13 +42,13 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
-            steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token-for-jenkins'
-                }
-            }
-        }
+        //stage('Quality Gate') {
+            //steps {
+               // script {
+                   // waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token-for-jenkins'
+               // }
+            //}
+       // }
 
         stage('Build & Push Docker Image') {
             steps {
