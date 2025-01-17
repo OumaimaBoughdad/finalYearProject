@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('hub-token') // Jenkins credentials ID for Docker Hub
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Jenkins credentials ID for Docker Hub
         DOCKER_IMAGE_NAME = 'oumaimaboughdad/clients-service' // Replace with your Docker Hub username and image name
     }
 
