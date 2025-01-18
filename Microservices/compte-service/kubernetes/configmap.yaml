@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: compte-service-config
+data:
+  APP_ENV: "production"
+  EUREKA_SERVER: "http://eureka-main:8761/eureka"

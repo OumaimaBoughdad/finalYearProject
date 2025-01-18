@@ -6,5 +6,7 @@ spec:
   selector:
     app: compte-service
   ports:
-    - port: 8086
+    - protocol: TCP
+      port: 80
       targetPort: 8086
+  type: LoadBalancer
