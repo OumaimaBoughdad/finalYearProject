@@ -1,22 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Employee, EmployeeService } from '../../services/employe.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { MaterialModules } from '../../shared/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-employe',
   templateUrl: './employe.component.html',
   styleUrls: ['./employe.component.css'],
   standalone: true,
-  imports: [CommonModule,FormsModule, HttpClientModule]
+  imports: [MaterialModules, CommonModule, FormsModule, HttpClientModule],
 })
 export class EmployeComponent implements OnInit {
   employees: Employee[] = [];
-  searchResult?: Employee;
-  errorMessage: string = ''; // Déclaration de la propriété errorMessage
-  selectedEmployee: Employee | null = null; // Pour stocker l'employé sélectionné à modifier
+  dataSource: MatTableDataSource<Employee>;
+  errorMessage: string = '';
+  selectedEmployee: Employee | null = null;
 
-  constructor(private employeeService: EmployeeService) {}
+  // Options de tri
+  selectedSortOption: string = 'id'; // Par défaut, tri par ID
+  sortOptions = [
+    { value: 'id', label: 'ID' },
+    { value: 'firstName', label: 'Prénom' },
+    { value: 'lastName', label: 'Nom' },
+    { value: 'email', label: 'Email' },
+    { value: 'role', label: 'Rôle' },
+  ];
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(private employeeService: EmployeeService) {
+    this.dataSource = new MatTableDataSource<Employee>([]);
+  }
 
   ngOnInit(): void {
     this.fetchEmployees();
@@ -25,13 +45,62 @@ export class EmployeComponent implements OnInit {
   fetchEmployees(): void {
     this.employeeService.getAllEmployees().subscribe((data) => {
       this.employees = data;
+      this.dataSource.data = this.employees; // Initialiser la source de données
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
+  }
+
+  // Recherche universelle
+  universalSearch(query: string): void {
+    if (!query) {
+      this.errorMessage = 'Veuillez saisir un ID ou un email.';
+      this.dataSource.data = this.employees; // Réinitialiser les données
+      return;
+    }
+
+    // Si la requête est un nombre, rechercher par ID
+    if (!isNaN(Number(query))) {
+      const employee = this.employees.find((emp) => emp.idEmployee === Number(query));
+      if (employee) {
+        this.dataSource.data = [employee]; // Afficher uniquement l'employé trouvé
+        this.errorMessage = '';
+      } else {
+        this.errorMessage = 'Employé introuvable.';
+        this.dataSource.data = []; // Aucun résultat
+      }
+    } else {
+      // Sinon, rechercher par email
+      const employee = this.employees.find((emp) => emp.email === query);
+      if (employee) {
+        this.dataSource.data = [employee]; // Afficher uniquement l'employé trouvé
+        this.errorMessage = '';
+      } else {
+        this.errorMessage = 'Employé introuvable avec cet email.';
+        this.dataSource.data = []; // Aucun résultat
+      }
+    }
+  }
+
+  // Réinitialiser la recherche
+  resetSearch(): void {
+    this.dataSource.data = this.employees; // Réinitialiser les données
+    this.errorMessage = '';
+  }
+
+  // Appliquer le tri en fonction de l'option sélectionnée
+  applySort(): void {
+    const sortState: Sort = { active: this.selectedSortOption, direction: 'asc' };
+    this.sort.active = sortState.active;
+    this.sort.direction = sortState.direction;
+    this.sort.sortChange.emit(sortState); // Déclencher le tri
   }
 
   deleteEmployee(id: number): void {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
         this.employees = this.employees.filter((emp) => emp.idEmployee !== id);
+        this.dataSource.data = this.employees; // Mettre à jour la source de données
       },
       error: (err) => {
         this.errorMessage = 'Erreur lors de la suppression de l\'employé.';
@@ -40,50 +109,20 @@ export class EmployeComponent implements OnInit {
     });
   }
 
-  searchById(id: number): void {
-    this.employeeService.getEmployeeById(id).subscribe({
-      next: (data) => {
-        this.searchResult = data;
-        this.errorMessage = '';
-      },
-      error: (err) => {
-        this.searchResult = undefined;
-        this.errorMessage = 'Employé introuvable.';
-        console.error(err);
-      },
-    });
-  }
-
-  searchByEmail(email: string): void {
-    this.employeeService.getEmployeeByEmail(email).subscribe({
-      next: (data) => {
-        this.searchResult = data;
-        this.errorMessage = '';
-      },
-      error: (err) => {
-        this.searchResult = undefined;
-        this.errorMessage = 'Employé introuvable avec cet email.';
-        console.error(err);
-      },
-    });
-  }
-
-  // Nouvelle fonction pour activer l'édition de l'employé
   editEmployee(employee: Employee): void {
     employee.isEditing = true;
   }
 
-  // Nouvelle fonction pour sauvegarder l'employé après modification
   saveEmployee(employee: Employee): void {
     this.employeeService.updateEmployee(employee.idEmployee, employee).subscribe({
       next: (data) => {
-        // Mettre à jour l'employé dans la liste après la modification
         const index = this.employees.findIndex((emp) => emp.idEmployee === employee.idEmployee);
         if (index !== -1) {
           this.employees[index] = data;
+          this.dataSource.data = this.employees; // Mettre à jour la source de données
         }
-        employee.isEditing = false; // Désactiver le mode édition
-        this.errorMessage = ''; // Réinitialiser le message d'erreur
+        employee.isEditing = false;
+        this.errorMessage = '';
       },
       error: (err) => {
         this.errorMessage = 'Erreur lors de la mise à jour de l\'employé.';

@@ -8,10 +8,10 @@ import { LoginComponent } from './components/login/login.component';
 import {ClientComponent} from './components/client/client.component';
 import {CompteComponent} from './components/compte/compte.component';
 import {TransactionComponent} from './components/transaction/transaction.component';
-
+import {HomeComponent}from './components/home/home.component';
 
 export const routes: Routes = [
-  { path: '', component: EmployeComponent , canActivate: [AuthGuard]},
+  { path: '', component: HomeComponent , canActivate: [AuthGuard]},
   { path: 'employees', component: EmployeComponent,canActivate: [AuthGuard] },
   { path: 'add-employee', component: AddEmployeeComponent,canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
    { path: 'login', component: LoginComponent },

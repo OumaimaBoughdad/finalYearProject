@@ -1,13 +1,14 @@
-/* src/app/components/client/client.component.css */
-ul {
-  list-style-type: none;
-  padding: 0;
+.login-card {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
 }
 
-li {
-  margin: 10px 0;
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 button {
-  margin-left: 10px;
+  width: 100%;
 }
