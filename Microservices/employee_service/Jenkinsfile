@@ -14,7 +14,9 @@ pipeline {
         IMAGE_TAG = "latest"
     }
 
-    stage('Cleanup Docker Image') {
+    stages {
+        // Cleanup Docker Image Stage
+        stage('Cleanup Docker Image') {
             steps {
                 script {
                     // Remove the Docker image if it exists
@@ -27,13 +29,14 @@ pipeline {
             }
         }
 
-    stages {
+        // Checkout SCM Stage
         stage('Checkout SCM') {
             steps {
                 checkout scm
             }
         }
 
+        // Build Stage
         stage('Build') {
             steps {
                 echo 'Building the employee microservice ......'
@@ -43,18 +46,20 @@ pipeline {
             }
         }
 
+        // SonarQube Analysis Stage
         stage('SonarQube Analysis') {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
                         dir('Microservices/employee_service') {
-                           sh 'mvn sonar:sonar'
+                            sh 'mvn sonar:sonar'
                         }
                     }
                 }
             }
         }
 
+        // Build & Push Docker Image Stage
         stage('Build & Push Docker Image') {
             steps {
                 script {
