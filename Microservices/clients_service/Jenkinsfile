@@ -1,14 +1,17 @@
 pipeline {
-    agent any
+    agent { label 'jenkins-agent' }
 
     tools {
         maven 'Maven 3.9.9'
-        dockerTool 'Docker'
     }
 
     environment {
-        DOCKER_HUB_TOKEN = credentials('docker-hub-token')
-        DOCKER_IMAGE_NAME = 'oumaimaboughdad/api-gateway'
+        APP_NAME = "clients-service"
+        RELEASE = "latest"
+        DOCKER_USER = "oumaimaboughdad"
+        DOCKER_PASS = 'token-for-the-jenkins'
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -20,8 +23,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the microservice...'
-                dir('Microservices/api-gateway') {
+                echo 'Building the employee microservice ......'
+                dir('Microservices/employee_service') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -29,34 +32,25 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonar-7') {
-                    dir('Microservices/api-gateway') {
-                        sh '''
-                        mvn sonar:sonar \
-                            -Dsonar.host.url=http://16.170.223.44:9000/ \
-                            -Dsonar.login=squ_1ae4f5b6d10ad27965eb511624faa9f2da2dc9fc \
-                            -Dsonar.projectKey=api-gateway
-                        '''
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
+                        dir('Microservices/employee_service') {
+                            sh 'mvn sonar:sonar'
+                        }
                     }
                 }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build & Push Docker Image') {
             steps {
-                echo 'Building Docker image...'
                 script {
-                    docker.build("${env.DOCKER_IMAGE_NAME}:latest", 'Microservices/api-gateway')
-                }
-            }
-        }
-
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                echo 'Pushing Docker image to Docker Hub...'
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
-                        docker.image("${env.DOCKER_IMAGE_NAME}:latest").push()
+                    dir('Microservices/employee_service') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            docker_image = docker.build("${IMAGE_NAME}")
+                            docker_image.push("${IMAGE_TAG}")
+                            docker_image.push('latest')
+                        }
                     }
                 }
             }

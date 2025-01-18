@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/eureka_main/pom.xml" />
         <option value="$PROJECT_DIR$/security-services/pom.xml" />
         <option value="$PROJECT_DIR$/compte-service/pom.xml" />
+        <option value="$PROJECT_DIR$/Credit_Microservice/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -7,12 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="transaction-service" />
         <module name="clients_service" />
-        <module name="security_service" />
+        <module name="credit-service" />
         <module name="eureka_main" />
-        <module name="compte-service" />
         <module name="security-services" />
+        <module name="transaction-service" />
+        <module name="security_service" />
+        <module name="compte-service" />
       </profile>
       <profile name="Annotation profile for employee_service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -34,6 +35,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="clients_service" options="-parameters" />
       <module name="compte-service" options="-parameters" />
+      <module name="credit-service" options="-parameters" />
       <module name="employee_service" options="-parameters" />
       <module name="eureka_main" options="-parameters" />
       <module name="security-services" options="-parameters" />

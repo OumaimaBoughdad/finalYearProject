@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "api-gateway"
+        APP_NAME = "api-gateway-service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
@@ -23,8 +23,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the API Gateway microservice ......'
-                dir('Microservices/api_gateway') {
+                echo 'Building the employee microservice ......'
+                dir('Microservices/employee_service') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/api_gateway') {
+                        dir('Microservices/employee_service') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -45,7 +45,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/api_gateway') {
+                    dir('Microservices/employee_service') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")
