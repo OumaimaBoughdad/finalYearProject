@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
-
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import {Compte} from '../models/compte.model'; // Importez jspdf-autotable pour les tables
 @Injectable({
   providedIn: 'root',
 })
@@ -33,6 +35,51 @@ export class TransactionService {
     };
 
     return this.http.post(`${this.apiUrl}/make`, body, { headers });
+  }
+  // Méthode pour exporter les transactions en PDF
+  exportTransactionsToPDF(transactions: Transaction[], filename: string): void {
+    const doc = new jsPDF();
+
+    // Titre du PDF
+    doc.setFontSize(18);
+    doc.text('Liste des Transactions', 10, 10);
+
+    // En-têtes de colonnes
+    const headers = [
+      ['ID', 'Type', 'Montant', 'Date', 'Comptes'],
+    ];
+
+    // Données des transactions
+    const data = transactions.map((transaction) => [
+      transaction.idTransaction,
+      transaction.typeTransaction,
+      transaction.montant,
+      transaction.dateTransaction,
+      this.formatComptes(transaction.comptes), // Formater les comptes
+    ]);
+
+    // Générer la table
+    (doc as any).autoTable({
+      head: headers,
+      body: data,
+      startY: 20, // Position de départ de la table
+    });
+
+    // Télécharger le PDF
+    doc.save(`${filename}.pdf`);
+  }
+
+  // Méthode pour formater les comptes
+  private formatComptes(comptes: Compte[]): string {
+    return comptes.map((compte) => compte.numeroCompte).join(', ');
+  }
+
+  // Méthode pour formater l'employé
+  private formatEmployee(employee: any): string {
+    if (employee && employee.nom && employee.prenom) {
+      return `${employee.nom} ${employee.prenom}`;
+    }
+    return 'N/A';
   }
 
   // Méthode pour récupérer toutes les transactions

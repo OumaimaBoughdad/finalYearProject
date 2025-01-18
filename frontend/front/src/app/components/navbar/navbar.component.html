@@ -12,10 +12,16 @@
   <a mat-button routerLink="/clients">gestion des clients</a>
   <a mat-button routerLink="/comptes">Gestion des comptes</a>
   <a mat-button routerLink="/transaction">Gestion des transactions</a>
-
+  <!-- Bouton pour basculer le thème -->
+  <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle theme">
+    <mat-icon>
+      {{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}
+    </mat-icon>
+  </button>
   <!-- Menu de déconnexion -->
   <button mat-button (click)="onLogout()">
     <mat-icon>logout</mat-icon>
     Déconnexion
   </button>
+
 </mat-toolbar>

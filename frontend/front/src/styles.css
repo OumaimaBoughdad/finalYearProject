@@ -1,4 +1,109 @@
-/* You can add global styles to this file, and also import other style files */
+/* Thème clair (par défaut) */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #344480;
+  --accent-color: #e91e63;
+  --card-background: #f5f5f5;
+  --button-text-color: #ffffff; /* Texte des boutons en blanc */
+  --table-header-background: #e0e0e0;
+  --table-row-background: #ffffff;
+  --table-row-hover-background: #f5f5f5;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Thème sombre de style galaxy */
+.dark-theme {
+  --background-color: #010709; /* Fond sombre inspiré de l'espace */
+  --text-color: #ffffff; /* Texte en blanc */
+  --primary-color: #2d3667; /* Violet profond */
+  --accent-color: #ff4081; /* Rose vif pour les accents */
+  --card-background: #041419; /* Fond de carte sombre */
+  --button-text-color: #ffffff; /* Texte des boutons en blanc */
+  --table-header-background: #2c3e50; /* Fond de l'en-tête de table */
+  --table-row-background: #1a1a2e; /* Fond des lignes de table */
+  --table-row-hover-background: #2c3e50; /* Fond au survol des lignes */
+}
+
+/* Appliquer les variables CSS */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--button-text-color); /* Utiliser la variable pour la couleur du texte */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--accent-color);
+}
+
+/* Styles pour les cartes Material */
+mat-card {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  margin: 10px;
+  padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Styles pour les formulaires Material en mode sombre */
+.dark-theme .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: var(--card-background);
+}
+
+.dark-theme .mat-form-field-label {
+  color: var(--text-color);
+}
+
+.dark-theme .mat-form-field-underline {
+  background-color: var(--text-color);
+}
+
+.dark-theme .mat-input-element {
+  color: var(--text-color);
+}
+
+/* Styles pour les tables Material en mode sombre */
+.dark-theme .mat-table {
+  background-color: var(--card-background);
+}
+
+.dark-theme .mat-header-cell {
+  background-color: var(--table-header-background);
+  color: var(--text-color);
+}
+
+.dark-theme .mat-cell {
+  background-color: var(--table-row-background);
+  color: var(--text-color);
+}
+
+.dark-theme .mat-row:hover {
+  background-color: var(--table-row-hover-background);
+}
+
+/* Styles pour la navbar en mode sombre */
+.dark-theme .mat-toolbar {
+  background-color: var(--primary-color); /* Couleur de fond de la navbar */
+  color: var(--button-text-color); /* Couleur du texte dans la navbar */
+}
+
+.dark-theme .mat-toolbar button {
+  color: var(--button-text-color); /* Couleur du texte des boutons dans la navbar */
+}
+
+.dark-theme .mat-toolbar button:hover {
+  background-color: var(--accent-color); /* Couleur de fond au survol des boutons */
+}
+
+.dark-theme .mat-icon {
+  color: var(--button-text-color); /* Couleur des icônes dans la navbar */
+}
