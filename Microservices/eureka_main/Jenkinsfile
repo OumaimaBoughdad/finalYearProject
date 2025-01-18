@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "eureka-service"
+        APP_NAME = "eureka_main"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
@@ -38,7 +38,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the eureka-service microservice ......'
-                dir('Microservices/eureka-service') {
+                dir('Microservices/eureka_main') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/eureka-service') {
+                        dir('Microservices/eureka_main') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -59,7 +59,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/eureka-service') {
+                    dir('Microservices/eureka_main') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")
