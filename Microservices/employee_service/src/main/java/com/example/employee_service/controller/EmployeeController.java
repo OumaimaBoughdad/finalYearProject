@@ -36,14 +36,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    // Create a new employee
-//    @PostMapping
-//    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-//        EmployeeDTO createdEmployee = employeeService.createEmployee(employeeDTO);
-//
-//        return ResponseEntity.ok(createdEmployee);
-//    }
-
     // Get all employees
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
@@ -108,7 +100,6 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDTOs);
     }
     // publish the employee object
-
     @PostMapping
     public ResponseEntity<Employee> sendJsonMessage(@RequestBody Employee employee){
         employeeService.createnewEmployee(employee);
