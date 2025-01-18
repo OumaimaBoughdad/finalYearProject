@@ -24,7 +24,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the API Gateway microservice ......'
-                dir('Microservices/api_gateway') {
+                dir('Microservices/api-gateway') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/api_gateway') {
+                        dir('Microservices/api-gateway') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -45,7 +45,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/api_gateway') {
+                    dir('Microservices/api-gateway') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")
