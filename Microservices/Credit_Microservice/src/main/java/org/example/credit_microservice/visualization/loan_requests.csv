@@ -1,4 +1,8 @@
 person_age,person_income,person_home_ownership,person_emp_length,loan_intent,loan_grade,loan_amnt,loan_int_rate,loan_percent_income,cb_person_default_on_file,cb_person_cred_hist_length,loan_status
-28,45000.0,MORTGAGE,4.2,EDUCATION,A,15000.0,5.5,33.33333333333333,Y,3,0
-30,90000.0,RENT,5.5,EDUCATION,A,10000.0,5.5,20.0,N,0,1
-30,90.0,RENT,5.5,EDUCATION,D,10000.0,5.5,11111.111111111111,N,12,1
+30,90.0,Own,5.0,PERSONAL,D,800.0,5.5,11111.111111111111,N,7,1
+30,90000.0,Own,5.0,PERSONAL,A,1000.0,5.5,11.11111111111111,N,7,0
+30,20000.0,Own,9.0,EDUCATION,A,20000.0,5.5,50.0,N,7,1
+30,20000.0,Own,9.0,EDUCATION,A,700.0,5.5,50.0,N,7,0
+30,20000.0,mortage,9.0,PERSONAL,A,800.0,5.5,4.0,N,7,1
+30,20000.0,RENT,9.0,PERSONAL,A,20000.0,5.5,100.0,N,7,1
+0,0.0,null,0.0,null,D,0.0,5.5,0.0,N,0,1
