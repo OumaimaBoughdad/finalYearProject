@@ -20,7 +20,7 @@ public class Credit {
     private double loanPercentIncome; // Calculated field
 
     @ManyToOne
-    @JoinColumn(name = "client_id") // Foreign key to the client table
+    @JoinColumn(name = "cni") // Foreign key to the client table
     private CreditClient client;
 
     // Constructors

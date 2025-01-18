@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "loan_predictions")
 public class LoanPredictionRequest {
@@ -24,6 +26,7 @@ public class LoanPredictionRequest {
     private double loan_amnt;
     private double loan_int_rate;
     private double loan_percent_income;
+
 
 
 
@@ -55,6 +58,7 @@ public class LoanPredictionRequest {
     public LoanPredictionRequest() {
 
     }
+
 
     public int getPerson_age() {
         return person_age;
