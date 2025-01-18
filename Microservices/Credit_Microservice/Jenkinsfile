@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "clients_service"
+        APP_NAME = "Credit_Microservice"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
@@ -28,6 +28,8 @@ pipeline {
                     }
                 }
             }
+
+
         stage('Checkout SCM') {
             steps {
                 checkout scm
@@ -36,8 +38,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the Compte microservice ......'
-                dir('Microservices/clients_service') {
+                echo 'Building the employee microservice ......'
+                dir('Microservices/Credit_Microservice') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -47,7 +49,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/clients_service') {
+                        dir('Microservices/Credit_Microservice') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -58,7 +60,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/clients_service') {
+                    dir('Microservices/Credit_Microservice') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")

@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "security-service"
+        APP_NAME = "security-services"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
@@ -15,6 +15,20 @@ pipeline {
     }
 
     stages {
+
+    // Cleanup Docker Image Stage
+            stage('Cleanup Docker Image') {
+                steps {
+                    script {
+                        sh(script: """
+                            if docker images -q ${IMAGE_NAME}:${IMAGE_TAG} 2>/dev/null; then
+                                docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG}
+                            fi
+                        """)
+                    }
+                }
+            }
+
         stage('Checkout SCM') {
             steps {
                 checkout scm
@@ -24,7 +38,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the Security microservice ......'
-                dir('Microservices/security_service') {
+                dir('Microservices/security-services') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -34,7 +48,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/security_service') {
+                        dir('Microservices/security-services') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -45,7 +59,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/security_service') {
+                    dir('Microservices/security-services') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")
