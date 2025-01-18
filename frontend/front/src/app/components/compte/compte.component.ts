@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CompteService } from '../../services/compte.service';
-import {CarteBancaire, Compte} from '../../models/compte.model';
+import { CarteBancaire, Compte } from '../../models/compte.model';
 import { AuthService } from '../../auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Client } from '../../models/client.model';
-import {ClientService} from '../../services/client.service'; // Importez le modèle Client
+import { ClientService } from '../../services/client.service';
 
 @Component({
   selector: 'app-compte',
@@ -27,24 +27,23 @@ export class CompteComponent implements OnInit {
     cartes: [],
   }; // Nouveau compte à créer
   selectedCompte: Compte | null = null; // Compte sélectionné pour la modification
-  searchNumeroCompte: string = ''; // Pour la recherche par numéro de compte
-  searchClientCne: string = ''; // Pour la recherche par CNE du client
-  loggedInUser: string = ''; // Utilisateur connecté (récupéré dynamiquement)
-  selectedCompteCartes: CarteBancaire[] | null = null; // Pour stocker les cartes du compte sélectionné
+  searchQuery: string = ''; // Pour la recherche combinée
+  loggedInUser: string = ''; // Utilisateur connecté
+  selectedCompteCartes: CarteBancaire[] | null = null; // Cartes du compte sélectionné
   clients: Client[] = []; // Liste des clients
   selectedClientId: number | null = null; // ID du client sélectionné
+  showAddForm: boolean = false; // Afficher/masquer le formulaire d'ajout
+
   constructor(
     private compteService: CompteService,
-    private clientService: ClientService, // Injectez ClientService
-
-    private authService: AuthService // Injectez AuthService
+    private clientService: ClientService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadComptes();
-    this.loadClients(); // Ajouter ici
-
-    this.loggedInUser = this.authService.employeeValue?.email || ''; // Récupérez l'utilisateur connecté
+    this.loadClients();
+    this.loggedInUser = this.authService.employeeValue?.email || '';
   }
 
   // Charger tous les comptes
@@ -54,6 +53,7 @@ export class CompteComponent implements OnInit {
       error: (err) => console.error('Failed to load comptes', err),
     });
   }
+
   // Charger tous les clients
   loadClients(): void {
     this.clientService.getClients().subscribe({
@@ -61,9 +61,10 @@ export class CompteComponent implements OnInit {
       error: (err) => console.error('Failed to load clients', err),
     });
   }
+
   // Afficher les cartes d'un compte
   showCartes(compte: Compte): void {
-    this.selectedCompteCartes = compte.cartes; // Stocker les cartes du compte sélectionné
+    this.selectedCompteCartes = compte.cartes;
   }
 
   // Fermer l'affichage des cartes
@@ -71,25 +72,26 @@ export class CompteComponent implements OnInit {
     this.selectedCompteCartes = null;
   }
 
-  // Rechercher un compte par son numéro
-  searchByNumero(): void {
-    if (this.searchNumeroCompte) {
-      this.compteService.getCompteByNumero(this.searchNumeroCompte).subscribe({
-        next: (compte) => {
-          this.comptes = [compte]; // Afficher uniquement le compte trouvé
-        },
-        error: (err) => console.error('Failed to load compte by numero', err),
-      });
-    }
-  }
-
-  // Rechercher les comptes d'un client par son CNE
-  searchByClientCne(): void {
-    if (this.searchClientCne) {
-      this.compteService.getComptesByClientCne(this.searchClientCne).subscribe({
-        next: (comptes) => (this.comptes = comptes),
-        error: (err) => console.error('Failed to load comptes by client CNE', err),
-      });
+  // Recherche combinée par numéro de compte ou CNE du client
+  search(): void {
+    if (this.searchQuery) {
+      if (/^\d+$/.test(this.searchQuery)) {
+        // Recherche par numéro de compte
+        this.compteService.getCompteByNumero(this.searchQuery).subscribe({
+          next: (compte) => {
+            this.comptes = [compte];
+          },
+          error: (err) => console.error('Failed to load compte by numero', err),
+        });
+      } else {
+        // Recherche par CNE du client
+        this.compteService.getComptesByClientCne(this.searchQuery).subscribe({
+          next: (comptes) => (this.comptes = comptes),
+          error: (err) => console.error('Failed to load comptes by client CNE', err),
+        });
+      }
+    } else {
+      this.loadComptes(); // Recharger tous les comptes si la recherche est vide
     }
   }
 
@@ -100,6 +102,7 @@ export class CompteComponent implements OnInit {
         next: (compte) => {
           this.comptes.push(compte); // Ajouter le nouveau compte à la liste
           this.resetNewCompteForm(); // Réinitialiser le formulaire
+          this.showAddForm = false; // Masquer le formulaire après l'ajout
         },
         error: (err) => console.error('Failed to create compte', err),
       });
@@ -114,9 +117,9 @@ export class CompteComponent implements OnInit {
   }
 
   // Mettre à jour un compte
-  updateCompte(): void {
-    if (this.selectedCompte && this.selectedCompte.idCompte) {
-      this.compteService.updateCompte(this.selectedCompte.idCompte, this.selectedCompte).subscribe({
+  updateCompte(compte: Compte): void {
+    if (compte.idCompte) {
+      this.compteService.updateCompte(compte.idCompte, compte).subscribe({
         next: (updatedCompte) => {
           const index = this.comptes.findIndex((c) => c.idCompte === updatedCompte.idCompte);
           if (index !== -1) {

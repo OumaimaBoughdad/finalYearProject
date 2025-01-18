@@ -9,15 +9,19 @@ import {ClientComponent} from './components/client/client.component';
 import {CompteComponent} from './components/compte/compte.component';
 import {TransactionComponent} from './components/transaction/transaction.component';
 import {HomeComponent}from './components/home/home.component';
+import {DashboardComponent} from './Dashboards/dashboard/dashboard.component';
+import {CompteDashboardComponent} from './Dashboards/compte-dashboard/compte-dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent , canActivate: [AuthGuard]},
-  { path: 'employees', component: EmployeComponent,canActivate: [AuthGuard] },
-  { path: 'add-employee', component: AddEmployeeComponent,canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
+  { path: 'employees', component: EmployeComponent},
+  { path: 'add-employee', component: AddEmployeeComponent, canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
    { path: 'login', component: LoginComponent },
-   { path: 'clients', component: ClientComponent,canActivate: [AuthGuard] },
-  { path: 'comptes', component: CompteComponent,canActivate: [AuthGuard] },
-  { path: 'transaction', component: TransactionComponent,canActivate: [AuthGuard] },
+   { path: 'clients', component: ClientComponent, canActivate: [AuthGuard] },
+  { path: 'comptes', component: CompteComponent, canActivate: [AuthGuard]},
+  { path: 'transaction', component: TransactionComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent},
+  { path: 'comptedashboard', component: CompteDashboardComponent },
 
  ];
 

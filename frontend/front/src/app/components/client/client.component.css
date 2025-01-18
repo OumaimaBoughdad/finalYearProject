@@ -1,14 +1,230 @@
-.login-card {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
+/* Conteneur principal */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-mat-form-field {
-  width: 100%;
-  margin-bottom: 1rem;
+/* Section de recherche */
+.search-section {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  margin-bottom: 20px;
 }
 
-button {
+.search-section:hover {
+  border-color: #3f51b5;
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.1);
+}
+
+/* Style pour les champs de formulaire */
+.search-section mat-form-field {
   width: 100%;
+  border-radius: 8px;
+}
+
+.search-section mat-form-field .mat-form-field-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-section .mat-input-element {
+  font-size: 14px;
+  color: #333;
+  padding: 8px;
+  border: none;
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+/* Lien pour afficher/masquer le formulaire d'ajout */
+.toggle-form-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #3f51b5;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.toggle-form-link:hover {
+  color: #1a5bbf;
+  text-decoration: underline;
+}
+
+/* Section du formulaire */
+.form-section,
+.update-section {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.form-section h3,
+.update-section h3 {
+  margin-top: 0;
+  color: #3f51b5;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Groupes de champs de formulaire */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #3f51b5;
+}
+
+/* Liens pour les actions du formulaire */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions a {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.form-actions a[type="submit"] {
+  background-color: #6a11cb; /* Violet */
+  color: white;
+}
+
+.form-actions a[type="submit"]:hover {
+  background-color: #4d0a9b; /* Violet plus foncé au survol */
+}
+
+.form-actions a[type="button"] {
+  background-color: #2575fc; /* Bleu */
+  color: white;
+}
+
+.form-actions a[type="button"]:hover {
+  background-color: #1a5bbf; /* Bleu plus foncé au survol */
+}
+
+/* Section de la liste des clients */
+.clients-section {
+  margin-top: 20px;
+}
+
+.clients-section h3 {
+  color: #3f51b5;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Style pour le tableau */
+mat-table {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour les cellules et en-têtes du tableau */
+mat-cell,
+mat-header-cell {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Style pour les en-têtes du tableau */
+mat-header-cell {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Style pour les lignes du tableau */
+mat-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* Actions dans le tableau */
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.table-actions a {
+  color: #3f51b5;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.table-actions a:hover {
+  color: #1a5bbf;
+  text-decoration: underline;
+}
+
+/* Ajustements pour les écrans étroits */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .search-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-section,
+  .update-section {
+    padding: 15px;
+  }
+
+  .input-group input {
+    padding: 8px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions a {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }

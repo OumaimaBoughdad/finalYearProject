@@ -1,7 +1,8 @@
 <div class="transaction-container">
   <h2>Effectuer une transaction</h2>
+
+  <!-- Formulaire pour effectuer une transaction -->
   <form (ngSubmit)="makeTransaction()">
-    <!-- Champ pour l'ID du compte source -->
     <div>
       <label for="compteId">ID du compte source :</label>
       <input
@@ -13,7 +14,6 @@
       />
     </div>
 
-    <!-- Champ pour le type de transaction -->
     <div>
       <label for="typeTransaction">Type de transaction :</label>
       <select
@@ -28,7 +28,6 @@
       </select>
     </div>
 
-    <!-- Champ pour le montant -->
     <div>
       <label for="amount">Montant :</label>
       <input
@@ -40,7 +39,6 @@
       />
     </div>
 
-    <!-- Champ pour l'ID du compte cible (uniquement pour les transferts) -->
     <div *ngIf="typeTransaction === 'TRANSFERT'">
       <label for="targetCompteId">ID du compte cible :</label>
       <input
@@ -52,18 +50,48 @@
       />
     </div>
 
-    <!-- Bouton pour soumettre le formulaire -->
     <button type="submit">Effectuer la transaction</button>
   </form>
 
   <!-- Section pour afficher toutes les transactions -->
   <div class="transactions-section">
     <h3>Toutes les transactions</h3>
-    <ul>
-      <li *ngFor="let transaction of transactions">
-        ID: {{ transaction.idTransaction }} - Type: {{ transaction.typeTransaction }} - Montant: {{ transaction.montant }}
-      </li>
-    </ul>
+    <table>
+      <thead>
+      <tr>
+        <th>ID Transaction</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>ID Compte</th>
+        <th>Numéro Compte</th>
+        <th>Employé</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let transaction of transactions">
+        <td>{{ transaction.idTransaction }}</td>
+        <td>{{ transaction.montant }}</td>
+        <td>{{ transaction.dateTransaction }}</td>
+        <td>{{ transaction.typeTransaction }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let compte of transaction.comptes">
+              {{ compte.idCompte }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let compte of transaction.comptes">
+              {{ compte.numeroCompte }}
+            </li>
+          </ul>
+        </td>
+        <td>{{ transaction.employee?.idEmployee }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- Section pour afficher les transactions d'un compte spécifique -->
@@ -80,10 +108,41 @@
       />
       <button (click)="loadTransactionsByCompteId()">Charger les transactions</button>
     </div>
-    <ul>
-      <li *ngFor="let transaction of compteTransactions">
-        ID: {{ transaction.idTransaction }} - Type: {{ transaction.typeTransaction }} - Montant: {{ transaction.montant }}
-      </li>
-    </ul>
+    <table>
+      <thead>
+      <tr>
+        <th>ID Transaction</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>ID Compte</th>
+        <th>Numéro Compte</th>
+        <th>Employé</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let transaction of compteTransactions">
+        <td>{{ transaction.idTransaction }}</td>
+        <td>{{ transaction.montant }}</td>
+        <td>{{ transaction.dateTransaction }}</td>
+        <td>{{ transaction.typeTransaction }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let compte of transaction.comptes">
+              {{ compte.idCompte }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let compte of transaction.comptes">
+              {{ compte.numeroCompte }}
+            </li>
+          </ul>
+        </td>
+        <td>{{ transaction.employee?.idEmployee }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>
