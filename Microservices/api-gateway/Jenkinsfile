@@ -15,6 +15,21 @@ pipeline {
     }
 
     stages {
+        
+        // Cleanup Docker Image Stage
+        stage('Cleanup Docker Image') {
+            steps {
+                script {
+                    // Remove the Docker image if it exists
+                    sh(script: """
+                        if docker images -q ${IMAGE_NAME}:${IMAGE_TAG} 2>/dev/null; then
+                            docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG}
+                        fi
+                    """)
+                }
+            }
+        }
+        
         stage('Checkout SCM') {
             steps {
                 checkout scm
