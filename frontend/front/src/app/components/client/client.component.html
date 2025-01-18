@@ -1,136 +1,162 @@
-<div class="client-container">
-  <h2>Gestion des Clients</h2>
-
-  <!-- Section de recherche par CNE -->
-  <div class="search-section">
-    <label for="searchCne">Rechercher par CNE :</label>
-    <input
-      type="text"
-      id="searchCne"
-      [(ngModel)]="searchCne"
-      placeholder="Entrer le CNE"
-    />
-    <button (click)="getClientByCne()">Rechercher</button>
-  </div>
-
-  <hr />
-
-  <!-- Section de recherche par ID -->
-  <div class="search-section">
-    <label for="searchId">Rechercher par ID :</label>
-    <input
-      type="number"
-      id="searchId"
-      [(ngModel)]="searchId"
-      placeholder="Entrer l'ID"
-    />
-    <button (click)="getClientById()">Rechercher</button>
-  </div>
-
-  <hr />
-
-  <!-- Formulaire pour ajouter un nouveau client -->
-  <div class="form-section">
+<div class="container">
+  <!-- Afficher le formulaire d'ajout uniquement si showAddForm est true -->
+  <div *ngIf="showAddForm" class="add-client-form">
     <h3>Ajouter un Nouveau Client</h3>
     <form (ngSubmit)="createClient()">
-      <div>
+      <div class="input-group">
         <label for="firstName">Prénom :</label>
         <input type="text" id="firstName" [(ngModel)]="newClient.firstName" name="firstName" required />
       </div>
-      <div>
+      <div class="input-group">
         <label for="lastName">Nom :</label>
         <input type="text" id="lastName" [(ngModel)]="newClient.lastName" name="lastName" required />
       </div>
-      <div>
+      <div class="input-group">
         <label for="email">Email :</label>
         <input type="email" id="email" [(ngModel)]="newClient.email" name="email" required />
       </div>
-      <div>
+      <div class="input-group">
         <label for="phoneNumber">Téléphone :</label>
         <input type="text" id="phoneNumber" [(ngModel)]="newClient.phoneNumber" name="phoneNumber" required />
       </div>
-      <div>
+      <div class="input-group">
         <label for="address">Adresse :</label>
         <input type="text" id="address" [(ngModel)]="newClient.address" name="address" required />
       </div>
-      <div>
+      <div class="input-group">
         <label for="cne">CNE :</label>
         <input type="text" id="cne" [(ngModel)]="newClient.cne" name="cne" required />
       </div>
-      <button type="submit">Ajouter</button>
+      <div class="form-actions">
+        <button type="submit">Ajouter</button>
+        <button type="button" (click)="cancelAdd()">Annuler</button>
+      </div>
     </form>
   </div>
 
-  <hr />
+  <!-- Afficher la liste des clients uniquement si showAddForm est false -->
+  <div *ngIf="!showAddForm">
+    <h2>Liste des Clients</h2>
 
-  <!-- Liste des clients -->
-  <div class="clients-section">
-    <h3>Liste des Clients</h3>
-    <table>
-      <thead>
-      <tr>
-        <th>Prénom</th>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Téléphone</th>
-        <th>Adresse</th>
-        <th>CNE</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let client of clients">
-        <td>{{ client.firstName }}</td>
-        <td>{{ client.lastName }}</td>
-        <td>{{ client.email }}</td>
-        <td>{{ client.phoneNumber }}</td>
-        <td>{{ client.address }}</td>
-        <td>{{ client.cne }}</td>
-        <td>
-          <!-- Bouton pour sélectionner le client à modifier -->
-          <button (click)="selectClientForUpdate(client)">Modifier</button>
-          <!-- Bouton pour supprimer le client -->
-          <button *ngIf="client.idClient !== undefined" (click)="deleteClient(client.idClient!)">
-            Supprimer
+    <!-- Conteneur pour la recherche et le tri -->
+    <div class="search-and-sort-container">
+      <!-- Barre de recherche à gauche -->
+      <div class="search-section">
+        <mat-form-field>
+          <input
+            matInput
+            #searchInput
+            type="text"
+            placeholder="Recherche par ID ou CNE"
+            (keyup.enter)="universalSearch(searchInput.value)"
+          />
+          <button matSuffix mat-button (click)="universalSearch(searchInput.value)">
+            <mat-icon>search</mat-icon> <!-- Icône de recherche -->
           </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        </mat-form-field>
+      </div>
+
+      <!-- Menu de tri à droite -->
+      <div class="sort-options">
+        <mat-form-field appearance="fill">
+          <mat-label>Trier par</mat-label>
+          <mat-select [(ngModel)]="selectedSortOption" (selectionChange)="applySort()">
+            <mat-option value="id">ID</mat-option>
+            <mat-option value="firstName">Prénom</mat-option>
+            <mat-option value="lastName">Nom</mat-option>
+            <mat-option value="email">Email</mat-option>
+            <mat-option value="cne">CNE</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Message d'erreur -->
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+    <!-- Tableau avec tri et pagination -->
+    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <!-- Colonne ID -->
+      <ng-container matColumnDef="idClient">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+        <mat-cell *matCellDef="let client">{{ client.idClient }}</mat-cell>
+      </ng-container>
+
+      <!-- Colonne Prénom -->
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Prénom</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="text" [(ngModel)]="client.firstName" />
+          <span *ngIf="!client.isEditing">{{ client.firstName }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne Nom -->
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Nom</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="text" [(ngModel)]="client.lastName" />
+          <span *ngIf="!client.isEditing">{{ client.lastName }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne Email -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="email" [(ngModel)]="client.email" />
+          <span *ngIf="!client.isEditing">{{ client.email }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne Téléphone -->
+      <ng-container matColumnDef="phoneNumber">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Téléphone</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="text" [(ngModel)]="client.phoneNumber" />
+          <span *ngIf="!client.isEditing">{{ client.phoneNumber }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne Adresse -->
+      <ng-container matColumnDef="address">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Adresse</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="text" [(ngModel)]="client.address" />
+          <span *ngIf="!client.isEditing">{{ client.address }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne CNE -->
+      <ng-container matColumnDef="cne">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>CNE</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <input *ngIf="client.isEditing" matInput type="text" [(ngModel)]="client.cne" />
+          <span *ngIf="!client.isEditing">{{ client.cne }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Colonne Actions -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell *matCellDef="let client">
+          <button *ngIf="!client.isEditing" mat-raised-button color="primary" (click)="editClient(client)">Modifier</button>
+          <button *ngIf="client.isEditing" mat-raised-button color="accent" (click)="saveClient(client)">Sauvegarder</button>
+          <button mat-raised-button color="warn" (click)="deleteClient(client.idClient!)">Supprimer</button>
+        </mat-cell>
+      </ng-container>
+
+      <!-- En-têtes et lignes du tableau -->
+      <mat-header-row *matHeaderRowDef="['idClient', 'firstName', 'lastName', 'email', 'phoneNumber', 'address', 'cne', 'actions']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['idClient', 'firstName', 'lastName', 'email', 'phoneNumber', 'address', 'cne', 'actions']"></mat-row>
+    </mat-table>
+
+    <!-- Pagination -->
+    <mat-paginator [pageSizeOptions]="[10, 20, 50]" [pageSize]="10" showFirstLastButtons></mat-paginator>
   </div>
 
-  <hr />
-
-  <!-- Formulaire de mise à jour des clients -->
-  <div class="update-section" *ngIf="selectedClient">
-    <h3>Modifier le Client</h3>
-    <form (ngSubmit)="updateClient()">
-      <div>
-        <label for="updateFirstName">Prénom :</label>
-        <input type="text" id="updateFirstName" [(ngModel)]="selectedClient.firstName" name="updateFirstName" required />
-      </div>
-      <div>
-        <label for="updateLastName">Nom :</label>
-        <input type="text" id="updateLastName" [(ngModel)]="selectedClient.lastName" name="updateLastName" required />
-      </div>
-      <div>
-        <label for="updateEmail">Email :</label>
-        <input type="email" id="updateEmail" [(ngModel)]="selectedClient.email" name="updateEmail" required />
-      </div>
-      <div>
-        <label for="updatePhoneNumber">Téléphone :</label>
-        <input type="text" id="updatePhoneNumber" [(ngModel)]="selectedClient.phoneNumber" name="updatePhoneNumber" required />
-      </div>
-      <div>
-        <label for="updateAddress">Adresse :</label>
-        <input type="text" id="updateAddress" [(ngModel)]="selectedClient.address" name="updateAddress" required />
-      </div>
-      <div>
-        <label for="updateCne">CNE :</label>
-        <input type="text" id="updateCne" [(ngModel)]="selectedClient.cne" name="updateCne" required />
-      </div>
-      <button type="submit">Mettre à jour</button>
-      <button type="button" (click)="selectedClient = null">Annuler</button>
-    </form>
-  </div>
+  <!-- Bouton flottant pour ajouter un client -->
+  <button mat-fab color="primary" class="add-client-button" (click)="openAddClientForm()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
