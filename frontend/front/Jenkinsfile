@@ -8,13 +8,12 @@ pipeline {
     environment {
         APP_NAME = "front-app"
         DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = credentials('docker-token-for-jenkins') // Reference to Jenkins credential ID
+        DOCKER_PASS = credentials('token-for-the-jenkins') // Reference to Jenkins credential ID
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
 
     stages {
-
         stage('Checkout SCM') {
             steps {
                 checkout scm
@@ -23,7 +22,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('frontend') { // Navigate to the Angular project directory
+                dir('frontend/front') { // Navigate to the correct directory
                     sh 'npm install'
                 }
             }
@@ -31,18 +30,16 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('frontend') {
-                    sh 'ng build --prod'
+                dir('frontend/front') {
+                    sh 'node --max_old_space_size=2048 ./node_modules/@angular/cli/bin/ng build --configuration production'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                dir('frontend') {
+                dir('frontend/front') {
                     sh 'ng test --watch=false' // Run unit tests
-                    // Optionally run end-to-end tests
-                    // sh 'ng e2e'
                 }
             }
         }
@@ -50,7 +47,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') { // Ensure SonarQube server is configured in Jenkins
-                    dir('frontend') {
+                    dir('frontend/front') {
                         sh 'npm run sonar' // Ensure 'sonar' script is defined in package.json
                     }
                 }
@@ -63,9 +60,7 @@ pipeline {
                     sh """
                         docker logout
                         docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-                        if docker images -q ${IMAGE_NAME}:${IMAGE_TAG} 2>/dev/null; then
-                            docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG}
-                        fi
+                        docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG} || true
                     """
                 }
             }
@@ -73,7 +68,7 @@ pipeline {
 
         stage('Build & Push Docker Image') {
             steps {
-                dir('frontend') {
+                dir('frontend/front') {
                     script {
                         docker.withRegistry("", "${DOCKER_PASS}") {
                             def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
@@ -83,16 +78,6 @@ pipeline {
                 }
             }
         }
-
-        //stage('Deploy to Kubernetes') {
-         //   steps {
-              //  withCredentials([file(credentialsId: 'kubeconfig-id', variable: 'KUBECONFIG')]) { // Reference to Jenkins credential ID for kubeconfig
-                  //  sh 'export KUBECONFIG=$KUBECONFIG'
-                  //  sh 'kubectl apply -f k8s/deployment.yaml -f k8s/service.yaml' // Adjust paths as necessary
-                   // sh "kubectl set image deployment/${APP_NAME} ${APP_NAME}=${IMAGE_NAME}:${IMAGE_TAG}"
-               // }
-           // }
-        //}
     }
 
     post {
