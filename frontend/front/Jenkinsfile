@@ -1,20 +1,91 @@
 pipeline {
-    agent any
-    tools {nodejs "NodeJS 18"}
+    agent { label 'jenkins-agent' }
+
+    tools {
+        nodejs 'NodeJS 18' // Ensure Node.js version is correctly installed on the agent
+    }
+
+    environment {
+        APP_NAME = "front-app"
+        DOCKER_USER = "oumaimaboughdad"
+        DOCKER_PASS = credentials('token-for-the-jenkins') // Reference to Jenkins credential ID
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "latest"
+    }
+
     stages {
-        stage('Build') {
+        stage('Checkout SCM') {
             steps {
-                sh 'npm install'
+                checkout scm
             }
         }
-        stage('Deliver') {
+
+        stage('Install Dependencies') {
             steps {
-                sh 'chmod -R +rwx ./jenkins/scripts/deliver.sh'
-                sh 'chmod -R +rwx ./jenkins/scripts/kill.sh'
-                sh './jenkins/scripts/deliver.sh'
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh './jenkins/scripts/kill.sh'
+                dir('frontend/front') { // Navigate to the correct directory
+                    sh 'npm install'
+                }
             }
+        }
+
+        stage('Build') {
+            steps {
+                dir('frontend/front') {
+                    sh 'node --max_old_space_size=2048 ./node_modules/@angular/cli/bin/ng build --configuration production'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('frontend/front') {
+                    sh 'ng test --watch=false' // Run unit tests
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') { // Ensure SonarQube server is configured in Jenkins
+                    dir('frontend/front') {
+                        sh 'npm run sonar' // Ensure 'sonar' script is defined in package.json
+                    }
+                }
+            }
+        }
+
+        stage('Cleanup Docker Image') {
+            steps {
+                script {
+                    sh """
+                        docker logout
+                        docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+                        docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG} || true
+                    """
+                }
+            }
+        }
+
+        stage('Build & Push Docker Image') {
+            steps {
+                dir('frontend/front') {
+                    script {
+                        docker.withRegistry("", "${DOCKER_PASS}") {
+                            def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
+                            dockerImage.push()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
