@@ -32,7 +32,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('frontend/front') {
-                    sh 'ng build --prod'
+                    sh 'npm run ng -- build' // Updated command
                 }
             }
         }
