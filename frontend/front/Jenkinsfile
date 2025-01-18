@@ -39,7 +39,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('frontend/front') {
-                    sh 'ng test --watch=false' // Run unit tests
+                    sh 'ng test --watch=false --browsers=ChromeHeadless' // Run unit tests in headless mode
                 }
             }
         }
@@ -57,8 +57,9 @@ pipeline {
         stage('Cleanup Docker Image') {
             steps {
                 script {
+                    // Clean up existing Docker image if it exists
                     sh """
-                        docker logout
+                        docker logout || true
                         docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
                         docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG} || true
                     """
@@ -86,6 +87,10 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed. Please check the logs.'
+        }
+        always {
+            // Clean up Docker credentials
+            sh 'docker logout || true'
         }
     }
 }
