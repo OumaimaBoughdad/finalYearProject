@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "Credit_Microservice"
+        APP_NAME = "credit_microservice"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
