@@ -1,13 +1,10 @@
 package com.example.employee_service.security;
 
 
-import com.example.employee_service.entity.Employee;
-import com.example.employee_service.reposetory.EmployeeRepository;
-import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,11 +51,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
-//    public CommandLineRunner initData(EmployeeRepository repository, PasswordEncoder encoder) {
-//        return args -> {
-//            repository.save(new Employee("Fatima", "Ait", "fatimaait@example.com", "1234567890", "ROlE_ADMIN", encoder.encode("fatima200312")));
-//        };
-//    }
+
 
 }
