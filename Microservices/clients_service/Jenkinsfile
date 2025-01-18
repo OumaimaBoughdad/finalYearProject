@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "clients-service"
+        APP_NAME = "clients_service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad"
         DOCKER_PASS = 'token-for-the-jenkins'
@@ -23,8 +23,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the employee microservice ......'
-                dir('Microservices/employee_service') {
+                echo 'Building the clients_service microservice ......'
+                dir('Microservices/clients_service') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/employee_service') {
+                        dir('Microservices/clients_service') {
                             sh 'mvn sonar:sonar'
                         }
                     }
@@ -45,7 +45,7 @@ pipeline {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/employee_service') {
+                    dir('Microservices/clients_service') {
                         docker.withRegistry('', DOCKER_PASS) {
                             docker_image = docker.build("${IMAGE_NAME}")
                             docker_image.push("${IMAGE_TAG}")
