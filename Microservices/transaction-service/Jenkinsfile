@@ -1,8 +1,17 @@
 pipeline {
-    agent any
+    agent { label 'jenkins-agent' }
 
     tools {
-        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
+        maven 'Maven 3.9.9'
+    }
+
+    environment {
+        APP_NAME = "transaction-service"
+        RELEASE = "latest"
+        DOCKER_USER = "oumaimaboughdad"
+        DOCKER_PASS = 'token-for-the-jenkins'
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -14,23 +23,37 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the transaction microservice ......  '
-                dir('Microservices/transaction-service') { // Change to the directory containing pom.xml
+                echo 'Building the Transaction microservice ......'
+                dir('Microservices/transaction_service') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-         stage('SonarQube Analysis') {
-                    steps {
-                        withSonarQubeEnv('SonarQube') { // Use the name configured in Jenkins
-                            sh 'mvn sonar:sonar -Dsonar.host.url=http://http://51.20.87.109:9000 -Dsonar.login=Sqa_1edd27e4ad72c8e103459f7a0eab4c058d3345ac'
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
+                        dir('Microservices/transaction_service') {
+                            sh 'mvn sonar:sonar'
                         }
                     }
-          }
+                }
+            }
+        }
 
-
-
-
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    dir('Microservices/transaction_service') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            docker_image = docker.build("${IMAGE_NAME}")
+                            docker_image.push("${IMAGE_TAG}")
+                            docker_image.push('latest')
+                        }
+                    }
+                }
+            }
+        }
     }
 }

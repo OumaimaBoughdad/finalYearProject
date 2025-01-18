@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-gateway
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: api-gateway
@@ -14,9 +14,16 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: your-docker-repo/api-gateway:latest
+          image: oumaimaboughdad/api-gateway:latest
           ports:
             - containerPort: 8080
           env:
             - name: EUREKA_SERVER
               value: "http://eureka-main:8761/eureka"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
