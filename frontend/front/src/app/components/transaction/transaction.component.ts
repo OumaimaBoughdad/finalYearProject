@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
 import { AuthService } from '../../auth.service';
 import { Transaction } from '../../models/transaction.model';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.css'],
   standalone: true,
-  imports :[CommonModule,FormsModule]
+  imports: [CommonModule, FormsModule],
 })
 export class TransactionComponent implements OnInit {
   compteId: number = 0; // ID du compte source
@@ -32,6 +32,7 @@ export class TransactionComponent implements OnInit {
   ngOnInit(): void {
     // Récupérer l'utilisateur connecté et le token JWT
     this.loggedInUser = this.authService.employeeValue?.email || '';
+    this.authToken = this.authService.employeeValue?.token || '';
 
     // Charger toutes les transactions au démarrage
     this.loadAllTransactions();

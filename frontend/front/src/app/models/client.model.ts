@@ -7,5 +7,7 @@ export interface Client {
   phoneNumber?: string; // Optionnel
   address: string;
   cne: string;
+  isEditing?: boolean; // Propriété optionnelle pour le mode édition
+
   employee?: any; // Vous pouvez créer un modèle Employee si nécessaire
 }

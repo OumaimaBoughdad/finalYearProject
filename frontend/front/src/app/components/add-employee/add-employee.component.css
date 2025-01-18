@@ -1,0 +1,91 @@
+/* Styles généraux */
+body {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.employee-form {
+  background-color: #eef0f3;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  max-width: 100%;
+  padding: 30px;
+  margin: 50px auto;
+  transition: all 0.6s ease-in-out;
+}
+
+.employee-form h3 {
+  color: rgba(6, 57, 131, 0.99);
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.employee-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-form label {
+  margin-bottom: 5px;
+  color: rgba(6, 57, 131, 0.99);
+  font-weight: bold;
+}
+
+.employee-form input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.employee-form input:focus {
+  border-color: #2575fc;
+}
+
+.employee-form button {
+  margin-top: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to right, #c1890f, #475997);
+  transition: background 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.employee-form button:hover {
+  background: linear-gradient(to right, #c1890f, #2c396c);
+  transform: scale(1.05);
+}
+
+.success-message, .error-message {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}

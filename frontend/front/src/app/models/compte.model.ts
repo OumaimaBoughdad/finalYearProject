@@ -5,6 +5,7 @@ export interface CarteBancaire {
   dateExpiration: string;
   codePin: string;
   limiteCarte: number;
+
 }
 
 export interface Compte {
@@ -16,4 +17,6 @@ export interface Compte {
   taux?: number; // Présent si le type est EPARGNE
   decouvert?: number; // Présent si le type est COURANT
   cartes: CarteBancaire[]; // Liste des cartes bancaires associées
+  isEditing?: boolean; // Propriété optionnelle pour le mode édition
+
 }
