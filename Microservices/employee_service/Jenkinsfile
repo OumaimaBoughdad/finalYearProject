@@ -35,14 +35,7 @@ pipeline {
                 script {
                     withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
                         dir('Microservices/employee_service') {
-                            sh """
-                                mvn sonar:sonar \
-                                    -Dsonar.projectKey=Prj-Fin-T \
-                                    -Dsonar.projectName=employee-service \
-                                    -Dsonar.projectVersion=1.0 \
-                                    -Dsonar.sources=src \
-                                    -Dsonar.java.binaries=target/classes
-                            """
+                           sh 'mvn sonar:sonar'
                         }
                     }
                 }
