@@ -38,10 +38,16 @@ export class EmployeeService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // // Récupérer un employé par email
+  // getEmployeeByEmail(email: string): Observable<Employee> {
+  //   return this.http.get<Employee>(`${this.apiUrl}/by-email?email=${email}`);
+  // }
+
   // Récupérer un employé par email
-  getEmployeeByEmail(email: string): Observable<Employee> {
-    return this.http.get<Employee>(`${this.apiUrl}/by-email?email=${email}`);
+  getEmployeesByLastName(lastname: string): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/by-lastname?lastName=${lastname}`);
   }
+
   addEmployee(employee: any) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post('http://localhost:8080/api/employees', employee, { headers: headers });

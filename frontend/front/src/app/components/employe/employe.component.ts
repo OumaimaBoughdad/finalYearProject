@@ -71,15 +71,16 @@ export class EmployeComponent implements OnInit {
       }
     } else {
       // Sinon, rechercher par email
-      const employee = this.employees.find((emp) => emp.email === query);
-      if (employee) {
-        this.dataSource.data = [employee]; // Afficher uniquement l'employé trouvé
-        this.errorMessage = '';
+      const foundEmployees = this.employees.filter((emp) => emp.lastName === query); // Trouver tous les employés correspondants
+      if (foundEmployees.length > 0) {
+        this.dataSource.data = foundEmployees; // Afficher tous les employés trouvés
+        this.errorMessage = ''; // Réinitialiser le message d'erreur
       } else {
-        this.errorMessage = 'Employé introuvable avec cet email.';
+        this.errorMessage = 'Aucun employé trouvé avec ce nom.'; // Message d'erreur si aucun employé trouvé
         this.dataSource.data = []; // Aucun résultat
       }
     }
+
   }
 
   // Réinitialiser la recherche

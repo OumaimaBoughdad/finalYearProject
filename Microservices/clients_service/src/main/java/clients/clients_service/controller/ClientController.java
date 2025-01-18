@@ -74,6 +74,7 @@ public class ClientController {
         }
         clientService.updateClient(id, clientDetails);
         return ResponseEntity.noContent().build();
+
     }
 
     @DeleteMapping("/{id}")

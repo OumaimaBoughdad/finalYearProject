@@ -96,7 +96,17 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(employee);
     }
-
+    @GetMapping("/by-lastname")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesByLastName(@RequestParam String lastName) {
+        List<Employee> employees = employeeService.findByLastName(lastName);
+        if (employees.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<EmployeeDTO> employeeDTOs = employees.stream()
+                .map(EmployeeMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(employeeDTOs);
+    }
     // publish the employee object
 
     @PostMapping
