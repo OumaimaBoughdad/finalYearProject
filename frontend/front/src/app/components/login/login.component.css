@@ -188,3 +188,33 @@ a:hover {
   color: #6a11cb;
   text-decoration: underline;
 }
+.background-container {
+  position: relative; /* Conteneur relatif pour positionner l'image de fond */
+  min-height: 100vh; /* Occupe toute la hauteur de la fenêtre */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Cache tout débordement */
+}
+
+.background-image {
+  position: absolute; /* Position absolue pour l'image de fond */
+  top: 0;
+  left: 0;
+  width: 100%; /* Largeur de l'écran */
+  height: 100%; /* Hauteur de l'écran */
+  object-fit: cover; /* Ajuste l'image pour couvrir tout l'écran */
+  z-index: -1; /* Place l'image derrière le contenu */
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent pour le contenu */
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 900px;
+  max-width: 100%;
+  height: 500px;
+  padding: 30px;
+  text-align: center;
+  z-index: 1; /* Place le contenu au-dessus de l'image de fond */
+}

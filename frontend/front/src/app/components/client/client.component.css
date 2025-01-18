@@ -1,3 +1,91 @@
+/* Styles généraux pour le formulaire */
+.add-client-form {
+  background-color: #eef0f3; /* Fond clair */
+  border-radius: 20px; /* Bordures arrondies */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Ombre portée */
+  width: 500px; /* Largeur fixe */
+  max-width: 100%; /* Responsive */
+  padding: 30px; /* Espace intérieur */
+  margin: 50px auto; /* Centrer horizontalement */
+  transition: all 0.6s ease-in-out; /* Animation fluide */
+}
+
+/* Titre du formulaire */
+.add-client-form h3 {
+  color: rgba(6, 57, 131, 0.99); /* Couleur du texte */
+  font-size: 24px; /* Taille de la police */
+  margin-bottom: 20px; /* Espace en dessous */
+  text-align: center; /* Centrer le texte */
+}
+
+/* Conteneur des champs du formulaire */
+.add-client-form form {
+  display: flex;
+  flex-direction: column; /* Disposition verticale */
+}
+
+/* Étiquettes des champs */
+.add-client-form label {
+  margin-bottom: 5px; /* Espace en dessous */
+  color: rgba(6, 57, 131, 0.99); /* Couleur du texte */
+  font-weight: bold; /* Texte en gras */
+}
+
+/* Champs de saisie */
+.add-client-form input {
+  width: 100%; /* Largeur maximale */
+  padding: 12px; /* Espace intérieur */
+  font-size: 16px; /* Taille de la police */
+  border: 1px solid #ccc; /* Bordure légère */
+  border-radius: 8px; /* Bordures arrondies */
+  outline: none; /* Supprimer le contour par défaut */
+  transition: border-color 0.3s ease; /* Animation fluide */
+  margin-bottom: 15px; /* Espace en dessous */
+}
+
+/* Effet au focus */
+.add-client-form input:focus {
+  border-color: #2575fc; /* Bordure bleue au focus */
+}
+
+/* Boutons du formulaire */
+.add-client-form button {
+  margin-top: 10px; /* Espace au-dessus */
+  padding: 12px 24px; /* Espace intérieur */
+  font-size: 16px; /* Taille de la police */
+  border: none; /* Supprimer la bordure */
+  border-radius: 8px; /* Bordures arrondies */
+  cursor: pointer; /* Curseur pointer */
+  font-weight: bold; /* Texte en gras */
+  color: #fff; /* Texte blanc */
+  background: linear-gradient(to right, #c1890f, #475997); /* Dégradé de couleur */
+  transition: background 0.3s ease-in-out, transform 0.2s ease; /* Animation fluide */
+}
+
+/* Effet au survol */
+.add-client-form button:hover {
+  background: linear-gradient(to right, #c1890f, #2c396c); /* Dégradé plus foncé */
+  transform: scale(1.05); /* Légère mise à l'échelle */
+}
+
+/* Messages de succès et d'erreur */
+.success-message, .error-message {
+  margin-top: 20px; /* Espace au-dessus */
+  padding: 12px; /* Espace intérieur */
+  border-radius: 8px; /* Bordures arrondies */
+  text-align: center; /* Centrer le texte */
+  font-weight: bold; /* Texte en gras */
+}
+
+.success-message {
+  background-color: #d4edda; /* Fond vert clair */
+  color: #155724; /* Texte vert foncé */
+}
+
+.error-message {
+  background-color: #f8d7da; /* Fond rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+}
 /* Conteneur principal */
 .container {
   padding: 20px;

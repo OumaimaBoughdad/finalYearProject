@@ -1,148 +1,157 @@
 <div class="transaction-container">
-  <h2>Effectuer une transaction</h2>
+  <!-- Boutons de navigation -->
+  <div class="navigation-buttons">
+    <button mat-raised-button (click)="showSection('form')" [color]="currentSection === 'form' ? 'primary' : 'basic'">
+      Effectuer une transaction
+    </button>
+    <button mat-raised-button (click)="showSection('allTransactions')" [color]="currentSection === 'allTransactions' ? 'primary' : 'basic'">
+      Toutes les transactions
+    </button>
+    <button mat-raised-button (click)="showSection('compteTransactions')" [color]="currentSection === 'compteTransactions' ? 'primary' : 'basic'">
+      Transactions du compte
+    </button>
+  </div>
 
   <!-- Formulaire pour effectuer une transaction -->
-  <form (ngSubmit)="makeTransaction()">
-    <div>
-      <label for="compteId">ID du compte source :</label>
-      <input
-        type="number"
-        id="compteId"
-        [(ngModel)]="compteId"
-        name="compteId"
-        required
-      />
-    </div>
+  <div *ngIf="currentSection === 'form'" class="form-section">
+    <h2>Effectuer une transaction</h2>
+    <form (ngSubmit)="makeTransaction()" class="transaction-form">
+      <mat-form-field appearance="fill">
+        <mat-label>ID du compte source</mat-label>
+        <input matInput type="number" [(ngModel)]="compteId" name="compteId" required />
+      </mat-form-field>
 
-    <div>
-      <label for="typeTransaction">Type de transaction :</label>
-      <select
-        id="typeTransaction"
-        [(ngModel)]="typeTransaction"
-        name="typeTransaction"
-        required
-      >
-        <option value="CREDIT">Crédit</option>
-        <option value="DEBIT">Débit</option>
-        <option value="TRANSFERT">Transfert</option>
-      </select>
-    </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Type de transaction</mat-label>
+        <mat-select [(ngModel)]="typeTransaction" name="typeTransaction" required>
+          <mat-option value="CREDIT">Crédit</mat-option>
+          <mat-option value="DEBIT">Débit</mat-option>
+          <mat-option value="TRANSFERT">Transfert</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <div>
-      <label for="amount">Montant :</label>
-      <input
-        type="number"
-        id="amount"
-        [(ngModel)]="amount"
-        name="amount"
-        required
-      />
-    </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Montant</mat-label>
+        <input matInput type="number" [(ngModel)]="amount" name="amount" required />
+      </mat-form-field>
 
-    <div *ngIf="typeTransaction === 'TRANSFERT'">
-      <label for="targetCompteId">ID du compte cible :</label>
-      <input
-        type="number"
-        id="targetCompteId"
-        [(ngModel)]="targetCompteId"
-        name="targetCompteId"
-        required
-      />
-    </div>
+      <mat-form-field *ngIf="typeTransaction === 'TRANSFERT'" appearance="fill">
+        <mat-label>ID du compte cible</mat-label>
+        <input matInput type="number" [(ngModel)]="targetCompteId" name="targetCompteId" required />
+      </mat-form-field>
 
-    <button type="submit">Effectuer la transaction</button>
-  </form>
+      <button mat-raised-button color="primary" type="submit">Effectuer la transaction</button>
+    </form>
+  </div>
 
   <!-- Section pour afficher toutes les transactions -->
-  <div class="transactions-section">
+  <div *ngIf="currentSection === 'allTransactions'" class="transactions-section">
     <h3>Toutes les transactions</h3>
-    <table>
-      <thead>
-      <tr>
-        <th>ID Transaction</th>
-        <th>Montant</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>ID Compte</th>
-        <th>Numéro Compte</th>
-        <th>Employé</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let transaction of transactions">
-        <td>{{ transaction.idTransaction }}</td>
-        <td>{{ transaction.montant }}</td>
-        <td>{{ transaction.dateTransaction }}</td>
-        <td>{{ transaction.typeTransaction }}</td>
-        <td>
+    <table mat-table [dataSource]="dataSourceAll" matSort #allTransactionsSort="matSort">
+      <!-- Colonnes -->
+      <ng-container matColumnDef="idTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID Transaction</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.idTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="montant">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Montant</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.montant }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.dateTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="typeTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.typeTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="comptes">
+        <th mat-header-cell *matHeaderCellDef>Comptes</th>
+        <td mat-cell *matCellDef="let transaction">
           <ul>
-            <li *ngFor="let compte of transaction.comptes">
-              {{ compte.idCompte }}
-            </li>
+            <li *ngFor="let compte of transaction.comptes">{{ compte.numeroCompte }}</li>
           </ul>
         </td>
-        <td>
-          <ul>
-            <li *ngFor="let compte of transaction.comptes">
-              {{ compte.numeroCompte }}
-            </li>
-          </ul>
-        </td>
-        <td>{{ transaction.employee?.idEmployee }}</td>
-      </tr>
-      </tbody>
+      </ng-container>
+
+      <ng-container matColumnDef="employee">
+        <th mat-header-cell *matHeaderCellDef>Employé</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.employee?.idEmployee }}</td>
+      </ng-container>
+
+
+
+      <!-- Ligne d'en-tête -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Lignes de données -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <!-- Pagination pour toutes les transactions -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons #allTransactionsPaginator></mat-paginator>
+    <!-- Bouton pour exporter en PDF -->
+    <button mat-raised-button color="accent" (click)="exportToPDF()">Exporter en PDF</button>
   </div>
 
   <!-- Section pour afficher les transactions d'un compte spécifique -->
-  <div class="compte-transactions-section">
+  <div *ngIf="currentSection === 'compteTransactions'" class="compte-transactions-section">
     <h3>Transactions du compte</h3>
     <div>
-      <label for="selectedCompteId">ID du compte :</label>
-      <input
-        type="number"
-        id="selectedCompteId"
-        [(ngModel)]="selectedCompteId"
-        name="selectedCompteId"
-        placeholder="Entrez l'ID du compte"
-      />
-      <button (click)="loadTransactionsByCompteId()">Charger les transactions</button>
+      <mat-form-field appearance="fill">
+        <mat-label>ID du compte</mat-label>
+        <input matInput type="number" [(ngModel)]="selectedCompteId" name="selectedCompteId" />
+      </mat-form-field>
+      <button mat-raised-button (click)="loadTransactionsByCompteId()">Charger les transactions</button>
     </div>
-    <table>
-      <thead>
-      <tr>
-        <th>ID Transaction</th>
-        <th>Montant</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>ID Compte</th>
-        <th>Numéro Compte</th>
-        <th>Employé</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let transaction of compteTransactions">
-        <td>{{ transaction.idTransaction }}</td>
-        <td>{{ transaction.montant }}</td>
-        <td>{{ transaction.dateTransaction }}</td>
-        <td>{{ transaction.typeTransaction }}</td>
-        <td>
+    <table mat-table [dataSource]="dataSourceCompte" matSort #compteTransactionsSort="matSort">
+      <!-- Colonnes -->
+      <ng-container matColumnDef="idTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID Transaction</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.idTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="montant">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Montant</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.montant }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.dateTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="typeTransaction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.typeTransaction }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="comptes">
+        <th mat-header-cell *matHeaderCellDef>Comptes</th>
+        <td mat-cell *matCellDef="let transaction">
           <ul>
-            <li *ngFor="let compte of transaction.comptes">
-              {{ compte.idCompte }}
-            </li>
+            <li *ngFor="let compte of transaction.comptes">{{ compte.numeroCompte }}</li>
           </ul>
         </td>
-        <td>
-          <ul>
-            <li *ngFor="let compte of transaction.comptes">
-              {{ compte.numeroCompte }}
-            </li>
-          </ul>
-        </td>
-        <td>{{ transaction.employee?.idEmployee }}</td>
-      </tr>
-      </tbody>
+      </ng-container>
+
+      <ng-container matColumnDef="employee">
+        <th mat-header-cell *matHeaderCellDef>Employé</th>
+        <td mat-cell *matCellDef="let transaction">{{ transaction.employee?.idEmployee }}</td>
+      </ng-container>
+
+      <!-- Ligne d'en-tête -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Lignes de données -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <!-- Pagination pour les transactions du compte -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons #compteTransactionsPaginator></mat-paginator>
   </div>
+
+
 </div>

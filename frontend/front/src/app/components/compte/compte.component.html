@@ -100,14 +100,14 @@
           <span *ngIf="compte !== selectedCompte">{{ compte.dateOuverture }}</span>
         </td>
         <td>
-            <span *ngIf="compte.typeCompte === 'EPARGNE'">
-              <input *ngIf="compte === selectedCompte" type="number" [(ngModel)]="compte.taux" />
-              <span *ngIf="compte !== selectedCompte">Taux : {{ compte.taux }}</span>
-            </span>
+<span *ngIf="compte.typeCompte === 'EPARGNE'">
+<input *ngIf="compte === selectedCompte" type="number" [(ngModel)]="compte.taux" />
+<span *ngIf="compte !== selectedCompte">Taux : {{ compte.taux }}</span>
+</span>
           <span *ngIf="compte.typeCompte === 'COURANT'">
-              <input *ngIf="compte === selectedCompte" type="number" [(ngModel)]="compte.decouvert" />
-              <span *ngIf="compte !== selectedCompte">Découvert : {{ compte.decouvert }}</span>
-            </span>
+<input *ngIf="compte === selectedCompte" type="number" [(ngModel)]="compte.decouvert" />
+<span *ngIf="compte !== selectedCompte">Découvert : {{ compte.decouvert }}</span>
+</span>
         </td>
         <td>
           <button *ngIf="compte !== selectedCompte" (click)="selectCompteForUpdate(compte)">Modifier</button>

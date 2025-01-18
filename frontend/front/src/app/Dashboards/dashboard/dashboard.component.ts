@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
           datasets: [{
             label: "Nombre de transactions",
             data: data,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            backgroundColor: ['#2ec130', '#e6be59', '#6774ac'],
           }]
         },
         options: {
@@ -103,14 +103,14 @@ export class DashboardComponent implements OnInit {
             {
               label: "Nombre de transactions",
               data: countData,
-              borderColor: '#FF6384',
+              borderColor: '#2ec130',
               fill: false,
               hidden: !this.showCount // Masquer ou afficher en fonction de showCount
             },
             {
               label: "Montant total des transactions",
               data: amountData,
-              borderColor: '#36A2EB',
+              borderColor: '#6774ac',
               fill: false,
               hidden: !this.showAmount // Masquer ou afficher en fonction de showAmount
             }
@@ -172,12 +172,12 @@ export class DashboardComponent implements OnInit {
             {
               label: "Nombre de transactions",
               data: countData,
-              backgroundColor: '#FF6384'
+              backgroundColor: '#2ec130'
             },
             {
               label: "Montant total des transactions",
               data: amountData,
-              backgroundColor: '#36A2EB'
+              backgroundColor: '#6774ac'
             }
           ]
         },
