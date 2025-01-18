@@ -20,5 +20,6 @@ public interface EmployeeService {
     void sendEmployeedelet(Employee employee);
     public Employee getEmployeeByIdOrThrow(Long id);
     public void sendEmployeeforupdate(Employee employee);
+    List<Employee> findByLastName(String lastName);
 
 }

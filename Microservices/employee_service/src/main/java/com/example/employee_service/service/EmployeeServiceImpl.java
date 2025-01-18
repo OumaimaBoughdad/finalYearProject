@@ -115,6 +115,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<Employee> findByLastName(String lastName) {
+        return employeeRepository.findByLastName(lastName);
+    }
+
+    @Override
     public Employee createnewEmployee(Employee employee) {
        return employeeRepository.save(employee);
     }
