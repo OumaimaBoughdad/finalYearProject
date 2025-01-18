@@ -16,7 +16,7 @@ public class LoanPredictionRequest {
     private Long id;
 
     private int person_age;
-    private int person_income;
+    private double person_income;
     private String person_home_ownership;
     private double person_emp_length;
     private String loan_intent;
@@ -35,9 +35,9 @@ public class LoanPredictionRequest {
 
     // Getters and Setters
 
-    public LoanPredictionRequest(Long id,int personAge, int personIncome, String personHomeOwnership, double personEmpLength,
-                      String loanIntent, String loanGrade, double loanAmnt, double loanIntRate, double loanPercentIncome,
-                      String cbPersonDefaultOnFile, int cbPersonCredHistLength) {
+    public LoanPredictionRequest(Long id,int personAge, double personIncome, String personHomeOwnership, double personEmpLength,
+                                 String loanIntent, String loanGrade, double loanAmnt, double loanIntRate, double loanPercentIncome,
+                                 String cbPersonDefaultOnFile, int cbPersonCredHistLength) {
         this.id=id;
         this.person_age = personAge;
         this.person_income = personIncome;
@@ -56,7 +56,6 @@ public class LoanPredictionRequest {
 
     }
 
-
     public int getPerson_age() {
         return person_age;
     }
@@ -65,11 +64,11 @@ public class LoanPredictionRequest {
         this.person_age = person_age;
     }
 
-    public int getPerson_income() {
+    public double getPerson_income() {
         return person_income;
     }
 
-    public void setPerson_income(int person_income) {
+    public void setPerson_income(double person_income) {
         this.person_income = person_income;
     }
 

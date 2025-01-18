@@ -1,8 +1,11 @@
-package org.example.credit_microservice.controller;
+package org.example.credit_microservice.service;
 
+import ch.qos.logback.core.net.server.Client;
 import jakarta.transaction.Transactional;
+import org.example.credit_microservice.entities.CreditClient;
 import org.example.credit_microservice.entities.LoanPredictionRequest;
 import org.example.credit_microservice.entities.LoanPredictionResponse;
+import org.example.credit_microservice.repositories.ClientRepository;
 import org.example.credit_microservice.repositories.LoanPredictionRepository;
 import org.example.credit_microservice.repositories.LoanPredictionResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,97 +15,33 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-//package org.example.credit_microservice.controller;
-//
-//
-//import org.example.credit_microservice.entities.ClientData;
-//import org.example.credit_microservice.entities.CreditScoreRequest;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-////@RestController
-////@RequestMapping("/api/loan")
-////public class LoanPredictionController {
-////
-////    private final LoanPredictionService loanPredictionService;
-////
-////    public LoanPredictionController(LoanPredictionService loanPredictionService) {
-////        this.loanPredictionService = loanPredictionService;
-////    }
-////
-////    @PostMapping("/predict")
-////    public ResponseEntity<LoanPredictionResponse> predictLoanStatus(@RequestBody LoanPredictionRequest request) {
-////        LoanPredictionResponse response = loanPredictionService.predictLoanStatus(request);
-////        return ResponseEntity.ok(response);
-////    }
-////}
-////
-////@RestController
-////@RequestMapping("/api/credit-score")
-////public class CreditScoreController {
-////
-////    @Autowired
-////    private  LoanPredictionService loanPredictionService;
-////    private static final String FLASK_API_URL = "http://localhost:5000/predict";
-////
-////    @PostMapping("/predict")
-////    public ResponseEntity<LoanPredictionResponse> predictLoanStatus(@RequestBody LoanPredictionRequest request) {
-////        LoanPredictionResponse response = loanPredictionService.predictLoanStatus(request);
-////        return ResponseEntity.ok(response);
-////    }
-////
-////
-////}
-//// src/main/java/com/example/demo/controller/LoanPredictionController.java
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.Map;
-//
-//import org.springframework.stereotype.Service;
-//import org.springframework.web.client.RestTemplate;
-//
-//import java.util.Map;
-//
-//@Service
-//public class CreditScoreService {
-//
-////    public Map<String, Object> predictCreditScore(Map<String, Object> clientData) {
-////        String flaskUrl = "http://localhost:5000/predict";
-////        RestTemplate restTemplate = new RestTemplate();
-////        return restTemplate.postForObject(flaskUrl, clientData, Map.class);
-////    }
-//    public int predictCreditScore(ClientData client) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url = "http://localhost:5000/predict";
-//
-//        // Prepare and send the request to the ML model API
-//        ResponseEntity<Integer> response = restTemplate.postForEntity(url, client, Integer.class);
-//        int predictedScore = response.getBody();
-//
-//        return predictedScore;
-//    }
-//}
 @Service
 @Transactional
-
 public class CreditScoreService {
-
 
     @Autowired
     private LoanPredictionRepository loanPredictionRepository;
-    @Autowired
-    private LoanPredictionResponseRepository LoanPredictionResponseRepository;
 
-    public int predictCreditScore(LoanPredictionRequest loanRequest) {
+    @Autowired
+    private LoanPredictionResponseRepository loanPredictionResponseRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public String predictCreditScore(LoanPredictionRequest loanRequest) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:5000/predict";
+
+        // Set default loan_int_rate to 5.5
+        loanRequest.setLoan_int_rate(5.5);
+
+        // Calculate loan_grade based on client's income
+        String loanGrade = calculateLoanGrade(loanRequest.getPerson_income());
+        loanRequest.setLoan_grade(loanGrade);
+
+        // Calculate loan_percent_income
+        double loanPercentIncome = calculateLoanPercentIncome(loanRequest.getLoan_amnt(), loanRequest.getPerson_income());
+        loanRequest.setLoan_percent_income(loanPercentIncome);
 
         // Prepare and send the request to the Flask ML API
         ResponseEntity<Map> response = restTemplate.postForEntity(url, loanRequest, Map.class);
@@ -115,9 +54,60 @@ public class CreditScoreService {
 
         // Create and save the loan prediction response linked to the saved request
         LoanPredictionResponse loanResponse = new LoanPredictionResponse(savedRequest, predictedLoanStatus);
-        LoanPredictionResponseRepository.save(loanResponse);
+        loanPredictionResponseRepository.save(loanResponse);
 
-        return predictedLoanStatus;
+        // Return the descriptive message
+        return loanResponse.getLoan_status_message();
     }
 
+    public LoanPredictionRequest prepareLoanPredictionRequest(Long cne, String loanIntent, double loanAmnt) {
+        // Fetch client details using CNI
+        CreditClient client = clientRepository.findByCni(cne)
+                .orElseThrow(() -> new RuntimeException("Client not found with CNI: " + cne));
+
+        // Calculate loan_grade based on income
+        String loanGrade = calculateLoanGrade(client.getPersonIncome());
+
+        // Calculate loan_percent_income
+        double loanPercentIncome = calculateLoanPercentIncome(loanAmnt, client.getPersonIncome());
+
+        // Prepare the LoanPredictionRequest object
+        LoanPredictionRequest request = new LoanPredictionRequest();
+        request.setPerson_age(client.getPersonAge());
+        request.setPerson_income(client.getPersonIncome());
+        request.setPerson_home_ownership(client.getPersonHomeOwnership());
+        request.setPerson_emp_length(client.getPersonEmpLength());
+        request.setLoan_grade(loanGrade);
+        request.setLoan_int_rate(5.5); // Fixed value
+        request.setLoan_percent_income(loanPercentIncome);
+        request.setCb_person_default_on_file(client.getCbPersonDefaultOnFile());
+        request.setCb_person_cred_hist_length(client.getCbPersonCredHistLength());
+        request.setLoan_intent(loanIntent);
+        request.setLoan_amnt(loanAmnt);
+
+        return request;
+    }
+
+    private String calculateLoanGrade(double income) {
+        if (income > 5000) {
+            return "A";
+        } else if (income > 3000) {
+            return "B";
+        } else if (income > 2000) {
+            return "C";
+        } else {
+            return "D";
+        }
+    }
+
+    private double calculateLoanPercentIncome(double loanAmnt, double personIncome) {
+        if (personIncome == 0) {
+            return 0; // Avoid division by zero
+        }
+        return (loanAmnt / personIncome) * 100;
+    }
+//    public Client getClientByCne(Long cne) {
+//        return clientRepository.findByCne(cne)
+//                .orElseThrow(() -> new RuntimeException("Client not found with CNE: " + cne));
+//    }
 }
