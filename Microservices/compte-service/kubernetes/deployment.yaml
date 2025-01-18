@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: compte-service
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: compte-service
@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: compte-service
-          image: your-docker-repo/compte-service:latest
+          image: oumaimaboughdad/compte-service:latest
           ports:
             - containerPort: 8086
-          env:
-            - name: EUREKA_SERVER
-              value: "http://eureka-main:8761/eureka"
+          envFrom:
+            - secretRef:
+                name: compte-service-secrets
