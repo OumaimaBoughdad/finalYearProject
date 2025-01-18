@@ -1,8 +1,17 @@
 pipeline {
-    agent any
+    agent { label 'jenkins-agent' }
 
     tools {
-        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
+        maven 'Maven 3.9.9'
+    }
+
+    environment {
+        APP_NAME = "security-service"
+        RELEASE = "latest"
+        DOCKER_USER = "oumaimaboughdad"
+        DOCKER_PASS = 'token-for-the-jenkins'
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -14,9 +23,35 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the security microservice ......  '
-                dir('Microservices/security-services') { // Change to the directory containing pom.xml
+                echo 'Building the Security microservice ......'
+                dir('Microservices/security_service') {
                     sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
+                        dir('Microservices/security_service') {
+                            sh 'mvn sonar:sonar'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    dir('Microservices/security_service') {
+                        docker.withRegistry('', DOCKER_PASS) {
+                            docker_image = docker.build("${IMAGE_NAME}")
+                            docker_image.push("${IMAGE_TAG}")
+                            docker_image.push('latest')
+                        }
+                    }
                 }
             }
         }
