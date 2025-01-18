@@ -1,6 +1,8 @@
 package org.example.credit_microservice.entities;
 
 import jakarta.persistence.*;
+import org.example.credit_microservice.entities.CreditClient;
+
 @Entity
 @Table(name = "credits")
 public class Credit {
@@ -12,23 +14,25 @@ public class Credit {
     private String loanIntent;
     private String loanGrade;
     private double loanAmnt;
-    private double loanIntRate;
-    private double loanPercentIncome;
+
+    private final double loanIntRate = 5.5; // Fixed interest rate
+
+    private double loanPercentIncome; // Calculated field
 
     @ManyToOne
     @JoinColumn(name = "client_id") // Foreign key to the client table
     private CreditClient client;
+
     // Constructors
     public Credit() {
     }
 
-    public Credit(String loanIntent, String loanGrade, double loanAmnt, double loanIntRate, double loanPercentIncome, CreditClient client) {
+    public Credit(String loanIntent, double loanAmnt, CreditClient client) {
         this.loanIntent = loanIntent;
-        this.loanGrade = loanGrade;
         this.loanAmnt = loanAmnt;
-        this.loanIntRate = loanIntRate;
-        this.loanPercentIncome = loanPercentIncome;
         this.client = client;
+        this.loanGrade = calculateLoanGrade(client.getPersonIncome());
+        this.loanPercentIncome = calculateLoanPercentIncome(); // Calculate dynamically
     }
 
     // Getters and setters
@@ -62,22 +66,17 @@ public class Credit {
 
     public void setLoanAmnt(double loanAmnt) {
         this.loanAmnt = loanAmnt;
+        this.loanPercentIncome = calculateLoanPercentIncome(); // Recalculate when loanAmnt changes
     }
 
+    // No setter for loanIntRate to make it immutable
     public double getLoanIntRate() {
         return loanIntRate;
     }
 
-    public void setLoanIntRate(double loanIntRate) {
-        this.loanIntRate = loanIntRate;
-    }
-
+    // No setter for loanPercentIncome to prevent manual modification
     public double getLoanPercentIncome() {
-        return loanPercentIncome;
-    }
-
-    public void setLoanPercentIncome(double loanPercentIncome) {
-        this.loanPercentIncome = loanPercentIncome;
+        return calculateLoanPercentIncome(); // Always calculate dynamically
     }
 
     public CreditClient getClient() {
@@ -86,5 +85,28 @@ public class Credit {
 
     public void setClient(CreditClient client) {
         this.client = client;
+        this.loanGrade = calculateLoanGrade(client.getPersonIncome());
+        this.loanPercentIncome = calculateLoanPercentIncome(); // Recalculate when client changes
+    }
+
+    // Helper method to calculate loanPercentIncome
+    private double calculateLoanPercentIncome() {
+        if (client == null || client.getPersonIncome() == 0) {
+            return 0; // Avoid division by zero
+        }
+        return (loanAmnt / client.getPersonIncome()) * 100;
+    }
+
+    // Helper method to calculate loan grade based on income
+    private String calculateLoanGrade(double income) {
+        if (income > 5000) {
+            return "A";
+        } else if (income > 3000) {
+            return "B";
+        } else if (income > 2000) {
+            return "C";
+        } else {
+            return "D";
+        }
     }
 }

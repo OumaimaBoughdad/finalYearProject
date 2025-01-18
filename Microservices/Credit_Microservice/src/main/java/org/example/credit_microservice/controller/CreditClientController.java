@@ -16,8 +16,8 @@ public class CreditClientController {
     @Autowired
     private ClientService clientService;
 
-    // Create or Update Client
-    @PostMapping
+    // Create a credit client that we will create its credit
+    @PostMapping("/non-registered-clients")
     public ResponseEntity<CreditClient> saveClient(@RequestBody CreditClient client) {
         CreditClient savedClient = clientService.saveClient(client);
         return ResponseEntity.ok(savedClient);
