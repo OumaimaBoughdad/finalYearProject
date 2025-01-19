@@ -27,7 +27,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.passwordEncoder = passwordEncoder; // Initialisation correcte
         this.kafkaTemplate = kafkaTemplate;
     }
-
+    @Override
+    public List<Employee> findByLastName(String lastName) {
+        return employeeRepository.findByLastName(lastName);
+    }
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
         // Crypter le mot de passe de l'employé

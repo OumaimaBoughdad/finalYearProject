@@ -14,7 +14,6 @@ public class CreditScoreController {
 
     @Autowired
     private CreditScoreService creditScoreService;
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/predict")
     public ResponseEntity<String> predictLoanStatus(@RequestBody LoanPredictionRequest request) {
         String loanStatusMessage = creditScoreService.predictCreditScore(request);
@@ -22,7 +21,6 @@ public class CreditScoreController {
         return ResponseEntity.ok(loanStatusMessage);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/predictbycne")
     public ResponseEntity<String> predictLoanStatus(@RequestBody PredictLoanRequest predictLoanRequest) {
         LoanPredictionRequest request = creditScoreService.prepareLoanPredictionRequest(
