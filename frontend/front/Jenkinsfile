@@ -8,7 +8,7 @@ pipeline {
     environment {
         APP_NAME = "front-app"
         DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = credentials('token-for-the-jenkins') // Reference to Jenkins credential ID
+        DOCKER_PASS = credentials('docker-credentials') // Reference to Jenkins credential ID
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
@@ -29,9 +29,7 @@ pipeline {
 
         stage('Install Angular CLI') {
             steps {
-                dir('frontend/front') {
-                    sh 'npm install -g @angular/cli' // Install Angular CLI globally
-                }
+                sh 'npm install -g @angular/cli' // Install Angular CLI globally
             }
         }
 
