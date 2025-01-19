@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build Angular App') {
             steps {
                 dir('frontend/front') {
                     sh 'npm run build' // Use global Angular CLI
@@ -53,48 +53,34 @@ pipeline {
             }
         }
 
-        //stage('Test') {
-           // steps {
-              //  dir('frontend/front') {
-                  //  sh 'ng test --watch=false' // Run unit tests
-                //}
-           // }
-        //}
-
-       // stage('SonarQube Analysis') {
-            //steps {
-               // withSonarQubeEnv('Sonar 7') { // Ensure SonarQube server is configured in Jenkins
-                   // dir('frontend/front') {
-                        //sh 'npm run sonar' // Ensure 'sonar' script is defined in package.json
-                    //}
-               // }
-            //}
-        //}
-
-       /* stage('Cleanup Docker Image') {
+        stage('Build Docker Image') {
             steps {
-                script {
-                    sh """
-                        docker logout
-                        docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-                        docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG} || true
-                    """
+                dir('frontend/front') {
+                    script {
+                        // Build the Docker image
+                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    }
                 }
             }
-        }*/
+        }
 
-       /*// stage('Build & Push Docker Image') {
-           // steps {
-               // dir('frontend/front') {
-                   // script {
-                        docker.withRegistry("", "${DOCKER_PASS}") {
-                            def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                            dockerImage.push()
-                        }
-                    }
-               / }
-           // }
-        //}*/
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    // Log in to Docker Hub using credentials
+                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    // Push the Docker image to Docker Hub
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
     }
 
     post {
