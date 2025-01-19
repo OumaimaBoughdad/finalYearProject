@@ -12,5 +12,5 @@ import {SafePipe} from '../../pipes/safe.pipe';
 })
 export class GrafanaPanelComponent {
   // Remplacez par l'URL de votre tableau de bord Grafana
-  grafanaUrl = "https://snapshot.raintank.io/dashboard-solo/snapshot/your-snapshot-id";
+  grafanaUrl = "https://snapshots.raintank.io/dashboard/snapshot/Lxu81YWfTcx5JtQ8G01q7QER91ZMIPXH";
 }
