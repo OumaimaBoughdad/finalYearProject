@@ -6,12 +6,16 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "compte-service"
-        RELEASE = "latest"
-        DOCKER_USER = "oumaimaboughdad" // Your Docker Hub username
-        DOCKER_PASS = credentials('docker-credentials') // Use Jenkins credentials for Docker Hub
-        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
-        IMAGE_TAG = "latest"
+        APP_NAME = "compte-service" // Name of the microservice
+        RELEASE = "latest" // Release tag
+        DOCKER_USER = "oumaimaboughdad" // Your Docker Hub username (optional, if you still want to push to Docker Hub)
+        DOCKER_PASS = credentials('docker-credentials') // Use Jenkins credentials for Docker Hub (optional)
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}" // Docker Hub image name (optional)
+        IMAGE_TAG = "latest" // Docker image tag
+        AWS_ACCOUNT_ID = "324037283952" // Your AWS account ID
+        AWS_REGION = "eu-west-3" // AWS region for ECR
+        ECR_REPO_NAME = "${APP_NAME}" // ECR repository name (same as microservice name)
+        ECR_IMAGE_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}" // ECR image URI
     }
 
     stages {
@@ -23,7 +27,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the employee microservice ......'
+                echo 'Building the compte-service microservice ......'
                 dir('Microservices/compte-service') { // Change to the directory containing pom.xml
                     sh 'mvn clean package -DskipTests' // Build the Maven project
                 }
@@ -51,20 +55,59 @@ pipeline {
         //     }
         // }
 
-        stage('Build & Push Docker Image') {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dir('Microservices/compte-service') { // Ensure Docker build is run in the correct directory
+                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ." // Build Docker image for Docker Hub (optional)
+                        sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${ECR_IMAGE_URI}" // Retag the image for ECR
+                    }
+                }
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                script {
+                    // Authenticate Docker with ECR
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+                }
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    dir('Microservices/compte-service') { // Ensure Docker push is run in the correct directory
+                        sh "docker push ${ECR_IMAGE_URI}" // Push the Docker image to ECR
+                    }
+                }
+            }
+        }
+
+        // Optional: Push to Docker Hub (if you still want to push to Docker Hub)
+        stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        dir('Microservices/compte-service') { // Ensure Docker build is run in the correct directory
+                        dir('Microservices/compte-service') { // Ensure Docker push is run in the correct directory
                             sh '''
                                 docker login -u $DOCKER_USER -p $DOCKER_PASS
-                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                                 docker push ${IMAGE_NAME}:${IMAGE_TAG}
                             '''
                         }
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
