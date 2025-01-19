@@ -71,7 +71,7 @@ pipeline {
             //}
         //}
 
-        stage('Cleanup Docker Image') {
+       /* stage('Cleanup Docker Image') {
             steps {
                 script {
                     sh """
@@ -81,20 +81,20 @@ pipeline {
                     """
                 }
             }
-        }
+        }*/
 
-        stage('Build & Push Docker Image') {
-            steps {
-                dir('frontend/front') {
-                    script {
+       /*// stage('Build & Push Docker Image') {
+           // steps {
+               // dir('frontend/front') {
+                   // script {
                         docker.withRegistry("", "${DOCKER_PASS}") {
                             def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
                             dockerImage.push()
                         }
                     }
-                }
-            }
-        }
+               / }
+           // }
+        //}*/
     }
 
     post {
