@@ -1,44 +1,31 @@
 pipeline {
-    agent { label 'jenkins-agent' }
+    agent any
 
     tools {
-        maven 'Maven 3.9.9'
+        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
 
     environment {
         APP_NAME = "compte-service"
         RELEASE = "latest"
-        DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = 'token-for-the-jenkins'
+        DOCKER_USER = "oumaimaboughdad" // Your Docker Hub username
+        DOCKER_PASS = credentials('docker-credentials') // Use Jenkins credentials for Docker Hub
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
 
     stages {
-
-    // Cleanup Docker Image Stage
-            stage('Cleanup Docker Image') {
-                steps {
-                    script {
-                        sh(script: """
-                            if docker images -q ${IMAGE_NAME}:${IMAGE_TAG} 2>/dev/null; then
-                                docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG}
-                            fi
-                        """)
-                    }
-                }
-            }
         stage('Checkout SCM') {
             steps {
-                checkout scm
+                checkout scm // Checkout the code from the SCM (e.g., Git)
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the Compte microservice ......'
-                dir('Microservices/compte-service') {
-                    sh 'mvn clean package -DskipTests'
+                echo 'Building the employee microservice ......'
+                dir('Microservices/compte-service') { // Change to the directory containing pom.xml
+                    sh 'mvn clean package -DskipTests' // Build the Maven project
                 }
             }
         }
@@ -46,23 +33,34 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/compte-service') {
-                            sh 'mvn sonar:sonar'
+                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') { // Use SonarQube credentials
+                        dir('Microservices/compte-service') { // Ensure analysis is run in the correct directory
+                            sh 'mvn sonar:sonar' // Run SonarQube analysis
                         }
                     }
                 }
             }
         }
 
+        // Uncomment this stage if you want to enforce the quality gate
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token-for-jenkins' // Enforce quality gate
+        //         }
+        //     }
+        // }
+
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/compte-service') {
-                        docker.withRegistry('', DOCKER_PASS) {
-                            docker_image = docker.build("${IMAGE_NAME}")
-                            docker_image.push("${IMAGE_TAG}")
-                            docker_image.push('latest')
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        dir('Microservices/compte-service') { // Ensure Docker build is run in the correct directory
+                            sh '''
+                                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                                docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                            '''
                         }
                     }
                 }
