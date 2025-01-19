@@ -8,4 +8,5 @@ export interface Client {
   address: string;
   cne: string;
   employee?: any; // Vous pouvez créer un modèle Employee si nécessaire
+  isEditing?:Boolean;
 }
