@@ -1,0 +1,60 @@
+<div class="container">
+  <h2>Gestion des Crédits</h2>
+
+  <!-- Formulaire pour créer/mettre à jour un crédit -->
+  <form [formGroup]="creditForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="cni">CNI du client :</label>
+      <input id="cni" type="number" formControlName="cni" placeholder="Ex : 123456">
+    </div>
+
+    <div class="form-group">
+      <label for="loanAmnt">Montant du prêt :</label>
+      <input id="loanAmnt" type="number" formControlName="loanAmnt" placeholder="Ex : 10000">
+    </div>
+
+    <div class="form-group">
+      <label for="loanIntent">Intention du prêt :</label>
+      <select id="loanIntent" formControlName="loanIntent">
+        <option value="EDUCATION">Éducation</option>
+        <option value="PERSONAL">Personnel</option>
+        <option value="MEDICAL">Médical</option>
+        <option value="VENTURE">Entreprise</option>
+        <option value="HOMEIMPROVEMENT">Amélioration de l'habitat</option>
+        <option value="DEBTCONSOLIDATION">Consolidation de dettes</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <button type="submit">{{ isEditing ? 'Mettre à jour' : 'Créer' }}</button>
+      <button type="button" (click)="resetForm()" *ngIf="isEditing">Annuler</button>
+    </div>
+  </form>
+
+  <!-- Liste des crédits -->
+  <h3>Liste des Crédits</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>CNI</th>
+      <th>Montant</th>
+      <th>Intention</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let credit of credits">
+      <td>{{ credit.creditId }}</td>
+      <td>{{ credit.cni }}</td>
+      <td>{{ credit.loanAmnt }}</td>
+      <td>{{ credit.loanIntent }}</td>
+      <td>{{ credit.loanStatus || 'En attente' }}</td>
+      <td>
+        <button (click)="deleteCredit(credit.creditId!)">Supprimer</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

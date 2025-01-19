@@ -7,33 +7,35 @@ import { Credit } from '../models/credit.model';
   providedIn: 'root'
 })
 export class CreditService {
-  private apiUrl = 'http://localhost:8091/api/credits';
+  private baseUrl = 'http://localhost:8091/api/credits';
 
   constructor(private http: HttpClient) {}
 
-  createCredit(cni: number, loanAmnt: number, loanIntent: string): Observable<Credit> {
-    return this.http.post<Credit>(this.apiUrl, null, {
-      params: {
-        cni: cni.toString(),
-        loanAmnt: loanAmnt.toString(),
-        loanIntent: loanIntent
-      }
-    });
-  }
-
+  // Récupérer tous les crédits
   getAllCredits(): Observable<Credit[]> {
-    return this.http.get<Credit[]>(this.apiUrl);
+    return this.http.get<Credit[]>(`${this.baseUrl}`);
   }
 
+  // Récupérer un crédit par ID
   getCreditById(creditId: number): Observable<Credit> {
-    return this.http.get<Credit>(`${this.apiUrl}/${creditId}`);
+    return this.http.get<Credit>(`${this.baseUrl}/${creditId}`);
   }
 
+  createCredit(cni: number, loanAmnt: number, loanIntent: string): Observable<Credit> {
+    // Construire l'URL avec les query parameters
+    const url = `${this.baseUrl}/api/create?cni=${cni}&loanIntent=${loanIntent}&loanAmnt=${loanAmnt}`;
+
+    // Envoyer une requête POST sans corps (body)
+    return this.http.post<Credit>(url, {});
+  }
+
+  // Mettre à jour un crédit
   updateCredit(creditId: number, updatedCredit: Credit): Observable<Credit> {
-    return this.http.put<Credit>(`${this.apiUrl}/${creditId}`, updatedCredit);
+    return this.http.put<Credit>(`${this.baseUrl}/${creditId}`, updatedCredit);
   }
 
   deleteCredit(creditId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${creditId}`);
+    const url = `${this.baseUrl}/deletecredit/${creditId}`; // Construire l'URL avec l'ID du crédit
+    return this.http.delete<void>(url); // Envoyer une requête DELETE
   }
 }

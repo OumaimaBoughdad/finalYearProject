@@ -1,0 +1,52 @@
+<!-- client-credit.component.html -->
+<div class="client-credit-form">
+  <h2>Créer un nouveau client de crédit</h2>
+  <form (ngSubmit)="createClientCredit()">
+    <div>
+      <label for="cni">CNI :</label>
+      <input type="number" id="cni" [(ngModel)]="cni" name="cni" required />
+    </div>
+    <div>
+      <label for="name">Nom :</label>
+      <input type="text" id="name" [(ngModel)]="name" name="name" required />
+    </div>
+    <div>
+      <label for="personAge">Âge :</label>
+      <input type="number" id="personAge" [(ngModel)]="personAge" name="personAge" required />
+    </div>
+    <div>
+      <label for="personIncome">Revenu :</label>
+      <input type="number" id="personIncome" [(ngModel)]="personIncome" name="personIncome" required />
+    </div>
+    <div>
+      <label for="personHomeOwnership">Propriété de la maison :</label>
+      <input type="text" id="personHomeOwnership" [(ngModel)]="personHomeOwnership" name="personHomeOwnership" required />
+    </div>
+    <div>
+      <label for="personEmpLength">Ancienneté de l'emploi :</label>
+      <input type="number" id="personEmpLength" [(ngModel)]="personEmpLength" name="personEmpLength" required />
+    </div>
+    <div>
+      <label for="cbPersonDefaultOnFile">Historique des défauts :</label>
+      <input type="text" id="cbPersonDefaultOnFile" [(ngModel)]="cbPersonDefaultOnFile" name="cbPersonDefaultOnFile" required />
+    </div>
+    <div>
+      <label for="cbPersonCredHistLength">Historique du crédit :</label>
+      <input type="number" id="cbPersonCredHistLength" [(ngModel)]="cbPersonCredHistLength" name="cbPersonCredHistLength" required />
+    </div>
+    <button type="submit">Créer le client</button>
+  </form>
+
+  <div *ngIf="errorMessage" class="error">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <h3>Liste des clients de crédit</h3>
+  <ul>
+    <li *ngFor="let client of clientCredits">
+      {{ client.name }} (CNI: {{ client.cni }})
+    </li>
+  </ul>
+
+  <button (click)="getAllClientCredits()">Récupérer tous les clients</button>
+</div>

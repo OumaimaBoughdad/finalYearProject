@@ -1,0 +1,25 @@
+<div>
+  <h2>Gestion des crédits</h2>
+
+  <!-- Boutons pour naviguer entre les composants -->
+  <div>
+    <button (click)="showComponent('predict')">Prédire</button>
+    <button (click)="showComponent('visualiser')">Visualiser</button>
+    <button (click)="showComponent('crediter')">Créditer</button>
+  </div>
+
+  <!-- Zone dynamique pour afficher les composants -->
+  <ng-container *ngIf="currentComponent === 'predict'">
+    <app-predict-loan></app-predict-loan>
+  </ng-container>
+
+  <ng-container *ngIf="currentComponent === 'visualiser'">
+    <app-grafana-panel></app-grafana-panel>
+    <app-loan-status-charts></app-loan-status-charts>
+  </ng-container>
+
+  <ng-container *ngIf="currentComponent === 'crediter'">
+    <app-client-credit></app-client-credit>
+    <app-credit></app-credit>
+  </ng-container>
+</div>

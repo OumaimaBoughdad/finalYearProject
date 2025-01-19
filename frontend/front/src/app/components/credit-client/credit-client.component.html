@@ -1,0 +1,145 @@
+<!--&lt;!&ndash; client.component.html &ndash;&gt;-->
+<!--<div class="container">-->
+<!--  <h1>Gestion des Clients</h1>-->
+
+<!--  &lt;!&ndash; Formulaire de création de client &ndash;&gt;-->
+<!--  <form (ngSubmit)="createClient()" class="form-group">-->
+<!--    <h2>Ajouter un nouveau client</h2>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="cni">CNI :</label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="cni"-->
+<!--        [(ngModel)]="newClient.cni"-->
+<!--        name="cni"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="name">Nom :</label>-->
+<!--      <input-->
+<!--        type="text"-->
+<!--        id="name"-->
+<!--        [(ngModel)]="newClient.name"-->
+<!--        name="name"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="personAge">Âge :</label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="personAge"-->
+<!--        [(ngModel)]="newClient.personAge"-->
+<!--        name="personAge"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="personIncome">Revenu :</label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="personIncome"-->
+<!--        [(ngModel)]="newClient.personIncome"-->
+<!--        name="personIncome"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="personHomeOwnership">Type de propriété :</label>-->
+<!--      <input-->
+<!--        type="text"-->
+<!--        id="personHomeOwnership"-->
+<!--        [(ngModel)]="newClient.personHomeOwnership"-->
+<!--        name="personHomeOwnership"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="personEmpLength">Durée d'emploi (en années) :</label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="personEmpLength"-->
+<!--        [(ngModel)]="newClient.personEmpLength"-->
+<!--        name="personEmpLength"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="cbPersonDefaultOnFile">Défaut enregistré :</label>-->
+<!--      <input-->
+<!--        type="text"-->
+<!--        id="cbPersonDefaultOnFile"-->
+<!--        [(ngModel)]="newClient.cbPersonDefaultOnFile"-->
+<!--        name="cbPersonDefaultOnFile"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <div class="form-row">-->
+<!--      <label for="cbPersonCredHistLength">Historique de crédit (en années) :</label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="cbPersonCredHistLength"-->
+<!--        [(ngModel)]="newClient.cbPersonCredHistLength"-->
+<!--        name="cbPersonCredHistLength"-->
+<!--        required-->
+<!--        class="form-control"-->
+<!--      />-->
+<!--    </div>-->
+
+<!--    <button type="submit" class="btn btn-primary">Créer</button>-->
+<!--    <button type="button" class="btn btn-secondary" (click)="resetForm()">-->
+<!--      Réinitialiser-->
+<!--    </button>-->
+<!--  </form>-->
+
+<!--  &lt;!&ndash; Table des clients &ndash;&gt;-->
+<!--  <h2>Liste des clients</h2>-->
+<!--  <table class="table">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>CNI</th>-->
+<!--      <th>Nom</th>-->
+<!--      <th>Âge</th>-->
+<!--      <th>Revenu</th>-->
+<!--      <th>Propriété</th>-->
+<!--      <th>Durée d'emploi</th>-->
+<!--      <th>Défaut</th>-->
+<!--      <th>Historique de crédit</th>-->
+<!--      <th>Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr *ngFor="let client of clients">-->
+<!--      <td>{{ client.cni }}</td>-->
+<!--      <td>{{ client.name }}</td>-->
+<!--      <td>{{ client.personAge }}</td>-->
+<!--      <td>{{ client.personIncome }}</td>-->
+<!--      <td>{{ client.personHomeOwnership }}</td>-->
+<!--      <td>{{ client.personEmpLength }}</td>-->
+<!--      <td>{{ client.cbPersonDefaultOnFile }}</td>-->
+<!--      <td>{{ client.cbPersonCredHistLength }}</td>-->
+<!--      <td>-->
+<!--        <button class="btn btn-danger" (click)="deleteClient(client.cni)">-->
+<!--          Supprimer-->
+<!--        </button>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--</div>-->

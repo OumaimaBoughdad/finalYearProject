@@ -14,6 +14,9 @@ import {CompteDashboardComponent} from './Dashboards/compte-dashboard/compte-das
 import {PredictLoanComponent} from './components/predict-loan/predict-loan.component';
 import {LoanStatusChartsComponent} from './components/loan-status-charts/loan-status-charts.component';
 import {GrafanaPanelComponent} from './components/grafana-panel/grafana-panel.component';
+import {CreditComponent} from './components/credit/credit.component';
+import {ClientCreditComponent} from './components/client-credit/client-credit.component';
+import {GestionCreditsComponent} from './components/gestion-credits/gestion-credits.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/},
@@ -28,6 +31,8 @@ export const routes: Routes = [
   { path: 'predict', component: PredictLoanComponent }, // Route pour PredictLoanComponent
   {path:'chart',component:LoanStatusChartsComponent},
   {path:'grafana',component:GrafanaPanelComponent},
+  {path:'credits',component:CreditComponent},
+  { path: 'gestion-credits', component: GestionCreditsComponent }, // Route pour la gestion des crédits
  ];
 
 @NgModule({
