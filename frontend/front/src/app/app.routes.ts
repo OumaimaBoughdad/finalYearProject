@@ -21,11 +21,11 @@ import {GestionCreditsComponent} from './components/gestion-credits/gestion-cred
 export const routes: Routes = [
   { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/},
   { path: 'employees', component: EmployeComponent},
-  { path: 'add-employee', component: AddEmployeeComponent/*, canActivate: [AuthGuard]*/ },  // Route pour le formulaire d'ajout
+  { path: 'add-employee', component: AddEmployeeComponent, canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
    { path: 'login', component: LoginComponent },
-   { path: 'clients', component: ClientComponent/*, canActivate: [AuthGuard]*/ },
-  { path: 'comptes', component: CompteComponent/*, canActivate: [AuthGuard]*/},
-  { path: 'transaction', component: TransactionComponent/*, canActivate: [AuthGuard]*/ },
+   { path: 'clients', component: ClientComponent, canActivate: [AuthGuard] },
+  { path: 'comptes', component: CompteComponent, canActivate: [AuthGuard]},
+  { path: 'transaction', component: TransactionComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent},
   { path: 'comptedashboard', component: CompteDashboardComponent },
   { path: 'predict', component: PredictLoanComponent }, // Route pour PredictLoanComponent
