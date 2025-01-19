@@ -7,7 +7,7 @@ import { LoanPredictionRequest, PredictLoanRequest } from '../models/loan-predic
   providedIn: 'root'
 })
 export class CreditScoreService {
-  private apiUrl = 'http://localhost:8091/api';
+  private apiUrl = 'http://localhost:8091/api/credits';
 
   constructor(private http: HttpClient) {}
 
@@ -18,6 +18,6 @@ export class CreditScoreService {
 
   // Méthode pour prédire le prêt pour un client existant
   predictLoanStatusByCNE(request: { cne: number, loanIntent: string, loanAmnt: number }): Observable<string> {
-    return this.http.post<string>(`http://localhost:8080/api/predict`, request, { responseType: 'text' as 'json' });
+    return this.http.post<string>(`${this.apiUrl}/predictbycne`, request, { responseType: 'text' as 'json' });
   }
 }

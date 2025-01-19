@@ -12,6 +12,8 @@ import {HomeComponent}from './components/home/home.component';
 import {DashboardComponent} from './Dashboards/dashboard/dashboard.component';
 import {CompteDashboardComponent} from './Dashboards/compte-dashboard/compte-dashboard.component';
 import {PredictLoanComponent} from './components/predict-loan/predict-loan.component';
+import {LoanStatusChartsComponent} from './components/loan-status-charts/loan-status-charts.component';
+import {GrafanaPanelComponent} from './components/grafana-panel/grafana-panel.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/},
@@ -24,6 +26,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
   { path: 'comptedashboard', component: CompteDashboardComponent },
   { path: 'predict', component: PredictLoanComponent }, // Route pour PredictLoanComponent
+  {path:'chart',component:LoanStatusChartsComponent},
+  {path:'grafana',component:GrafanaPanelComponent},
  ];
 
 @NgModule({
