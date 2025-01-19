@@ -11,6 +11,7 @@ import {TransactionComponent} from './components/transaction/transaction.compone
 import {HomeComponent}from './components/home/home.component';
 import {DashboardComponent} from './Dashboards/dashboard/dashboard.component';
 import {CompteDashboardComponent} from './Dashboards/compte-dashboard/compte-dashboard.component';
+import {PredictLoanComponent} from './components/predict-loan/predict-loan.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/},
@@ -22,7 +23,7 @@ export const routes: Routes = [
   { path: 'transaction', component: TransactionComponent/*, canActivate: [AuthGuard]*/ },
   { path: 'dashboard', component: DashboardComponent},
   { path: 'comptedashboard', component: CompteDashboardComponent },
-
+  { path: 'predict', component: PredictLoanComponent }, // Route pour PredictLoanComponent
  ];
 
 @NgModule({

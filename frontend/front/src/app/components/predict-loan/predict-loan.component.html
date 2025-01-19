@@ -1,0 +1,149 @@
+<div class="container">
+  <h2>Prédiction de prêt pour un nouveau client</h2>
+  <form [formGroup]="predictionForm" (ngSubmit)="onSubmit()">
+    <!-- Âge -->
+    <div class="form-group">
+      <label for="person_age">Âge :</label>
+      <input id="person_age" type="number" formControlName="person_age" placeholder="Ex : 21">
+    </div>
+
+    <!-- Revenu annuel -->
+    <div class="form-group">
+      <label for="person_income">Revenu annuel :</label>
+      <input id="person_income" type="number" formControlName="person_income" placeholder="Ex : 9600">
+    </div>
+
+    <!-- Type de propriété -->
+    <div class="form-group">
+      <label for="person_home_ownership">Propriété :</label>
+      <select id="person_home_ownership" formControlName="person_home_ownership">
+        <option value="RENT">Location</option>
+        <option value="OWN">Propriétaire</option>
+        <option value="MORTGAGE">Hypothèque</option>
+        <option value="OTHER">Autre</option>
+      </select>
+    </div>
+
+    <!-- Ancienneté professionnelle (en années) -->
+    <div class="form-group">
+      <label for="person_emp_length">Ancienneté professionnelle (années) :</label>
+      <input id="person_emp_length" type="number" formControlName="person_emp_length" placeholder="Ex : 5">
+    </div>
+
+    <!-- Intention du prêt -->
+    <div class="form-group">
+      <label for="loan_intent">Intention du prêt :</label>
+      <select id="loan_intent" formControlName="loan_intent">
+        <option value="EDUCATION">Éducation</option>
+        <option value="PERSONAL">Personnel</option>
+        <option value="MEDICAL">Médical</option>
+        <option value="VENTURE">Entreprise</option>
+        <option value="HOMEIMPROVEMENT">Amélioration de l'habitat</option>
+        <option value="DEBTCONSOLIDATION">Consolidation de dettes</option>
+      </select>
+    </div>
+
+    <!-- Grade du prêt -->
+    <div class="form-group">
+      <label for="loan_grade">Grade du prêt :</label>
+      <select id="loan_grade" formControlName="loan_grade">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="G">G</option>
+      </select>
+    </div>
+
+    <!-- Montant du prêt -->
+    <div class="form-group">
+      <label for="loan_amnt">Montant du prêt :</label>
+      <input id="loan_amnt" type="number" formControlName="loan_amnt" placeholder="Ex : 1000">
+    </div>
+
+    <!-- Taux d'intérêt -->
+    <div class="form-group">
+      <label for="loan_int_rate">Taux d'intérêt (%) :</label>
+      <input id="loan_int_rate" type="number" step="0.01" formControlName="loan_int_rate" placeholder="Ex : 11.14">
+    </div>
+
+    <!-- Pourcentage du revenu utilisé pour le prêt -->
+    <div class="form-group">
+      <label for="loan_percent_income">Pourcentage du revenu utilisé pour le prêt :</label>
+      <input id="loan_percent_income" type="number" step="0.01" formControlName="loan_percent_income" placeholder="Ex : 0.10">
+    </div>
+
+    <!-- Historique de défaut de paiement -->
+    <div class="form-group">
+      <label for="cb_person_default_on_file">Historique de défaut de paiement :</label>
+      <select id="cb_person_default_on_file" formControlName="cb_person_default_on_file">
+        <option value="Y">Oui</option>
+        <option value="N">Non</option>
+      </select>
+    </div>
+
+    <!-- Longueur de l'historique de crédit -->
+    <div class="form-group">
+      <label for="cb_person_cred_hist_length">Longueur de l'historique de crédit (années) :</label>
+      <input id="cb_person_cred_hist_length" type="number" formControlName="cb_person_cred_hist_length" placeholder="Ex : 2">
+    </div>
+
+    <!-- Bouton de soumission -->
+    <div class="form-group">
+      <button type="submit" [disabled]="loading">Prédire</button>
+    </div>
+  </form>
+
+  <!-- Résultat de la prédiction -->
+  <div *ngIf="predictionResult" class="result">
+    <h3>Résultat :</h3>
+    <p>{{ predictionResult }}</p>
+  </div>
+
+  <!-- Indicateur de chargement -->
+  <div *ngIf="loading" class="loading">Chargement...</div>
+
+  <h2>Prédiction de prêt pour un client existant</h2>
+  <form [formGroup]="existingClientForm" (ngSubmit)="onSubmitExistingClient()">
+    <!-- CNE -->
+    <div class="form-group">
+      <label for="cne">CNE :</label>
+      <input id="cne" type="number" formControlName="cne" placeholder="Ex : 123456">
+    </div>
+
+    <!-- Intention du prêt -->
+    <div class="form-group">
+      <label for="loanIntent">Intention du prêt :</label>
+      <select id="loanIntent" formControlName="loanIntent">
+        <option value="EDUCATION">Éducation</option>
+        <option value="PERSONAL">Personnel</option>
+        <option value="MEDICAL">Médical</option>
+        <option value="VENTURE">Entreprise</option>
+        <option value="HOMEIMPROVEMENT">Amélioration de l'habitat</option>
+        <option value="DEBTCONSOLIDATION">Consolidation de dettes</option>
+      </select>
+    </div>
+
+    <!-- Montant du prêt -->
+    <div class="form-group">
+      <label for="loanAmnt">Montant du prêt :</label>
+      <input id="loanAmnt" type="number" formControlName="loanAmnt" placeholder="Ex : 10000">
+    </div>
+
+    <!-- Bouton de soumission -->
+    <div class="form-group">
+      <button type="submit" [disabled]="loading">Prédire</button>
+    </div>
+  </form>
+
+  <!-- Résultat pour le client existant -->
+  <div *ngIf="existingClientResult" class="result">
+    <h3>Résultat :</h3>
+    <p>{{ existingClientResult }}</p>
+  </div>
+
+  <!-- Indicateur de chargement -->
+  <div *ngIf="loading" class="loading">Chargement...</div>
+</div>
