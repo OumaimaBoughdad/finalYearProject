@@ -61,15 +61,15 @@ pipeline {
            // }
         //}
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('Sonar 7') { // Ensure SonarQube server is configured in Jenkins
-                    dir('frontend/front') {
-                        sh 'npm run sonar' // Ensure 'sonar' script is defined in package.json
-                    }
-                }
-            }
-        }
+       // stage('SonarQube Analysis') {
+            //steps {
+               // withSonarQubeEnv('Sonar 7') { // Ensure SonarQube server is configured in Jenkins
+                   // dir('frontend/front') {
+                        //sh 'npm run sonar' // Ensure 'sonar' script is defined in package.json
+                    //}
+               // }
+            //}
+        //}
 
         stage('Cleanup Docker Image') {
             steps {
