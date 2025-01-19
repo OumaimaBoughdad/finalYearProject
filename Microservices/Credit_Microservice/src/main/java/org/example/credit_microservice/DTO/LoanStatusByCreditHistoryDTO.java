@@ -2,9 +2,9 @@ package org.example.credit_microservice.DTO;
 
 
 public class LoanStatusByCreditHistoryDTO {
-    private String creditHistoryLength; // Binned categories: "0-2", "3-5", "6-10", "10+"
-    private long noDefaultCount;        // Count of loan_status = 0
-    private long defaultCount;          // Count of loan_status = 1
+    private String creditHistoryLength;
+    private long noDefaultCount;
+    private long defaultCount;
 
     // Constructor, Getters, and Setters
     public LoanStatusByCreditHistoryDTO(String creditHistoryLength, long noDefaultCount, long defaultCount) {

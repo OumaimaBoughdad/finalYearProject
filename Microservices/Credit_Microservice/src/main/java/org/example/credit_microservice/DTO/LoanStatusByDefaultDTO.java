@@ -2,11 +2,10 @@ package org.example.credit_microservice.DTO;
 
 
 public class LoanStatusByDefaultDTO {
-    private String defaultOnFile; // "Y" or "N"
-    private long noDefaultCount;  // Count of loan_status = 0
-    private long defaultCount;    // Count of loan_status = 1
+    private String defaultOnFile;
+    private long noDefaultCount;
+    private long defaultCount;
 
-    // Constructor, Getters, and Setters
     public LoanStatusByDefaultDTO(String defaultOnFile, long noDefaultCount, long defaultCount) {
         this.defaultOnFile = defaultOnFile;
         this.noDefaultCount = noDefaultCount;

@@ -1,7 +1,6 @@
 package org.example.credit_microservice.entities;
 
 import jakarta.persistence.*;
-import org.example.credit_microservice.entities.CreditClient;
 
 @Entity
 @Table(name = "credits")
@@ -15,12 +14,12 @@ public class Credit {
     private String loanGrade;
     private double loanAmnt;
 
-    private final double loanIntRate = 5.5; // Fixed interest rate
+    private final double loanIntRate = 5.5;
 
-    private double loanPercentIncome; // Calculated field
+    private double loanPercentIncome;
 
     @ManyToOne
-    @JoinColumn(name = "cni") // Foreign key to the client table
+    @JoinColumn(name = "cni")
     private CreditClient client;
 
     // Constructors
@@ -32,10 +31,9 @@ public class Credit {
         this.loanAmnt = loanAmnt;
         this.client = client;
         this.loanGrade = calculateLoanGrade(client.getPersonIncome());
-        this.loanPercentIncome = calculateLoanPercentIncome(); // Calculate dynamically
+        this.loanPercentIncome = calculateLoanPercentIncome();
     }
 
-    // Getters and setters
     public Long getCreditId() {
         return creditId;
     }
@@ -69,12 +67,10 @@ public class Credit {
         this.loanPercentIncome = calculateLoanPercentIncome(); // Recalculate when loanAmnt changes
     }
 
-    // No setter for loanIntRate to make it immutable
     public double getLoanIntRate() {
         return loanIntRate;
     }
 
-    // No setter for loanPercentIncome to prevent manual modification
     public double getLoanPercentIncome() {
         return calculateLoanPercentIncome(); // Always calculate dynamically
     }
@@ -89,7 +85,6 @@ public class Credit {
         this.loanPercentIncome = calculateLoanPercentIncome(); // Recalculate when client changes
     }
 
-    // Helper method to calculate loanPercentIncome
     private double calculateLoanPercentIncome() {
         if (client == null || client.getPersonIncome() == 0) {
             return 0; // Avoid division by zero
@@ -97,7 +92,6 @@ public class Credit {
         return (loanAmnt / client.getPersonIncome()) * 100;
     }
 
-    // Helper method to calculate loan grade based on income
     private String calculateLoanGrade(double income) {
         if (income > 5000) {
             return "A";

@@ -1,6 +1,5 @@
 package org.example.credit_microservice.service;
 
-// src/main/java/com/example/demo/service/FlaskClientService.java
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CreditRepository extends JpaRepository<Credit, Long> {
-//    List<Credit> findByClient_ClientId(Long clientId);
 
 }
 

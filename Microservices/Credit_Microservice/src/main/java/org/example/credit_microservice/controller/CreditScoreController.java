@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/credits")
 public class CreditScoreController {
 
     @Autowired
@@ -17,18 +17,14 @@ public class CreditScoreController {
 
     @PostMapping("/predict")
     public ResponseEntity<String> predictLoanStatus(@RequestBody LoanPredictionRequest request) {
-        // Get the predicted loan status message
         String loanStatusMessage = creditScoreService.predictCreditScore(request);
 
-        // Return the message in the response
         return ResponseEntity.ok(loanStatusMessage);
     }
 
 
-  ///predict en entrant le amount / loanintent/cne
-    @PostMapping("/predictbyCNE")
+    @PostMapping("/predictbycne")
     public ResponseEntity<String> predictLoanStatus(@RequestBody PredictLoanRequest predictLoanRequest) {
-        // Prepare the LoanPredictionRequest using client CNE and other details
         LoanPredictionRequest request = creditScoreService.prepareLoanPredictionRequest(
                 predictLoanRequest.getCne(),
                 predictLoanRequest.getLoanIntent(),
@@ -37,7 +33,6 @@ public class CreditScoreController {
 
         String loanStatusMessage = creditScoreService.predictCreditScore(request);
 
-        // Return the message in the response
         return ResponseEntity.ok(loanStatusMessage);
     }
 

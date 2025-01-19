@@ -5,7 +5,6 @@ public class PredictLoanRequest {
     private String loanIntent;
     private double loanAmnt;
 
-    // Getters and setters
     public Long getCne() {
         return cne;
     }

@@ -21,12 +21,11 @@ public class VisualizationService {
     @Autowired
     private LoanPredictionResponseRepository responseRepository;
 
-    // Get data for Loan Status by Default on File
     public List<LoanStatusByDefaultDTO> getLoanStatusByDefaultOnFile() {
         List<LoanPredictionRequest> requests = requestRepository.findAll();
         Map<String, long[]> counts = new HashMap<>();
-        counts.put("Y", new long[]{0, 0}); // Y: [noDefaultCount, defaultCount]
-        counts.put("N", new long[]{0, 0}); // N: [noDefaultCount, defaultCount]
+        counts.put("Y", new long[]{0, 0});
+        counts.put("N", new long[]{0, 0});
 
         for (LoanPredictionRequest request : requests) {
             Optional<LoanPredictionResponse> response = responseRepository.findByLoanPredictionRequest(request);
@@ -46,7 +45,6 @@ public class VisualizationService {
         return result;
     }
 
-    // Get data for Loan Status by Credit History Length (Binned)
     public List<LoanStatusByCreditHistoryDTO> getLoanStatusByCreditHistoryLength() {
         List<LoanPredictionRequest> requests = requestRepository.findAll();
         Map<String, long[]> counts = new HashMap<>();

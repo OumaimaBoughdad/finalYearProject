@@ -12,7 +12,7 @@ import java.util.List;
 public class CreditClient {
 
     @Id
-    private Long cni; // Primary key
+    private Long cni;
 
     private String name;
     private int personAge;
@@ -24,11 +24,9 @@ public class CreditClient {
     @OneToMany(mappedBy = "client") // One client can have many credits
     private List<Credit> credits;
 
-    // No-args constructor
     public CreditClient() {
     }
 
-    // All-args constructor
     public CreditClient(Long cni, String name, int personAge, double personIncome, String personHomeOwnership,
                   double personEmpLength, String cbPersonDefaultOnFile, int cbPersonCredHistLength) {
         this.cni = cni;
@@ -41,7 +39,6 @@ public class CreditClient {
         this.cbPersonCredHistLength = cbPersonCredHistLength;
     }
 
-    // Getters and setters
     public Long getCni() {
         return cni;
     }
