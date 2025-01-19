@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/visualization")
+@RequestMapping("/api/credits")
 public class VisualizationController {
 
     @Autowired
     private VisualizationService visualizationService;
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @GetMapping("/loan-status-by-default")
     public List<LoanStatusByDefaultDTO> getLoanStatusByDefaultOnFile() {
         return visualizationService.getLoanStatusByDefaultOnFile();
     }
-    @CrossOrigin(origins = "http://localhost:4200")
+
 
     @GetMapping("/loan-status-by-credit-history")
     public List<LoanStatusByCreditHistoryDTO> getLoanStatusByCreditHistoryLength() {
