@@ -9,7 +9,7 @@ public class GrafanaController {
     @GetMapping("/grafana-panel")
     public String showGrafanaPanel(Model model) {
         // Replace with your actual panel snapshot URL
-        String panelSnapshotUrl = "https://snapshot.raintank.io/dashboard-solo/snapshot/your-snapshot-id";
+        String panelSnapshotUrl = "https://snapshots.raintank.io/dashboard/snapshot/Lxu81YWfTcx5JtQ8G01q7QER91ZMIPXH";
         model.addAttribute("panelSnapshotUrl", panelSnapshotUrl);
         return "grafana-dashboard";
     }
