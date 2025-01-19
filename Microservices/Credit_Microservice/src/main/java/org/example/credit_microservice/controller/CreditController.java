@@ -17,7 +17,7 @@ public class CreditController {
     @Autowired
     private CreditService creditService;
 
-    @PostMapping
+    @PostMapping("/api/create")
     public ResponseEntity<Credit> createCredit(@RequestParam Long cni, @RequestParam double loanAmnt, @RequestParam String loanIntent) {
         Credit savedCredit = creditService.createCredit(cni, loanAmnt, loanIntent);
         return new ResponseEntity<>(savedCredit, HttpStatus.CREATED);

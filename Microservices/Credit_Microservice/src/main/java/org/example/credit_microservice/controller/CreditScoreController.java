@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/credits")
 public class CreditScoreController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class CreditScoreController {
     }
 
 
-    @PostMapping("/predictbyCNE")
+    @PostMapping("/predictbycne")
     public ResponseEntity<String> predictLoanStatus(@RequestBody PredictLoanRequest predictLoanRequest) {
         LoanPredictionRequest request = creditScoreService.prepareLoanPredictionRequest(
                 predictLoanRequest.getCne(),

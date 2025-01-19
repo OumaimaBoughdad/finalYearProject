@@ -10,19 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/api/credits")
 public class CreditClientController {
 
     @Autowired
     private ClientService clientService;
 
-    // Create a credit client that we will create its credit
-    @PostMapping("/non-registered-clients")
+    @PostMapping("/create-client")
     public ResponseEntity<CreditClient> saveClient(@RequestBody CreditClient client) {
         CreditClient savedClient = clientService.saveClient(client);
         return ResponseEntity.ok(savedClient);
     }
-    // Get Client by CNI
     @GetMapping("/{cni}")
     public ResponseEntity<CreditClient> getClientByCni(@PathVariable Long cni) {
         CreditClient client = clientService.getClientByCni(cni);
@@ -32,14 +30,12 @@ public class CreditClientController {
         return ResponseEntity.ok(client);
     }
 
-    // Get All Clients
-    @GetMapping
+    @GetMapping("/clients")
     public ResponseEntity<List<CreditClient>> getAllClients() {
         List<CreditClient> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
     }
 
-    // Delete Client by CNI
     @DeleteMapping("/{cni}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long cni) {
         clientService.deleteClient(cni);
