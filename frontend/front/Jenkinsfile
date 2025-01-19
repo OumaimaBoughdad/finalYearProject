@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS 18' // Ensure Node.js version is correctly installed on the agent
+        nodejs 'NodeJS 18' // Ensure this matches the Node.js version configured in Jenkins
     }
 
     environment {
@@ -20,9 +20,24 @@ pipeline {
             }
         }
 
+        stage('Check Node.js and npm Versions') {
+            steps {
+                sh 'node --version'
+                sh 'npm --version'
+            }
+        }
+
+        stage('Install Angular CLI') {
+            steps {
+                dir('frontend/front') {
+                    sh 'npm install -g @angular/cli' // Install Angular CLI globally
+                }
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                dir('frontend/front') { // Navigate to the correct directory
+                dir('frontend/front') {
                     sh 'npm install'
                 }
             }
@@ -31,7 +46,9 @@ pipeline {
         stage('Build') {
             steps {
                 dir('frontend/front') {
-                    sh 'ng build --configuration production'
+                    sh 'ng build --configuration production' // Use global Angular CLI
+                    // OR
+                    // sh 'npx ng build --configuration production' // Use local Angular CLI
                 }
             }
         }
