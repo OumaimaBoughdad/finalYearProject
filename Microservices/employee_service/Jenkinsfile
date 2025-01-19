@@ -1,5 +1,5 @@
 pipeline {
-    agent any // Run on any available agent (including the controller)
+    agent any
 
     tools {
         maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
@@ -43,13 +43,13 @@ pipeline {
         }
 
         // Uncomment this stage if you want to enforce the quality gate
-       // stage('Quality Gate') {
-          //  steps {
-              //  script {
-                 //   waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token-for-jenkins' // Enforce quality gate
-                //}
-           // }
-        //}
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token-for-jenkins' // Enforce quality gate
+        //         }
+        //     }
+        // }
 
         stage('Build & Push Docker Image') {
             steps {
