@@ -12,6 +12,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import {ReactiveFormsModule} from '@angular/forms';
 
 export const MaterialModules = [
   MatTableModule,
@@ -26,6 +28,8 @@ export const MaterialModules = [
   MatButtonModule,
   MatIconModule,
   MatSelectModule, // Ajouter MatSelectModule
+  MatRadioModule,
+  ReactiveFormsModule,
 
   MatMenuModule,
 ];
