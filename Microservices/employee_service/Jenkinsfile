@@ -51,21 +51,23 @@ pipeline {
         //     }
         // }
 
+        pipeline {
+    agent any
+    stages {
         stage('Build & Push Docker Image') {
             steps {
                 script {
-                    dir('Microservices/employee_service') { // Change to the directory containing the Dockerfile
-                        docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_PASS) { // Use Docker Hub registry
-                            // Build Docker image
-                            docker_image = docker.build("${IMAGE_NAME}")
-                            
-                            // Push Docker image with the specified tag and 'latest'
-                            docker_image.push("${IMAGE_TAG}")
-                            docker_image.push('latest')
-                        }
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh '''
+                            docker login -u $DOCKER_USER -p $DOCKER_PASS
+                            docker build -t your-docker-image:latest .
+                            docker push your-docker-image:latest
+                        '''
                     }
                 }
             }
         }
+    }
+}
     }
 }
