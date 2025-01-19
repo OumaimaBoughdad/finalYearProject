@@ -51,23 +51,20 @@ pipeline {
         //     }
         // }
 
-        pipeline {
-    agent any
-    stages {
         stage('Build & Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh '''
-                            docker login -u $DOCKER_USER -p $DOCKER_PASS
-                            docker build -t your-docker-image:latest .
-                            docker push your-docker-image:latest
-                        '''
+                        dir('Microservices/employee_service') { // Ensure Docker build is run in the correct directory
+                            sh '''
+                                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                                docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                            '''
+                        }
                     }
                 }
             }
         }
-    }
-}
     }
 }
