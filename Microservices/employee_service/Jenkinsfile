@@ -12,7 +12,6 @@ pipeline {
         DOCKER_PASS = credentials('docker-credentials')
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
-        DOCKER_HOST = "unix:///var/run/docker.sock" // Ensure Docker is accessible
     }
 
     stages {
@@ -50,7 +49,7 @@ pipeline {
                         dir('Microservices/employee_service') {
                             sh '''
                                 echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile .
                                 docker push ${IMAGE_NAME}:${IMAGE_TAG}
                             '''
                         }
