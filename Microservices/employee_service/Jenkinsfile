@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.9'
+        maven 'Maven 3.9.9' // Ensure this matches the Maven version configured in Jenkins
     }
 
     environment {
         APP_NAME = "employee_service"
         RELEASE = "latest"
-        DOCKER_USER = "oumaimaboughdad"
-        DOCKER_PASS = credentials('docker-credentials')
+        DOCKER_USER = "oumaimaboughdad" // Your Docker Hub username
+        DOCKER_PASS = credentials('docker-credentials') // Use Jenkins credentials for Docker Hub
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
@@ -17,15 +17,15 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {
-                checkout scm
+                checkout scm // Checkout the code from the SCM (e.g., Git)
             }
         }
 
         stage('Build') {
             steps {
                 echo 'Building the employee microservice ......'
-                dir('Microservices/employee_service') {
-                    sh 'mvn clean package -DskipTests'
+                dir('Microservices/employee_service') { // Change to the directory containing pom.xml
+                    sh 'mvn clean package -DskipTests' // Build the Maven project
                 }
             }
         }
@@ -33,23 +33,32 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') {
-                        dir('Microservices/employee_service') {
-                            sh 'mvn sonar:sonar'
+                    withSonarQubeEnv(credentialsId: 'sonar-token-for-jenkins') { // Use SonarQube credentials
+                        dir('Microservices/employee_service') { // Ensure analysis is run in the correct directory
+                            sh 'mvn sonar:sonar' // Run SonarQube analysis
                         }
                     }
                 }
             }
         }
 
+        // Uncomment this stage if you want to enforce the quality gate
+        // stage('Quality Gate') {
+        //     steps {
+        //         script {
+        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token-for-jenkins' // Enforce quality gate
+        //         }
+        //     }
+        // }
+
         stage('Build & Push Docker Image') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        dir('Microservices/employee_service') {
+                        dir('Microservices/employee_service') { // Ensure Docker build is run in the correct directory
                             sh '''
-                                echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile .
+                                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                                 docker push ${IMAGE_NAME}:${IMAGE_TAG}
                             '''
                         }
