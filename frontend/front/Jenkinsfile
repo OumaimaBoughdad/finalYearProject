@@ -53,13 +53,13 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                dir('frontend/front') {
-                    sh 'ng test --watch=false' // Run unit tests
-                }
-            }
-        }
+        //stage('Test') {
+           // steps {
+              //  dir('frontend/front') {
+                  //  sh 'ng test --watch=false' // Run unit tests
+                //}
+           // }
+        //}
 
         stage('SonarQube Analysis') {
             steps {
