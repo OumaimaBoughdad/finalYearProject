@@ -7,7 +7,7 @@ import { Credit } from '../models/credit.model';
   providedIn: 'root'
 })
 export class CreditService {
-  private baseUrl = 'http://localhost:8091/api/credits';
+  private baseUrl = 'http://localhost:8080/api/credits';
 
   constructor(private http: HttpClient) {}
 

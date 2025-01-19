@@ -21,7 +21,7 @@ export interface LoanStatusByCreditHistoryDTO {
 })
 export class VisualizationService {
   // URL de base de l'API backend
-  private apiUrl = 'http://localhost:8091/api/visualization';
+  private apiUrl = 'http://localhost:8080/api/credits';
 
   constructor(private http: HttpClient) {}
 

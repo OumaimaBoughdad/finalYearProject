@@ -7,7 +7,7 @@ import { LoanPredictionRequest, PredictLoanRequest } from '../models/loan-predic
   providedIn: 'root'
 })
 export class CreditScoreService {
-  private apiUrl = 'http://localhost:8091/api/credits';
+  private apiUrl = 'http://localhost:8080/api/credits';
 
   constructor(private http: HttpClient) {}
 

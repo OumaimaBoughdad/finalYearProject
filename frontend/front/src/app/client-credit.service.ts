@@ -19,7 +19,7 @@ export interface ClientCredit {
 })
 export class ClientCreditService {
 
-  private baseUrl = 'http://localhost:8091/api/credits';  // URL de votre backend
+  private baseUrl = 'http://localhost:8080/api/credits';  // URL de votre backend
 
   constructor(private http: HttpClient) {}
 
