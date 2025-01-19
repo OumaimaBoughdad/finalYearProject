@@ -39,7 +39,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('frontend/front') {
-                    sh 'ng test --watch=false' // Run unit tests
+                    sh 'ng test --watch=false --code-coverage' // Run unit tests with code coverage
                 }
             }
         }
@@ -68,11 +68,15 @@ pipeline {
 
         stage('Build & Push Docker Image') {
             steps {
-                dir('frontend/front') {
-                    script {
-                        docker.withRegistry("", "${DOCKER_PASS}") {
-                            def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
-                            dockerImage.push()
+                script {
+                    dir('frontend/front') { // Change to the directory containing the Dockerfile
+                        docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_PASS) { // Use Docker Hub registry
+                            // Build Docker image
+                            docker_image = docker.build("${IMAGE_NAME}")
+                            
+                            // Push Docker image with the specified tag and 'latest'
+                            docker_image.push("${IMAGE_TAG}")
+                            docker_image.push('latest')
                         }
                     }
                 }
