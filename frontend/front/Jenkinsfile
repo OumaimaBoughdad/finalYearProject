@@ -44,9 +44,7 @@ pipeline {
         stage('Build Angular App') {
             steps {
                 dir('frontend/front') {
-                    sh 'npm run build' // Use global Angular CLI
-                    // OR
-                    // sh 'npx ng build --configuration production' // Use local Angular CLI
+                    sh 'npm run build -- --configuration production' // Use production configuration
                 }
             }
         }
