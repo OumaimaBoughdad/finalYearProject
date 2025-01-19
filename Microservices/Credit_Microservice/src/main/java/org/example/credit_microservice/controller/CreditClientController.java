@@ -15,13 +15,16 @@ public class CreditClientController {
 
     @Autowired
     private ClientService clientService;
+    @CrossOrigin(origins = "http://localhost:4200")
 
     @PostMapping("/create-client")
     public ResponseEntity<CreditClient> saveClient(@RequestBody CreditClient client) {
         CreditClient savedClient = clientService.saveClient(client);
         return ResponseEntity.ok(savedClient);
     }
-    @GetMapping("/{cni}")
+    @CrossOrigin(origins = "http://localhost:4200")
+
+    @GetMapping("/getclient/{cni}")
     public ResponseEntity<CreditClient> getClientByCni(@PathVariable Long cni) {
         CreditClient client = clientService.getClientByCni(cni);
         if (client == null) {
@@ -29,14 +32,16 @@ public class CreditClientController {
         }
         return ResponseEntity.ok(client);
     }
+    @CrossOrigin(origins = "http://localhost:4200")
 
     @GetMapping("/clients")
     public ResponseEntity<List<CreditClient>> getAllClients() {
         List<CreditClient> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
     }
+    @CrossOrigin(origins = "http://localhost:4200")
 
-    @DeleteMapping("/{cni}")
+    @DeleteMapping("/deleteclient/{cni}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long cni) {
         clientService.deleteClient(cni);
         return ResponseEntity.noContent().build();
