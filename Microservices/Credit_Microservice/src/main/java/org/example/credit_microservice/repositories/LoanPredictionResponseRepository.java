@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface LoanPredictionResponseRepository extends JpaRepository<LoanPredictionResponse, Long> {
 
-    // Custom query to find LoanPredictionResponse by LoanPredictionRequest
     @Query("SELECT r FROM LoanPredictionResponse r WHERE r.loanPredictionRequest = :request")
     Optional<LoanPredictionResponse> findByLoanPredictionRequest(@Param("request") LoanPredictionRequest request);
 }

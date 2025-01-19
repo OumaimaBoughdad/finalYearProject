@@ -22,7 +22,6 @@ public class CreditClientController {
         CreditClient savedClient = clientService.saveClient(client);
         return ResponseEntity.ok(savedClient);
     }
-
     // Get Client by CNI
     @GetMapping("/{cni}")
     public ResponseEntity<CreditClient> getClientByCni(@PathVariable Long cni) {

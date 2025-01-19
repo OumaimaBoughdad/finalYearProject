@@ -37,11 +37,9 @@ public class DataExportService {
     public void exportRequestsToCsv() {
         logger.info("Starting CSV export process...");
 
-        // Fetch all loan requests
         List<LoanPredictionRequest> requests = requestRepository.findAll();
         logger.info("Found {} loan requests in the database.", requests.size());
 
-        // Ensure the directory exists
         Path directoryPath = Paths.get(pythonScriptDirectory);
         if (!Files.exists(directoryPath)) {
             try {
@@ -53,18 +51,14 @@ public class DataExportService {
             }
         }
 
-        // Construct the full path to the CSV file
         String csvFilePath = Paths.get(pythonScriptDirectory, "loan_requests.csv").toString();
         logger.info("Writing CSV file to: {}", csvFilePath);
 
         try (FileWriter writer = new FileWriter(csvFilePath)) {
-            // Write CSV header
             writer.write("person_age,person_income,person_home_ownership,person_emp_length,loan_intent,loan_grade,loan_amnt,loan_int_rate,loan_percent_income,cb_person_default_on_file,cb_person_cred_hist_length,loan_status\n");
 
-            // Write data rows
-            // Write data rows
+
             for (LoanPredictionRequest request : requests) {
-                // Fetch the corresponding LoanPredictionResponse
                 Optional<LoanPredictionResponse> responseOptional = responseRepository.findByLoanPredictionRequest(request);
                 int loanStatus = responseOptional.map(LoanPredictionResponse::getLoan_status).orElse(0); // Use 0 for missing responses
 

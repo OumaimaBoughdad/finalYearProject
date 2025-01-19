@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "loan_predictions")
@@ -36,7 +35,6 @@ public class LoanPredictionRequest {
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private int cb_person_cred_hist_length = 0;
 
-    // Getters and Setters
 
     public LoanPredictionRequest(Long id,int personAge, double personIncome, String personHomeOwnership, double personEmpLength,
                                  String loanIntent, String loanGrade, double loanAmnt, double loanIntRate, double loanPercentIncome,
