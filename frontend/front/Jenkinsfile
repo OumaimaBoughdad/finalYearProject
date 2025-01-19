@@ -11,6 +11,7 @@ pipeline {
         DOCKER_PASS = credentials('docker-credentials') // Reference to Jenkins credential ID
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
+      PASS= "Ouma2001*"
     }
 
     stages {
@@ -64,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // Log in to Docker Hub using the DOCKER_PASS variable
-                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    sh "docker login -u ${DOCKER_USER} -p ${PASS}"
                 }
             }
         }
