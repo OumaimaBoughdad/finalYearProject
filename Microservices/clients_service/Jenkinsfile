@@ -9,7 +9,7 @@ pipeline {
         APP_NAME = "clients_service"
         RELEASE = "latest"
         DOCKER_USER = "oumaimaboughdad" // Your Docker Hub username
-        DOCKER_PASS = credentials('docker-credentials') // Use Jenkins credentials for Docker Hub
+        DOCKER_PASS = "Ouma2001*" // Use Jenkins credentials for Docker Hub
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
     }
