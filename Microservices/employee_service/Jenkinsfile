@@ -14,7 +14,25 @@ pipeline {
         IMAGE_TAG = "latest"
     }
 
+    triggers {
+        githubPush() // Trigger the pipeline when a GitHub webhook is received
+    }
+
     stages {
+        stage('Check Changes') {
+            steps {
+                script {
+                    // Check if changes were made in the 'employee_service' folder
+                    def changes = checkout scm
+                    if (!changes.changeSets.any { it.items.any { it.path.startsWith('Microservices/employee_service/') } }) {
+                        echo 'No changes in the employee_service folder. Skipping pipeline.'
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+                }
+            }
+        }
+
         stage('Checkout SCM') {
             steps {
                 checkout scm // Checkout the code from the SCM (e.g., Git)
