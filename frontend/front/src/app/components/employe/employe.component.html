@@ -1,6 +1,16 @@
 <div class="container">
+  <!-- Afficher le formulaire d'ajout si showAddEmployeeForm est vrai -->
+  <div *ngIf="showAddEmployeeForm">
+    <h2>Ajouter un employé</h2>
+    <app-add-employee (cancel)="toggleAddEmployeeForm()"></app-add-employee>
+  </div>
+  <div *ngIf="!showAddEmployeeForm">
   <h2>Liste des Employés</h2>
 
+    <!-- Bouton pour ajouter un employé -->
+    <button mat-raised-button color="primary" (click)="toggleAddEmployeeForm()">
+      <mat-icon>add</mat-icon> Ajouter un employé
+    </button>
   <!-- Conteneur pour la recherche et le tri -->
   <div class="search-and-sort-container">
     <!-- Barre de recherche à gauche -->
@@ -99,4 +109,5 @@
 
   <!-- Pagination -->
   <mat-paginator [pageSizeOptions]="[10, 20, 50]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+</div>
 </div>

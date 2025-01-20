@@ -1,0 +1,60 @@
+/* Conteneur principal pour les graphiques */
+.chart-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Deux colonnes de largeur égale */
+  gap: 20px; /* Espace entre les graphiques */
+  margin-bottom: 30px; /* Espace en dessous */
+}
+
+/* Conteneur pour chaque graphique */
+.chart-container > div {
+  padding: 20px;
+  background-color: #fff; /* Fond blanc */
+  border-radius: 12px; /* Bordures arrondies */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Animation fluide */
+}
+
+/* Effet au survol du conteneur */
+.chart-container > div:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+  transform: translateY(-5px); /* Légère élévation */
+}
+
+/* Titre des graphiques */
+h2 {
+  color: #3f51b5; /* Couleur du texte */
+  font-size: 20px; /* Taille de la police */
+  margin-bottom: 15px; /* Espace en dessous */
+  text-align: center; /* Centrer le texte */
+  font-weight: 600; /* Texte en gras */
+}
+
+/* Canvas (graphique) */
+canvas {
+  width: 100% !important; /* Largeur maximale */
+  height: auto !important; /* Hauteur automatique */
+  border-radius: 8px; /* Bordures arrondies */
+  background-color: #f9f9f9; /* Fond clair */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Ombre légère */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chart-container {
+    grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    gap: 15px; /* Espace réduit entre les graphiques */
+  }
+
+  .chart-container > div {
+    padding: 15px; /* Réduire l'espace intérieur sur les petits écrans */
+  }
+
+  h2 {
+    font-size: 18px; /* Taille de police plus petite */
+  }
+
+  canvas {
+    height: 150px !important; /* Hauteur fixe pour les petits écrans */
+  }
+}

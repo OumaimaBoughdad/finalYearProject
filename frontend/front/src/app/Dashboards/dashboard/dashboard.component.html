@@ -1,18 +1,14 @@
 <div class="dashboard-container">
-  <!-- Statistiques globales -->
-  <div class="statistics-container">
-    <h2>Statistiques globales</h2>
-    <p>Nombre total de transactions : {{ totalTransactions }}</p>
-  </div>
-
   <!-- Camembert : Répartition des transactions par type -->
   <div class="chart-container">
+    <i class="fas fa-chart-pie icon"></i> <!-- Icône FontAwesome -->
     <h3>Répartition des transactions par type</h3>
     <canvas id="pieChart"></canvas>
   </div>
 
   <!-- Lignes : Évolution des transactions par date -->
   <div class="chart-container">
+    <i class="fas fa-chart-line icon"></i> <!-- Icône FontAwesome -->
     <h3>Évolution des transactions par date</h3>
     <div>
       <label>
@@ -27,10 +23,9 @@
     <canvas id="lineChartDate"></canvas>
   </div>
 
-
-
   <!-- Barres empilées : Transactions par compte (nombre et montant) pour une date spécifique -->
   <div class="chart-container">
+    <i class="fas fa-chart-bar icon"></i> <!-- Icône FontAwesome -->
     <h3>Transactions par compte (nombre et montant)</h3>
     <div>
       <label>

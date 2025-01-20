@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Client } from '../../models/client.model';
 import {ClientService} from '../../services/client.service'; // Importez le modèle Client
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-compte',
@@ -34,6 +35,7 @@ export class CompteComponent implements OnInit {
   clients: Client[] = []; // Liste des clients
   selectedClientId: number | null = null; // ID du client sélectionné
   constructor(
+    private router: Router,
     private compteService: CompteService,
     private clientService: ClientService, // Injectez ClientService
 
@@ -45,6 +47,11 @@ export class CompteComponent implements OnInit {
     this.loadClients(); // Ajouter ici
 
     this.loggedInUser = this.authService.employeeValue?.email || ''; // Récupérez l'utilisateur connecté
+  }
+
+  // Méthode pour naviguer vers le tableau de bord des comptes
+  goToCompteDashboard() {
+    this.router.navigate(['/comptedashboard']);
   }
 
   // Charger tous les comptes

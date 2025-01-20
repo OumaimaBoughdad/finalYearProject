@@ -1,0 +1,147 @@
+/* Conteneur principal */
+.client-credit-form {
+  max-width: 800px; /* Largeur maximale */
+  margin: 0 auto; /* Centrer horizontalement */
+  padding: 20px;
+  background-color: #fff; /* Fond blanc */
+  border-radius: 12px; /* Bordures arrondies */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* Titres */
+h2, h3 {
+  color: #3f51b5; /* Couleur du texte */
+  font-size: 24px; /* Taille de la police */
+  margin-bottom: 20px; /* Espace en dessous */
+  text-align: center; /* Centrer le texte */
+  font-weight: 600; /* Texte en gras */
+}
+
+h3 {
+  font-size: 20px; /* Taille plus petite pour le sous-titre */
+}
+
+/* Formulaire */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espace entre les champs */
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espace entre le label et l'input */
+}
+
+form label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500; /* Texte en demi-gras */
+}
+
+form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Bordures arrondies */
+  font-size: 14px;
+  transition: border-color 0.3s ease; /* Animation fluide */
+}
+
+form input:focus {
+  border-color: #3f51b5; /* Bordure bleue au focus */
+  outline: none;
+}
+
+/* Bouton de soumission */
+form button {
+  background: linear-gradient(to right, #6a11cb, #2575fc); /* Dégradé de couleur */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordures arrondies */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease; /* Animation fluide */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+form button:hover {
+  background: linear-gradient(to right, #4d0a9b, #1a5bbf); /* Dégradé plus foncé */
+  transform: scale(1.05); /* Légère mise à l'échelle */
+}
+
+/* Messages d'erreur */
+.error {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #f8d7da; /* Fond rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+  border-radius: 8px; /* Bordures arrondies */
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Liste des clients */
+ul {
+  list-style-type: none; /* Supprimer les puces */
+  padding: 0;
+  margin-top: 20px;
+}
+
+ul li {
+  padding: 10px;
+  background-color: #f9f9f9; /* Fond clair */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px; /* Bordures arrondies */
+  margin-bottom: 10px; /* Espace entre les éléments */
+  transition: background-color 0.3s ease; /* Animation fluide */
+}
+
+ul li:hover {
+  background-color: #f1f1f1; /* Fond plus clair au survol */
+}
+
+/* Bouton pour récupérer tous les clients */
+button {
+  background: linear-gradient(to right, #6a11cb, #2575fc); /* Dégradé de couleur */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordures arrondies */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease; /* Animation fluide */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  margin-top: 20px; /* Espace au-dessus */
+}
+
+button:hover {
+  background: linear-gradient(to right, #4d0a9b, #1a5bbf); /* Dégradé plus foncé */
+  transform: scale(1.05); /* Légère mise à l'échelle */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .client-credit-form {
+    padding: 15px; /* Réduire l'espace intérieur sur les petits écrans */
+  }
+
+  h2 {
+    font-size: 20px; /* Taille de police plus petite */
+  }
+
+  h3 {
+    font-size: 18px; /* Taille de police plus petite */
+  }
+
+  form input {
+    padding: 8px; /* Réduire l'espace intérieur */
+  }
+
+  form button, button {
+    width: 100%; /* Boutons pleine largeur */
+  }
+}

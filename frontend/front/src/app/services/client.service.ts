@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Client } from '../models/client.model';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,12 @@ export class ClientService {
 
   getClients(): Observable<Client[]> {
     return this.http.get<Client[]>(this.apiUrl);
+  }
+  // Calculer le nombre total de clients
+  getTotalClients(): Observable<number> {
+    return this.getClients().pipe(
+      map((clients) => clients.length) // Utilise la longueur du tableau
+    );
   }
 
   getClientById(id: number): Observable<Client> {

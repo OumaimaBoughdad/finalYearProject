@@ -19,20 +19,20 @@ import {ClientCreditComponent} from './components/client-credit/client-credit.co
 import {GestionCreditsComponent} from './components/gestion-credits/gestion-credits.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/},
+  { path: '', component: HomeComponent , canActivate: [AuthGuard]},
   { path: 'employees', component: EmployeComponent},
   { path: 'add-employee', component: AddEmployeeComponent, canActivate: [AuthGuard] },  // Route pour le formulaire d'ajout
    { path: 'login', component: LoginComponent },
    { path: 'clients', component: ClientComponent, canActivate: [AuthGuard] },
   { path: 'comptes', component: CompteComponent, canActivate: [AuthGuard]},
   { path: 'transaction', component: TransactionComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent},
-  { path: 'comptedashboard', component: CompteDashboardComponent },
-  { path: 'predict', component: PredictLoanComponent }, // Route pour PredictLoanComponent
-  {path:'chart',component:LoanStatusChartsComponent},
-  {path:'grafana',component:GrafanaPanelComponent},
-  {path:'credits',component:CreditComponent},
-  { path: 'gestion-credits', component: GestionCreditsComponent }, // Route pour la gestion des crédits
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'comptedashboard', component: CompteDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'predict', component: PredictLoanComponent, canActivate: [AuthGuard] }, // Route pour PredictLoanComponent
+  {path:'chart',component:LoanStatusChartsComponent, canActivate: [AuthGuard]},
+  {path:'grafana',component:GrafanaPanelComponent, canActivate: [AuthGuard]},
+  {path:'credits',component:CreditComponent, canActivate: [AuthGuard]},
+  { path: 'gestion-credits', component: GestionCreditsComponent, canActivate: [AuthGuard] }, // Route pour la gestion des crédits
  ];
 
 @NgModule({

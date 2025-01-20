@@ -1,0 +1,78 @@
+/* Conteneur principal */
+div {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9; /* Fond clair */
+  border-radius: 20px; /* Bordures arrondies */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ombre portée */
+}
+
+/* Titre principal */
+h2 {
+  color: #3f51b5; /* Couleur du texte */
+  font-size: 24px; /* Taille de la police */
+  margin-bottom: 20px; /* Espace en dessous */
+  text-align: center; /* Centrer le texte */
+  font-weight: 600; /* Texte en gras */
+}
+
+/* Conteneur des boutons */
+div > div {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Espace entre les boutons */
+  margin-bottom: 30px; /* Espace en dessous */
+}
+
+/* Styles pour les boutons */
+button {
+  background: linear-gradient(to right, #6a11cb, #2575fc); /* Dégradé de couleur */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordures arrondies */
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease; /* Animation fluide */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* Effet au survol */
+button:hover {
+  background: linear-gradient(to right, #4d0a9b, #1a5bbf); /* Dégradé plus foncé */
+  transform: scale(1.05); /* Légère mise à l'échelle */
+}
+
+/* Effet au clic */
+button:active {
+  transform: scale(0.95); /* Légère réduction */
+}
+
+/* Zone dynamique pour afficher les composants */
+ng-container {
+  display: block;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px; /* Bordures arrondies */
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  div > div {
+    flex-direction: column; /* Boutons en colonne sur les petits écrans */
+    gap: 10px;
+  }
+
+  button {
+    width: 100%; /* Boutons pleine largeur */
+  }
+
+  ng-container {
+    padding: 15px;
+  }
+}
