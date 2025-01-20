@@ -1,1 +1,57 @@
-<p>home works!</p>
+<div class="dashboard-container">
+  <!-- Carte pour le nombre total de clients -->
+  <div class="metric-card">
+    <div class="metric-icon">
+      <i class="fas fa-users"></i> <!-- Icône FontAwesome pour les clients -->
+    </div>
+    <div class="metric-info">
+      <h3>Clients</h3>
+      <p>{{ totalClients }}</p>
+    </div>
+  </div>
+
+  <!-- Carte pour le nombre total d'employés -->
+  <div class="metric-card">
+    <div class="metric-icon">
+      <i class="fas fa-user-tie"></i> <!-- Icône FontAwesome pour les employés -->
+    </div>
+    <div class="metric-info">
+      <h3>Employés</h3>
+      <p>{{ totalEmployees }}</p>
+    </div>
+  </div>
+
+  <!-- Carte pour le nombre total de transactions -->
+  <div class="metric-card">
+    <div class="metric-icon">
+      <i class="fas fa-exchange-alt"></i> <!-- Icône FontAwesome pour les transactions -->
+    </div>
+    <div class="metric-info">
+      <h3>Transactions</h3>
+      <p>{{ totalTransactions }}</p>
+    </div>
+  </div>
+
+
+  <!-- Carte pour le nombre total de comptes -->
+  <div class="metric-card">
+    <div class="metric-icon">
+      <i class="fas fa-wallet"></i> <!-- Icône FontAwesome pour les comptes -->
+    </div>
+    <div class="metric-info">
+      <h3>Comptes</h3>
+      <p>{{ totalAccounts }}</p>
+    </div>
+  </div>
+</div>
+  <!-- Section Dashboard -->
+  <section class="dashboard-section">
+    <h2>Tableau de Bord</h2>
+    <app-dashboard></app-dashboard> <!-- Utilisation du DashboardComponent -->
+  </section>
+
+  <!-- Pied de Page -->
+  <footer>
+    <p>© 2023 FinTechPro. Tous droits réservés.</p>
+  </footer>
+

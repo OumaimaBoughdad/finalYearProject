@@ -1,5 +1,12 @@
 <mat-toolbar color="primary">
-  <img src="/ab.png" alt="Bank Logo" height="40" class="logo" />
+  <img
+    src="/ab.png"
+    alt="Bank Logo"
+    height="40"
+    class="logo"
+    routerLink="/"
+    style="cursor: pointer;"
+  />
 
   <span>AMWAL</span>
 
@@ -7,9 +14,7 @@
   <span class="spacer"></span>
 
   <!-- Liens de navigation -->
-  <a mat-button routerLink="/employees">Liste des employés</a>
-
-  <a mat-button routerLink="/add-employee">Ajouter un employé</a>
+  <a mat-button routerLink="/employees">Gestion des employés</a>
   <a mat-button routerLink="/clients">gestion des clients</a>
   <a mat-button routerLink="/comptes">Gestion des comptes</a>
   <a mat-button routerLink="/transaction">Gestion des transactions</a>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {map} from 'rxjs/operators';
 
 export interface Employee {
   idEmployee: number;
@@ -20,6 +21,13 @@ export class EmployeeService {
   private apiUrl = 'http://localhost:8080/api/employees';
 
   constructor(private http: HttpClient) {}
+
+  // Calculer le nombre total d'employés
+  getTotalEmployees(): Observable<number> {
+    return this.getAllEmployees().pipe(
+      map((employes) => employes.length) // Utilise la longueur du tableau
+    );
+  }
 
   getAllEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.apiUrl);

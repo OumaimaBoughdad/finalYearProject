@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import {Compte} from '../models/compte.model'; // Importez jspdf-autotable pour les tables
+import {Compte} from '../models/compte.model';
+import {map} from 'rxjs/operators'; // Importez jspdf-autotable pour les tables
 @Injectable({
   providedIn: 'root',
 })
@@ -72,6 +73,12 @@ export class TransactionService {
   // Méthode pour formater les comptes
   private formatComptes(comptes: Compte[]): string {
     return comptes.map((compte) => compte.numeroCompte).join(', ');
+  }
+  // Calculer le nombre total de transactions
+  getTotalTransactions(): Observable<number> {
+    return this.getAllTransactions().pipe(
+      map((transactions) => transactions.length) // Utilise la longueur du tableau
+    );
   }
 
   // Méthode pour formater l'employé

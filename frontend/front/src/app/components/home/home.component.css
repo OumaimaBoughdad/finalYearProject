@@ -1,0 +1,49 @@
+/* Conteneur principal du tableau de bord */
+.dashboard-container {
+  margin-top:70px;
+  display: flex; /* Utilise Flexbox pour aligner les cartes */
+  justify-content: space-between; /* Espace les cartes uniformément */
+  gap: 20px; /* Espace entre les cartes */
+  padding: 20px; /* Marge intérieure */
+  margin: 0 auto; /* Centrer le conteneur */
+  max-width: 1200px; /* Largeur maximale du conteneur */
+}
+
+/* Style pour chaque carte de métrique */
+.metric-card {
+  flex: 1; /* Les cartes prennent un espace égal */
+  background-color: #ffffff; /* Fond blanc */
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  padding: 20px; /* Espace intérieur */
+  text-align: center; /* Centrer le texte */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+}
+
+/* Effet au survol */
+.metric-card:hover {
+  transform: translateY(-5px); /* Légère élévation */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+}
+
+/* Style pour l'icône */
+.metric-icon {
+  font-size: 2rem; /* Taille de l'icône */
+  color: #5D87FF; /* Couleur principale */
+  margin-bottom: 10px; /* Espace sous l'icône */
+}
+
+/* Style pour le titre */
+.metric-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333; /* Couleur du texte */
+}
+
+/* Style pour le nombre total */
+.metric-info p {
+  margin: 5px 0 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5D87FF; /* Couleur principale */
+}

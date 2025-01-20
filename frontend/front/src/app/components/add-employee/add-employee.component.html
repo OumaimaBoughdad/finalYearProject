@@ -19,6 +19,7 @@
     <input id="role" [(ngModel)]="employee.role" name="role" required />
 
     <button type="submit">Ajouter</button>
+    <button mat-raised-button color="warn" type="button" (click)="onCancel()">Annuler</button>
   </form>
 
   <div *ngIf="successMessage" class="success-message">

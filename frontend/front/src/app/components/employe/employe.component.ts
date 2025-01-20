@@ -7,13 +7,14 @@ import { MaterialModules } from '../../shared/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import {AddEmployeeComponent} from '../add-employee/add-employee.component';
 
 @Component({
   selector: 'app-employe',
   templateUrl: './employe.component.html',
   styleUrls: ['./employe.component.css'],
   standalone: true,
-  imports: [MaterialModules, CommonModule, FormsModule, HttpClientModule],
+  imports: [MaterialModules, CommonModule, FormsModule, HttpClientModule, AddEmployeeComponent],
 })
 export class EmployeComponent implements OnInit {
   employees: Employee[] = [];
@@ -50,6 +51,7 @@ export class EmployeComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
     });
   }
+
 
   // Recherche universelle
   universalSearch(query: string): void {
@@ -111,6 +113,11 @@ export class EmployeComponent implements OnInit {
 
   editEmployee(employee: Employee): void {
     employee.isEditing = true;
+  }
+  showAddEmployeeForm: boolean = false;
+
+  toggleAddEmployeeForm(): void {
+    this.showAddEmployeeForm = !this.showAddEmployeeForm; // Basculer l'affichage
   }
 
   saveEmployee(employee: Employee): void {

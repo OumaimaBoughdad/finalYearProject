@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Compte } from '../models/compte.model';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,12 @@ export class CompteService {
 
   getComptes(): Observable<Compte[]> {
     return this.http.get<Compte[]>(this.apiUrl);
+  }
+  // Calculer le nombre total de comptes
+  getTotalAccounts(): Observable<number> {
+    return this.getComptes().pipe(
+      map((comptes) => comptes.length) // Utilise la longueur du tableau
+    );
   }
 
   getCompteByNumero(numeroCompte: string): Observable<Compte> {

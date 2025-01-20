@@ -1,27 +1,75 @@
-.dashboard-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
+/* Police moderne */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa; /* Fond légèrement gris */
+  margin: 0;
+  padding: 0;
 }
 
-.statistics-container {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
+.dashboard-container {
+  display: flex; /* Alignement horizontal */
+  gap: 20px; /* Espace entre les cartes */
+  padding: 20px;
+  justify-content: center; /* Centrer les cartes */
+  max-width: 2000px; /* Limiter la largeur du conteneur */
+  margin: 0 auto; /* Centrer le conteneur */
+  overflow-x: auto; /* Ajouter un défilement horizontal si nécessaire */
 }
 
 .chart-container {
-  flex: 1 1 45%;
-  max-width: 800px;
-  margin: 20px auto;
+  flex: 1 1 30%; /* Trois cartes par ligne avec un espace de 20px */
+  min-width: 300px; /* Largeur minimale pour éviter que les cartes deviennent trop petites */
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none; /* Supprimer la bordure */
+  border-radius: 12px; /* Coins plus arrondis */
+  background: linear-gradient(135deg, #ffffff, #f1f3f5); /* Dégradé de fond */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ombre plus prononcée */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+}
+
+.chart-container:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
 }
 
 canvas {
   max-width: 100%;
   height: auto;
+}
+
+/* Style pour les titres des cartes */
+.chart-container h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style pour les labels et les inputs */
+.chart-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.chart-container input[type="checkbox"],
+.chart-container input[type="date"] {
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+/* Icônes modernes */
+.chart-container .icon {
+  font-size: 2rem;
+  color: #5D87FF; /* Couleur principale */
+  margin-bottom: 10px;
+  display: block;
+  text-align: center;
 }
