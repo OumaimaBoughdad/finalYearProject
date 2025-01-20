@@ -12,6 +12,8 @@ pipeline {
         DOCKER_PASS = "Ouma2001*" // Use Jenkins credentials for Docker Hub
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "latest"
+        DOCKER_HOST = 'unix:///var/run/docker.sock'
+
     }
 
     stages {
